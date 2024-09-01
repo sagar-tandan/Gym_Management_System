@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using api.Data;
 using api.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace API.Controllers
 {
@@ -49,6 +50,17 @@ namespace API.Controllers
             {
                 return StatusCode(500, ex.Message);
             }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetAllMembers()
+        {
+            var allMembers = await _context.MemberRegistrations.ToListAsync();
+            if (allMembers == null)
+            {
+                return NotFound();
+            }
+            return Ok(allMembers);
         }
     }
 }
