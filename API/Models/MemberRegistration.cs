@@ -11,15 +11,15 @@ namespace api.Models
     {
 
         [Key]
-        
+
         public int MemberId { get; set; }
         public string? MemberName { get; set; }
 
-        public string? JoiningDate { get; set; }
+        public String? JoiningDate { get; set; }
 
         public string? EmailAddress { get; set; }
 
-        public int Contact { get; set; }
+        public string? Contact { get; set; }
 
         public string? Plan { get; set; }
 

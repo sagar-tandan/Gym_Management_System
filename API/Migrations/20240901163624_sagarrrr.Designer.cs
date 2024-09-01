@@ -11,8 +11,8 @@ using api.Data;
 namespace API.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240901161028_Backedn")]
-    partial class Backedn
+    [Migration("20240901163624_sagarrrr")]
+    partial class sagarrrr
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
