@@ -12,8 +12,8 @@ using api.Data;
 namespace API.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240902082206_klasfhkc")]
-    partial class klasfhkc
+    [Migration("20240902122037_initialkjn")]
+    partial class initialkjn
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -61,26 +61,21 @@ namespace API.Migrations
                     b.Property<decimal>("Amount")
                         .HasColumnType("numeric");
 
-                    b.Property<int>("MemberRegistrationId")
-                        .HasColumnType("integer");
-
                     b.Property<DateTime>("PaymentDate")
                         .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("MemberRegistrationId");
 
                     b.ToTable("Payments");
                 });
 
             modelBuilder.Entity("API.Models.Plan", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("PlanId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("PlanId"));
 
                     b.Property<decimal>("Cost")
                         .HasColumnType("numeric");
@@ -91,7 +86,7 @@ namespace API.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("text");
 
-                    b.HasKey("Id");
+                    b.HasKey("PlanId");
 
                     b.ToTable("Plans");
                 });
@@ -105,6 +100,9 @@ namespace API.Migrations
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("ContactNumber")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Email")
                         .HasColumnType("text");
 
                     b.Property<string>("FullName")
@@ -123,21 +121,10 @@ namespace API.Migrations
                     b.ToTable("MemberRegistrations");
                 });
 
-            modelBuilder.Entity("API.Models.Payment", b =>
-                {
-                    b.HasOne("api.Models.MemberRegistration", "MemberRegistration")
-                        .WithMany("Payments")
-                        .HasForeignKey("MemberRegistrationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("MemberRegistration");
-                });
-
             modelBuilder.Entity("api.Models.MemberRegistration", b =>
                 {
                     b.HasOne("API.Models.Plan", "Plan")
-                        .WithMany("Members")
+                        .WithMany("MemberRegistrations")
                         .HasForeignKey("PlanId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -147,12 +134,7 @@ namespace API.Migrations
 
             modelBuilder.Entity("API.Models.Plan", b =>
                 {
-                    b.Navigation("Members");
-                });
-
-            modelBuilder.Entity("api.Models.MemberRegistration", b =>
-                {
-                    b.Navigation("Payments");
+                    b.Navigation("MemberRegistrations");
                 });
 #pragma warning restore 612, 618
         }
