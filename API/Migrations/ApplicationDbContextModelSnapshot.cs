@@ -58,26 +58,21 @@ namespace API.Migrations
                     b.Property<decimal>("Amount")
                         .HasColumnType("numeric");
 
-                    b.Property<int>("MemberRegistrationId")
-                        .HasColumnType("integer");
-
                     b.Property<DateTime>("PaymentDate")
                         .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("MemberRegistrationId");
 
                     b.ToTable("Payments");
                 });
 
             modelBuilder.Entity("API.Models.Plan", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("PlanId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("PlanId"));
 
                     b.Property<decimal>("Cost")
                         .HasColumnType("numeric");
@@ -88,7 +83,7 @@ namespace API.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("text");
 
-                    b.HasKey("Id");
+                    b.HasKey("PlanId");
 
                     b.ToTable("Plans");
                 });
@@ -110,7 +105,7 @@ namespace API.Migrations
                     b.Property<string>("FullName")
                         .HasColumnType("text");
 
-                    b.Property<int?>("PlanId")
+                    b.Property<int>("PlanId")
                         .HasColumnType("integer");
 
                     b.Property<DateTime>("RegistrationDate")
@@ -123,27 +118,20 @@ namespace API.Migrations
                     b.ToTable("MemberRegistrations");
                 });
 
-            modelBuilder.Entity("API.Models.Payment", b =>
+            modelBuilder.Entity("api.Models.MemberRegistration", b =>
                 {
-                    b.HasOne("api.Models.MemberRegistration", "MemberRegistration")
-                        .WithMany()
-                        .HasForeignKey("MemberRegistrationId")
+                    b.HasOne("API.Models.Plan", "Plan")
+                        .WithMany("MemberRegistrations")
+                        .HasForeignKey("PlanId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("MemberRegistration");
-                });
-
-            modelBuilder.Entity("api.Models.MemberRegistration", b =>
-                {
-                    b.HasOne("API.Models.Plan", null)
-                        .WithMany("Members")
-                        .HasForeignKey("PlanId");
+                    b.Navigation("Plan");
                 });
 
             modelBuilder.Entity("API.Models.Plan", b =>
                 {
-                    b.Navigation("Members");
+                    b.Navigation("MemberRegistrations");
                 });
 #pragma warning restore 612, 618
         }

@@ -9,10 +9,13 @@ namespace API.Models
 {
     public class Plan
     {
-        public int Id { get; set; }
+        public int PlanId { get; set; }
         public string? Name { get; set; } // e.g., "1 Month", "3 Months", "6 Months"
         public int DurationInMonths { get; set; } // 1, 3, 6
         public decimal Cost { get; set; }
+
+        //Naviagtion Property
+        public List<MemberRegistration> MemberRegistrations { get; set; } = new List<MemberRegistration>();
 
     }
 }

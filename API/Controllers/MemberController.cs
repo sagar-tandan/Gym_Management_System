@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using api.Data;
 using api.Models;
 using API.DTOs;
+using API.DTOs.Member;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -24,21 +25,31 @@ namespace API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> RegisterMember([FromBody] MemberRegistrationDto memberRegistrationDto)
+        public async Task<IActionResult> RegisterMember([FromBody] MRegisterDTO mRegisterDTO)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
+            // Check if the Plan exists
+            var plan = await _context.Plans.FindAsync(mRegisterDTO.PlanId);
+            if (plan == null)
+            {
+                return NotFound("The selected plan does not exist.");
+            }
+
 
             var newMember = new MemberRegistration
             {
-                FullName = memberRegistrationDto.FullName,
-                ContactNumber = memberRegistrationDto.ContactNumber,
-                RegistrationDate = memberRegistrationDto.RegistrationDate,
-                Email = memberRegistrationDto.Email,
+                Id = mRegisterDTO.Id,
+                FullName = mRegisterDTO.FullName,
+                ContactNumber = mRegisterDTO.ContactNumber,
+                RegistrationDate = mRegisterDTO.RegistrationDate,
+                Email = mRegisterDTO.Email,
+                PlanId = mRegisterDTO.PlanId
 
             };
+
 
             try
             {
@@ -52,26 +63,6 @@ namespace API.Controllers
             }
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetAllMembers()
-        {
-            var allMembers = await _context.MemberRegistrations.ToListAsync();
-            if (allMembers == null)
-            {
-                return NotFound();
-            }
 
-            var memberDto = allMembers.Select(member => new MemberRegistrationDto
-            {
-                Id = member.Id,
-                FullName = member.FullName,
-                ContactNumber = member.ContactNumber,
-                RegistrationDate = member.RegistrationDate,
-                Email = member.Email,
-            });
-
-
-            return Ok(allMembers);
-        }
     }
 }

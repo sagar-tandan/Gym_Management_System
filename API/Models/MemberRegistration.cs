@@ -15,8 +15,12 @@ namespace api.Models
         public string? FullName { get; set; }
         public string? ContactNumber { get; set; }
         public DateTime RegistrationDate { get; set; }
-
         public string? Email { get; set; }
+
+
+        // Foreign Key for Plan
+        public int PlanId { get; set; }
+        public Plan Plan { get; set; } // Navigation property
 
 
     }
