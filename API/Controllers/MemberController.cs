@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using api.Data;
 using api.Models;
+using API.DTOs;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -23,7 +24,7 @@ namespace API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> RegisterMember([FromBody] MemberRegistration memberRegistration)
+        public async Task<IActionResult> RegisterMember([FromBody] MemberRegistrationDto memberRegistrationDto)
         {
             if (!ModelState.IsValid)
             {
@@ -32,12 +33,11 @@ namespace API.Controllers
 
             var newMember = new MemberRegistration
             {
-                MemberName = memberRegistration.MemberName,
-                JoiningDate = memberRegistration.JoiningDate,
-                EmailAddress = memberRegistration.EmailAddress,
-                Contact = memberRegistration.Contact,
-                Plan = memberRegistration.Plan,
-                Price = memberRegistration.Price
+                FullName = memberRegistrationDto.FullName,
+                ContactNumber = memberRegistrationDto.ContactNumber,
+                RegistrationDate = memberRegistrationDto.RegistrationDate,
+                Email = memberRegistrationDto.Email,
+
             };
 
             try
@@ -60,6 +60,17 @@ namespace API.Controllers
             {
                 return NotFound();
             }
+
+            var memberDto = allMembers.Select(member => new MemberRegistrationDto
+            {
+                Id = member.Id,
+                FullName = member.FullName,
+                ContactNumber = member.ContactNumber,
+                RegistrationDate = member.RegistrationDate,
+                Email = member.Email,
+            });
+
+
             return Ok(allMembers);
         }
     }
