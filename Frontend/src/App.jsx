@@ -1,7 +1,12 @@
 import { useState } from "react";
+import AdminPage from "./Admin/AdminPage";
 
 function App() {
-  return <></>;
+  return (
+    <>
+      <AdminPage />
+    </>
+  );
 }
 
 export default App;
