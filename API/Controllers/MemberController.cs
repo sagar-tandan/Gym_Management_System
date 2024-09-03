@@ -55,13 +55,28 @@ namespace API.Controllers
             {
                 await _context.MemberRegistrations.AddAsync(newMember);
                 await _context.SaveChangesAsync();
-                return Ok(newMember);
+                return Ok("The user is registered!");
             }
             catch (Exception ex)
             {
                 return StatusCode(500, ex.Message);
             }
         }
+
+        [HttpGet]
+
+        public async Task<IActionResult> GetAllMembers()
+        {
+            var allMembers = await _context.MemberRegistrations.ToListAsync();
+            if (allMembers == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(allMembers);
+        }
+
+
 
 
     }
