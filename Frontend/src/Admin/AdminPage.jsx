@@ -23,7 +23,7 @@ const AdminPage = () => {
   };
 
   return (
-    <div className="w-full max-w-screen-2xl mx-auto flex">
+    <div className="w-full max-w-screen-2xl mx-auto flex relative h-screen">
       {/* ADMIN MENU */}
       <aside className="w-[250px] px-2 h-screen fixed bg-white flex flex-col gap-4">
         {/* LOGO Section */}
