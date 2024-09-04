@@ -77,14 +77,35 @@ const Inventory = () => {
                   </span>
                 </td>
 
-                <td className="py-3 px-5">
-                
+                <td className="py-3 px-5 w-[200px]">
+                  <div className="w-full flex gap-8">
+                    <LiaEditSolid className="w-6 h-6 text-[#636363] hover:text-green-500 cursor-pointer" />
+                    <MdDeleteOutline className="w-6 h-6 text-[#636363] hover:text-red-500 cursor-pointer" />
+                  </div>
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
       </section>
+
+      <div className="w-full top-0 left-0 right-0 bottom-0 backdrop-blur-sm flex justify-center items-center fixed">
+        <div className="w-[400px] bg-[#efefef] p-8 rounded-lg ">
+          <form className="w-full flex flex-col gap-4" action="">
+            <label>Equipment Image</label>
+            <input type="file" />
+
+            <label htmlFor="">Equipment Name</label>
+            <input type="text" />
+
+            <label htmlFor="">Number of Equipment</label>
+            <input type="number" />
+
+            <label htmlFor="">Number of defective Equipment</label>
+            <input type="number" />
+          </form>
+        </div>
+      </div>
     </div>
   );
 };
