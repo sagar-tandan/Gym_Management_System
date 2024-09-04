@@ -25,7 +25,7 @@ const AdminPage = () => {
   return (
     <div className="w-full max-w-screen-2xl mx-auto flex relative h-screen">
       {/* ADMIN MENU */}
-      <aside className="w-[250px] px-2 h-screen fixed bg-white flex flex-col gap-4">
+      <aside className="w-[250px] px-2 h-screen fixed bg-white flex flex-col gap-4 overflow-auto">
         {/* LOGO Section */}
         <div className="w-full py-2 flex flex-col items-center">
           <img
