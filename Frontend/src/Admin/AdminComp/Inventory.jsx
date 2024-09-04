@@ -29,16 +29,40 @@ const Inventory = () => {
     defect: "",
   });
 
+  const [openModel, setModel] = useState(false);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setEquipment((prev) => ({ ...prev, [name]: value }));
     console.log(equipments);
   };
 
+  const UnMountModel = () => {
+    setTimeout(() => {
+      setModel(false);
+    }, 200);
+  };
+
+  const MountModel = (e) => {
+    e.preventDefault();
+    setTimeout(() => {
+      setModel(true);
+    }, 200);
+  };
+
+  const handleEditModel = (e, data) => {
+    console.log(data);
+    setEquipment(data);
+    setModel(true);
+  };
+
   return (
     <div className="w-full flex flex-col gap-2 h-screen">
       <div className="w-full flex justify-end px-5">
-        <button className="px-3 py-[6px] bg-blue-500 text-white rounded-sm hover:bg-blue-600 active:bg-blue-900 transition-all duration-300 ease-in-out font-medium ">
+        <button
+          onClick={(e) => MountModel(e)}
+          className="px-3 py-[6px] bg-blue-500 text-white rounded-sm hover:bg-blue-600 active:bg-blue-900 transition-all duration-300 ease-in-out font-medium "
+        >
           Add Inventory
         </button>
       </div>
@@ -93,7 +117,10 @@ const Inventory = () => {
 
                 <td className="py-3 px-5 w-[200px]">
                   <div className="w-full flex gap-8">
-                    <LiaEditSolid className="w-6 h-6 text-[#636363] hover:text-green-500 cursor-pointer" />
+                    <LiaEditSolid
+                      onClick={(e) => handleEditModel(e, equip)}
+                      className="w-6 h-6 text-[#636363] hover:text-green-500 cursor-pointer"
+                    />
                     <MdDeleteOutline className="w-6 h-6 text-[#636363] hover:text-red-500 cursor-pointer" />
                   </div>
                 </td>
@@ -103,74 +130,82 @@ const Inventory = () => {
         </table>
       </section>
 
-      <div className="w-full top-0 left-0 right-0 bottom-0 backdrop-blur-sm flex justify-center items-center fixed">
-        <div className="w-[400px] bg-[#efefef] p-8 rounded-lg ">
-          <div className="w-full flex justify-end mb-2">
-            <GiTireIronCross className="w-6 h-6 text-red-600 cursor-pointer active:scale-[0.95]" />
-          </div>
-          <form className="w-full flex flex-col" action="">
-            <label class="block mb-2 font-medium" for="file_input">
-              Upload file
-            </label>
-            <input
-              class="w-full rounded-lg cursor-pointer py-1"
-              id="file_input"
-              type="file"
-              name="image"
-              value={equipments.image}
-              onChange={handleChange}
-            />
-
-            <label class="block mb-2 font-medium mt-4 " for="name">
-              Equipment Name
-            </label>
-            <input
-              type="text"
-              id="name"
-              name="name"
-              className="p-2 w-full rounded-sm"
-              placeholder="Name of Equipment"
-              value={equipments.name}
-              onChange={handleChange}
-              required
-            />
-
-            <label class="block mb-2 font-medium mt-4 " for="quantity">
-              Number of Equipment
-            </label>
-            <input
-              type="number"
-              id="quantity"
-              name="quantity"
-              className="p-2 w-full rounded-sm"
-              placeholder="Total Equipments"
-              value={equipments.quantity}
-              onChange={handleChange}
-              required
-            />
-
-            <label class="block mb-2 font-medium mt-4 " for="defect">
-              Number of defective Equipment
-            </label>
-            <input
-              type="number"
-              id="defect"
-              name="defect"
-              className="p-2 w-full rounded-sm"
-              placeholder="No. of defective Equipments"
-              value={equipments.defect}
-              onChange={handleChange}
-              required
-            />
-
-            <div className="w-full flex justify-end mt-5 px-[2px]">
-              <button className="bg-blue-500 text-[16px] px-6 py-[6px] text-white rounded-sm font-medium hover:bg-blue-700 transition-all duration-300 ease-in-out active:bg-blue-900">
-                Add Item
-              </button>
+      {openModel && (
+        <div className="w-full top-0 left-0 right-0 bottom-0 backdrop-blur-sm flex justify-center items-center fixed">
+          <div className="w-[400px] bg-[#eaeaea] p-8 rounded-lg shadow-sm">
+            <div className="w-full flex justify-between mb-4 items-center">
+              <h1 className="font-medium text-lg text-blue-600">
+                Add Equipment
+              </h1>
+              <GiTireIronCross
+                onClick={() => UnMountModel()}
+                className="w-5 h-5 text-red-600 cursor-pointer active:scale-[0.95]"
+              />
             </div>
-          </form>
+            <form className="w-full flex flex-col" action="">
+              <label class="block mb-2 font-medium" for="file_input">
+                Upload file
+              </label>
+              <input
+                class="w-full rounded-lg cursor-pointer py-1"
+                id="file_input"
+                type="file"
+                name="image"
+                value={equipments.image}
+                onChange={handleChange}
+              />
+
+              <label class="block mb-2 font-medium mt-4 " for="name">
+                Equipment Name
+              </label>
+              <input
+                type="text"
+                id="name"
+                name="name"
+                className="p-2 w-full rounded-sm"
+                placeholder="Name of Equipment"
+                value={equipments.name}
+                onChange={handleChange}
+                required
+              />
+
+              <label class="block mb-2 font-medium mt-4 " for="quantity">
+                Number of Equipment
+              </label>
+              <input
+                type="number"
+                id="quantity"
+                name="quantity"
+                className="p-2 w-full rounded-sm"
+                placeholder="Total Equipments"
+                value={equipments.quantity}
+                onChange={handleChange}
+                required
+              />
+
+              <label class="block mb-2 font-medium mt-4 " for="defect">
+                Number of defective Equipment
+              </label>
+              <input
+                type="number"
+                id="defect"
+                name="defect"
+                className="p-2 w-full rounded-sm"
+                placeholder="No. of defective Equipments"
+                value={equipments.defect}
+                onChange={handleChange}
+                required
+              />
+
+              <div className="w-full flex justify-end mt-5 px-[2px]">
+                <button className="bg-blue-500 text-[16px] px-6 py-[6px] text-white rounded-sm font-medium hover:bg-blue-700 transition-all duration-300 ease-in-out active:bg-blue-900">
+                  Add Item
+                </button>
+              </div>
+            </form>
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 };
