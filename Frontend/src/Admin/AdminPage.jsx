@@ -31,7 +31,7 @@ const AdminPage = () => {
           <img
             className="w-[100px] object-cover"
             src="https://cdn3.f-cdn.com/contestentries/1981694/57156482/6119296dad926_thumb900.jpg"
-            alt=""
+            alt="img"
           />
           <h1 className="w-full text-center font-semibold mt-1 text-xl">
             Dharan Fitness Club
@@ -136,7 +136,7 @@ const AdminPage = () => {
 
       <section className="w-full h-screen ml-[250px] flex flex-col gap-3 overflow-y-auto">
         <div className="w-full py-2 flex flex-col items-center">
-          <img className="w-[100px] h-[90px] object-cover" src="" alt="" />
+          <img className="w-[100px] h-[24px] object-cover" src="" alt="" />
           <h1 className="w-full text-center font-semibold text-xl mt-1">
             Dharan Fitness Club
           </h1>
