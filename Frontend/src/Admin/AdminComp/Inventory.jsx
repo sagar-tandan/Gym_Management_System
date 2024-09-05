@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { LiaEditSolid } from "react-icons/lia";
 import { MdDeleteOutline } from "react-icons/md";
 import { GiTireIronCross } from "react-icons/gi";
+import axios from "axios";
 
 const equipment = [
   {
@@ -29,7 +30,11 @@ const Inventory = () => {
     defect: "",
   });
 
+  const [imageUrl, setImageUrl] = useState("");
+
   const [openModel, setModel] = useState(false);
+  const [editable, setEditable] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -40,20 +45,60 @@ const Inventory = () => {
   const UnMountModel = () => {
     setTimeout(() => {
       setModel(false);
+      setEditable(false);
     }, 200);
   };
 
   const MountModel = (e) => {
     e.preventDefault();
+    setEquipment("");
     setTimeout(() => {
       setModel(true);
     }, 200);
   };
 
   const handleEditModel = (e, data) => {
-    console.log(data);
+    setEditable(true);
     setEquipment(data);
     setModel(true);
+  };
+
+  const addItem = async (e) => {
+    setLoading(true);
+    e.preventDefault();
+    await uploadImage();
+    await sendDataToBackend();
+    setEquipment("");
+    setTimeout(() => {
+      setModel(false);
+      setEditable(false);
+    }, 200);
+    setLoading(false);
+  };
+
+  const uploadImage = async () => {
+    const formData = new FormData();
+    formData.append("file", equipments.image);
+    formData.append("upload_preset", "Dharan Fitness Club");
+
+    try {
+      const response = await axios.post(
+        "https://api.cloudinary.com/v1_1/djpnst0u5/image/upload",
+        formData
+      );
+
+      setImageUrl(response.data.url);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const sendDataToBackend = async () => {
+    setEquipment((prev) => {
+      const updatedEquip = { ...prev, image: imageUrl };
+      console.log(updatedEquip);
+      // now send it to backend for storage
+    });
   };
 
   return (
@@ -63,7 +108,7 @@ const Inventory = () => {
           onClick={(e) => MountModel(e)}
           className="px-3 py-[6px] bg-blue-500 text-white rounded-sm hover:bg-blue-600 active:bg-blue-900 transition-all duration-300 ease-in-out font-medium "
         >
-          Add Inventory
+          Add Equipment
         </button>
       </div>
       <hr className="w-full mt-1 border-[1px]" />
@@ -131,11 +176,11 @@ const Inventory = () => {
       </section>
 
       {openModel && (
-        <div className="w-full top-0 left-0 right-0 bottom-0 backdrop-blur-sm flex justify-center items-center fixed">
-          <div className="w-[400px] bg-[#eaeaea] p-8 rounded-lg shadow-sm">
+        <div className="w-full top-0 left-0 right-0 bottom-0 backdrop-blur-sm flex justify-center items-center fixed overflow-y-auto">
+          <div className="w-[450px] bg-[#eaeaea] p-8 rounded-lg shadow-sm">
             <div className="w-full flex justify-between mb-4 items-center">
               <h1 className="font-medium text-lg text-blue-600">
-                Add Equipment
+                {editable ? "Edit Inventory" : "Add Inventory"}
               </h1>
               <GiTireIronCross
                 onClick={() => UnMountModel()}
@@ -151,8 +196,12 @@ const Inventory = () => {
                 id="file_input"
                 type="file"
                 name="image"
-                value={equipments.image}
-                onChange={handleChange}
+                onChange={(e) =>
+                  setEquipment((prev) => ({
+                    ...prev,
+                    image: e.target.files[0],
+                  }))
+                }
               />
 
               <label class="block mb-2 font-medium mt-4 " for="name">
@@ -169,37 +218,47 @@ const Inventory = () => {
                 required
               />
 
-              <label class="block mb-2 font-medium mt-4 " for="quantity">
-                Number of Equipment
-              </label>
-              <input
-                type="number"
-                id="quantity"
-                name="quantity"
-                className="p-2 w-full rounded-sm"
-                placeholder="Total Equipments"
-                value={equipments.quantity}
-                onChange={handleChange}
-                required
-              />
-
-              <label class="block mb-2 font-medium mt-4 " for="defect">
-                Number of defective Equipment
-              </label>
-              <input
-                type="number"
-                id="defect"
-                name="defect"
-                className="p-2 w-full rounded-sm"
-                placeholder="No. of defective Equipments"
-                value={equipments.defect}
-                onChange={handleChange}
-                required
-              />
+              <div className="w-full flex gap-3">
+                <div className="w-full flex flex-col">
+                  <label class="block mb-2 font-medium mt-4 " for="quantity">
+                    Total Equipment
+                  </label>
+                  <input
+                    type="number"
+                    id="quantity"
+                    name="quantity"
+                    className="p-2 w-full rounded-sm"
+                    placeholder="Total Equipments"
+                    value={equipments.quantity}
+                    onChange={handleChange}
+                    required
+                  />
+                </div>
+                <div className="w-full flex flex-col">
+                  <label class="block mb-2 font-medium mt-4 " for="defect">
+                    Defective Equipment
+                  </label>
+                  <input
+                    type="number"
+                    id="defect"
+                    name="defect"
+                    className="p-2 w-full rounded-sm"
+                    placeholder="No. of defective Equipments"
+                    value={equipments.defect}
+                    onChange={handleChange}
+                    required
+                  />
+                </div>
+              </div>
 
               <div className="w-full flex justify-end mt-5 px-[2px]">
-                <button className="bg-blue-500 text-[16px] px-6 py-[6px] text-white rounded-sm font-medium hover:bg-blue-700 transition-all duration-300 ease-in-out active:bg-blue-900">
-                  Add Item
+                <button
+                  onClick={(e) => addItem(e)}
+                  className="bg-blue-500 text-[16px] px-6 py-[6px] text-white rounded-sm font-medium hover:bg-blue-700 transition-all duration-300 ease-in-out active:bg-blue-900"
+                >
+                  {loading
+                    ? "loading"
+                    : `${editable ? "Update Item" : "Add Item"}`}
                 </button>
               </div>
             </form>
