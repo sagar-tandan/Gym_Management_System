@@ -130,7 +130,7 @@ const Inventory = () => {
 
   //Function for deleting Data
 
-  const deleteItem = async (id) => {
+  const deleteItem = async (e, id) => {
     try {
       // Send a DELETE request to the backend
       const response = await axios.delete(
@@ -217,7 +217,10 @@ const Inventory = () => {
                         onClick={(e) => handleEditModel(e, equip)}
                         className="w-6 h-6 text-[#636363] hover:text-green-500 cursor-pointer"
                       />
-                      <MdDeleteOutline className="w-6 h-6 text-[#636363] hover:text-red-500 cursor-pointer" />
+                      <MdDeleteOutline
+                        onClick={(e) => deleteItem(e, equip.id)}
+                        className="w-6 h-6 text-[#636363] hover:text-red-500 cursor-pointer"
+                      />
                     </div>
                   </td>
                 </tr>
