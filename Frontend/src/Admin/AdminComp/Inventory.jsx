@@ -15,7 +15,9 @@ const Inventory = () => {
 
   const [allData, setAllData] = useState();
   const [openModel, setModel] = useState(false);
+  const [openDeleteModel, setDeleteModel] = useState(false);
   const [editable, setEditable] = useState(false);
+  const [itemID, setItemID] = useState();
   const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
@@ -137,6 +139,7 @@ const Inventory = () => {
         `http://localhost:5002/api/inventory/${id}`
       );
       console.log(response);
+      setDeleteModel(false);
       getAllData(); // Refresh data after deleting
     } catch (error) {
       console.log(error);
@@ -218,7 +221,10 @@ const Inventory = () => {
                         className="w-6 h-6 text-[#636363] hover:text-green-500 cursor-pointer"
                       />
                       <MdDeleteOutline
-                        onClick={(e) => deleteItem(e, equip.id)}
+                        onClick={() => {
+                          setItemID(equip.id);
+                          setDeleteModel(true);
+                        }}
                         className="w-6 h-6 text-[#636363] hover:text-red-500 cursor-pointer"
                       />
                     </div>
@@ -330,6 +336,42 @@ const Inventory = () => {
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {openDeleteModel && (
+        <div className="w-full top-0 left-0 right-0 bottom-0 backdrop-blur-[6px] flex justify-center items-center fixed overflow-y-auto">
+          <div className="w-[450px] bg-white p-6 rounded-lg border-[2px]">
+            <div className="w-full flex justify-between mb-1 items-center">
+              <h1 className="font-medium text-2xl text-black">Delete item</h1>
+            </div>
+            <p className="text-lg text-[#636363] mb-5">
+              Are you sure you want to delete this item?{" "}
+            </p>
+
+            <div className="w-full flex justify-end">
+              <div className="flex gap-5">
+                <button
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setItemID("");
+                    setTimeout(() => {
+                      setDeleteModel(false);
+                    }, 200);
+                  }}
+                  className="font-medium text-[16px]"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={(e) => deleteItem(e, itemID)}
+                  className="font-medium text-red-500 text-[16px]"
+                >
+                  Delete
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       )}
