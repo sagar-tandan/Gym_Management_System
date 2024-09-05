@@ -110,23 +110,25 @@ const Inventory = () => {
         updatedEquip
       );
       console.log(response);
+      getAllData();
     } catch (error) {
       console.log(error);
     }
   };
 
-  // GETTING ALL THE INVENTORY DATA
   useEffect(() => {
-    const getAllData = async () => {
-      try {
-        const response = await axios.get("http://localhost:5002/api/inventory");
-        setAllData(response.data);
-      } catch (error) {
-        console.log(error);
-      }
-    };
     getAllData();
   }, []);
+
+  // GETTING ALL THE INVENTORY DATA
+  const getAllData = async () => {
+    try {
+      const response = await axios.get("http://localhost:5002/api/inventory");
+      setAllData(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <div className="w-full flex flex-col gap-2 h-screen">
