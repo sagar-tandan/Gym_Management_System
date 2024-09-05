@@ -37,6 +37,7 @@ namespace API.Controllers
                 ImageUrl = data.ImageUrl,
                 ItemName = data.ItemName,
                 Quantity = data.Quantity,
+                Defect = data.Defect,
                 Price = data.Price
             });
 
@@ -60,6 +61,7 @@ namespace API.Controllers
                 ImageUrl = searchedData.ImageUrl,
                 ItemName = searchedData.ItemName,
                 Quantity = searchedData.Quantity,
+                Defect = searchedData.Defect,
                 Price = searchedData.Price
             };
 
@@ -75,6 +77,7 @@ namespace API.Controllers
                 ImageUrl = inventoryDto.ImageUrl,
                 ItemName = inventoryDto.ItemName,
                 Quantity = inventoryDto.Quantity,
+                Defect = inventoryDto.Defect,
                 Price = inventoryDto.Price
             };
 
@@ -105,6 +108,7 @@ namespace API.Controllers
             InventoryToBeUpdated.ItemName = inventoryDto.ItemName;
             InventoryToBeUpdated.Quantity = inventoryDto.Quantity;
             InventoryToBeUpdated.Price = inventoryDto.Price;
+            InventoryToBeUpdated.Defect = inventoryDto.Defect;
 
             _context.Entry(InventoryToBeUpdated).State = EntityState.Modified;
             await _context.SaveChangesAsync();
