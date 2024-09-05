@@ -4,34 +4,36 @@ import { MdDeleteOutline } from "react-icons/md";
 import { GiTireIronCross } from "react-icons/gi";
 import axios from "axios";
 
-const equipment = [
-  {
-    name: "Lats Pulldown",
-    quantity: "2",
-    defect: "1",
-  },
-  {
-    name: "Chest Press",
-    quantity: "2",
-    defect: "0",
-  },
-  {
-    name: "Chest Press",
-    quantity: "3",
-    defect: "2",
-  },
-];
+// const equipment = [
+//   {
+//     name: "Lats Pulldown",
+//     quantity: "2",
+//     defect: "1",
+//   },
+//   {
+//     name: "Chest Press",
+//     quantity: "2",
+//     defect: "0",
+//   },
+//   {
+//     name: "Chest Press",
+//     quantity: "3",
+//     defect: "2",
+//   },
+// ];
 
 const Inventory = () => {
   const [equipments, setEquipment] = useState({
-    image: "",
-    name: "",
+    imageUrl: "",
+    itemName: "",
     quantity: "",
     defect: "",
+    price: "",
   });
 
-  const [imageUrl, setImageUrl] = useState("");
+  const [allData, setAllData] = useState();
 
+  const [imgUrl, setImageUrl] = useState("");
   const [openModel, setModel] = useState(false);
   const [editable, setEditable] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -66,19 +68,25 @@ const Inventory = () => {
   const addItem = async (e) => {
     setLoading(true);
     e.preventDefault();
-    await uploadImage();
-    await sendDataToBackend();
-    setEquipment("");
-    setTimeout(() => {
-      setModel(false);
-      setEditable(false);
-    }, 200);
+    const uploadedImageUrl = await uploadImage(); // Get the uploaded image URL
+    if (uploadedImageUrl) {
+      await sendDataToBackend(uploadedImageUrl); // Pass the image URL to the backend
+    }
+    setEquipment({
+      imageUrl: "",
+      itemName: "",
+      quantity: "",
+      defect: "",
+      price: "",
+    });
+    setModel(false);
+    setEditable(false);
     setLoading(false);
   };
 
   const uploadImage = async () => {
     const formData = new FormData();
-    formData.append("file", equipments.image);
+    formData.append("file", equipments.imageUrl);
     formData.append("upload_preset", "Dharan Fitness Club");
 
     try {
@@ -86,20 +94,39 @@ const Inventory = () => {
         "https://api.cloudinary.com/v1_1/djpnst0u5/image/upload",
         formData
       );
-
       setImageUrl(response.data.url);
+      return response.data.url; // Return the image URL after upload
+    } catch (error) {
+      console.log(error);
+      return null;
+    }
+  };
+
+  const sendDataToBackend = async (uploadedImageUrl) => {
+    const updatedEquip = { ...equipments, imageUrl: uploadedImageUrl };
+    try {
+      const response = await axios.post(
+        "http://localhost:5002/api/inventory",
+        updatedEquip
+      );
+      console.log(response);
     } catch (error) {
       console.log(error);
     }
   };
 
-  const sendDataToBackend = async () => {
-    setEquipment((prev) => {
-      const updatedEquip = { ...prev, image: imageUrl };
-      console.log(updatedEquip);
-      // now send it to backend for storage
-    });
-  };
+  // GETTING ALL THE INVENTORY DATA
+  useEffect(() => {
+    const getAllData = async () => {
+      try {
+        const response = await axios.get("http://localhost:5002/api/inventory");
+        setAllData(response.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getAllData();
+  }, []);
 
   return (
     <div className="w-full flex flex-col gap-2 h-screen">
@@ -125,6 +152,9 @@ const Inventory = () => {
               <th className="font-medium text-left pl-4 py-2 text-[#636363]">
                 Quantity
               </th>
+              <th className="font-medium text-left pl-4 py-2 text-[#636363]">
+                Price
+              </th>
               <th className="font-medium text-left pl-6 py-2 text-[#636363]">
                 Status
               </th>
@@ -135,42 +165,48 @@ const Inventory = () => {
           </thead>
 
           <tbody>
-            {equipment.map((equip, index) => (
-              <tr key={index} className="border-[1px] border-blue-100">
-                <td className="py-3 px-5 font-medium text-black">{index}</td>
-                <td className="py-3 px-5 font-normal text-[#636363]">
-                  {equip.name}
-                </td>
-                <td className="py-3 px-5 font-normal text-[#636363]">
-                  {equip.quantity}
-                </td>
-                <td
-                  className={`py-3 px-5 font-normal text-[#636363] flex justify-start`}
-                >
-                  <span
-                    className={`${
-                      parseInt(equip.defect) / parseInt(equip.quantity) > 0.5
-                        ? "bg-red-200 text-red-500 px-2 py-[1px] rounded-xl"
-                        : "bg-green-200 text-green-500 px-3 py-[1px] rounded-xl"
-                    } flex items-center justify-center`}
-                  >
-                    {parseInt(equip.defect) / parseInt(equip.quantity) > 0.5
-                      ? "Inactive"
-                      : "Active"}
-                  </span>
-                </td>
+            {allData &&
+              allData.map((equip, index) => (
+                <tr key={index} className="border-[1px] border-blue-100">
+                  <td className="py-3 px-5 font-medium text-black">{index}</td>
+                  <td className="py-3 px-5 font-normal text-[#636363]">
+                    {equip.itemName}
+                  </td>
+                  <td className="py-3 px-5 font-normal text-[#636363]">
+                    {equip.quantity}
+                  </td>
 
-                <td className="py-3 px-5 w-[200px]">
-                  <div className="w-full flex gap-8">
-                    <LiaEditSolid
-                      onClick={(e) => handleEditModel(e, equip)}
-                      className="w-6 h-6 text-[#636363] hover:text-green-500 cursor-pointer"
-                    />
-                    <MdDeleteOutline className="w-6 h-6 text-[#636363] hover:text-red-500 cursor-pointer" />
-                  </div>
-                </td>
-              </tr>
-            ))}
+                  <td className="py-3 px-5 font-normal text-[#636363]">
+                    {equip.price}
+                  </td>
+
+                  <td
+                    className={`py-3 px-5 font-normal text-[#636363] flex justify-start`}
+                  >
+                    <span
+                      className={`${
+                        parseInt(equip.defect) / parseInt(equip.quantity) > 0.5
+                          ? "bg-red-200 text-red-500 px-2 py-[1px] rounded-xl"
+                          : "bg-green-200 text-green-500 px-3 py-[1px] rounded-xl"
+                      } flex items-center justify-center`}
+                    >
+                      {parseInt(equip.defect) / parseInt(equip.quantity) > 0.5
+                        ? "Inactive"
+                        : "Active"}
+                    </span>
+                  </td>
+
+                  <td className="py-3 px-5 w-[200px]">
+                    <div className="w-full flex gap-8">
+                      <LiaEditSolid
+                        onClick={(e) => handleEditModel(e, equip)}
+                        className="w-6 h-6 text-[#636363] hover:text-green-500 cursor-pointer"
+                      />
+                      <MdDeleteOutline className="w-6 h-6 text-[#636363] hover:text-red-500 cursor-pointer" />
+                    </div>
+                  </td>
+                </tr>
+              ))}
           </tbody>
         </table>
       </section>
@@ -195,25 +231,25 @@ const Inventory = () => {
                 class="w-full rounded-lg cursor-pointer py-1"
                 id="file_input"
                 type="file"
-                name="image"
+                name="imageUrl"
                 onChange={(e) =>
                   setEquipment((prev) => ({
                     ...prev,
-                    image: e.target.files[0],
+                    imageUrl: e.target.files[0],
                   }))
                 }
               />
 
-              <label class="block mb-2 font-medium mt-4 " for="name">
+              <label class="block mb-2 font-medium mt-4 " for="itemName">
                 Equipment Name
               </label>
               <input
                 type="text"
-                id="name"
-                name="name"
+                id="itemName"
+                name="itemName"
                 className="p-2 w-full rounded-sm"
                 placeholder="Name of Equipment"
-                value={equipments.name}
+                value={equipments.itemName}
                 onChange={handleChange}
                 required
               />
@@ -250,6 +286,20 @@ const Inventory = () => {
                   />
                 </div>
               </div>
+
+              <label class="block mb-2 font-medium mt-4 " for="price">
+                Total Price
+              </label>
+              <input
+                type="number"
+                id="price"
+                name="price"
+                className="p-2 w-full rounded-sm"
+                placeholder="Total price"
+                value={equipments.price}
+                onChange={handleChange}
+                required
+              />
 
               <div className="w-full flex justify-end mt-5 px-[2px]">
                 <button
