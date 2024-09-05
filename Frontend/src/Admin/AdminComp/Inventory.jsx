@@ -4,24 +4,6 @@ import { MdDeleteOutline } from "react-icons/md";
 import { GiTireIronCross } from "react-icons/gi";
 import axios from "axios";
 
-// const equipment = [
-//   {
-//     name: "Lats Pulldown",
-//     quantity: "2",
-//     defect: "1",
-//   },
-//   {
-//     name: "Chest Press",
-//     quantity: "2",
-//     defect: "0",
-//   },
-//   {
-//     name: "Chest Press",
-//     quantity: "3",
-//     defect: "2",
-//   },
-// ];
-
 const Inventory = () => {
   const [equipments, setEquipment] = useState({
     imageUrl: "",
@@ -32,8 +14,6 @@ const Inventory = () => {
   });
 
   const [allData, setAllData] = useState();
-
-  const [imgUrl, setImageUrl] = useState("");
   const [openModel, setModel] = useState(false);
   const [editable, setEditable] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -68,10 +48,17 @@ const Inventory = () => {
   const addItem = async (e) => {
     setLoading(true);
     e.preventDefault();
-    const uploadedImageUrl = await uploadImage(); // Get the uploaded image URL
-    if (uploadedImageUrl) {
-      await sendDataToBackend(uploadedImageUrl); // Pass the image URL to the backend
+
+    let uploadedImageUrl = equipments.imageUrl;
+
+    // If the user has uploaded a new image, only then upload it
+    if (equipments.imageUrl instanceof File) {
+      uploadedImageUrl = await uploadImage();
     }
+
+    await sendDataToBackend(uploadedImageUrl);
+
+    // Reset the form after submission
     setEquipment({
       imageUrl: "",
       itemName: "",
@@ -84,6 +71,32 @@ const Inventory = () => {
     setLoading(false);
   };
 
+  const sendDataToBackend = async (uploadedImageUrl) => {
+    // If no new image is uploaded, keep the old image URL
+    const updatedEquip = { ...equipments, imageUrl: uploadedImageUrl };
+
+    try {
+      if (editable) {
+        // Update existing item
+        const response = await axios.put(
+          `http://localhost:5002/api/inventory/${equipments.id}`,
+          updatedEquip
+        );
+        console.log(response);
+      } else {
+        // Add new item
+        const response = await axios.post(
+          "http://localhost:5002/api/inventory",
+          updatedEquip
+        );
+        console.log(response);
+      }
+      getAllData(); // Refresh data after adding/updating
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const uploadImage = async () => {
     const formData = new FormData();
     formData.append("file", equipments.imageUrl);
@@ -94,25 +107,10 @@ const Inventory = () => {
         "https://api.cloudinary.com/v1_1/djpnst0u5/image/upload",
         formData
       );
-      setImageUrl(response.data.url);
       return response.data.url; // Return the image URL after upload
     } catch (error) {
       console.log(error);
       return null;
-    }
-  };
-
-  const sendDataToBackend = async (uploadedImageUrl) => {
-    const updatedEquip = { ...equipments, imageUrl: uploadedImageUrl };
-    try {
-      const response = await axios.post(
-        "http://localhost:5002/api/inventory",
-        updatedEquip
-      );
-      console.log(response);
-      getAllData();
-    } catch (error) {
-      console.log(error);
     }
   };
 
@@ -125,6 +123,21 @@ const Inventory = () => {
     try {
       const response = await axios.get("http://localhost:5002/api/inventory");
       setAllData(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  //Function for deleting Data
+
+  const deleteItem = async (id) => {
+    try {
+      // Send a DELETE request to the backend
+      const response = await axios.delete(
+        `http://localhost:5002/api/inventory/${id}`
+      );
+      console.log(response);
+      getAllData(); // Refresh data after deleting
     } catch (error) {
       console.log(error);
     }
