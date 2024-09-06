@@ -106,3 +106,7 @@ C:\Users\CSE\Desktop\Project-undefined\client\API\obj\Debug\net8.0\refint\API.dl
 C:\Users\CSE\Desktop\Project-undefined\client\API\obj\Debug\net8.0\API.pdb
 C:\Users\CSE\Desktop\Project-undefined\client\API\obj\Debug\net8.0\API.genruntimeconfig.cache
 C:\Users\CSE\Desktop\Project-undefined\client\API\obj\Debug\net8.0\ref\API.dll
+C:\Users\CSE\Desktop\Project-undefined\client\api\bin\Debug\net8.0\Microsoft.AspNetCore.JsonPatch.dll
+C:\Users\CSE\Desktop\Project-undefined\client\api\bin\Debug\net8.0\Microsoft.AspNetCore.Mvc.NewtonsoftJson.dll
+C:\Users\CSE\Desktop\Project-undefined\client\api\bin\Debug\net8.0\Newtonsoft.Json.dll
+C:\Users\CSE\Desktop\Project-undefined\client\api\bin\Debug\net8.0\Newtonsoft.Json.Bson.dll
