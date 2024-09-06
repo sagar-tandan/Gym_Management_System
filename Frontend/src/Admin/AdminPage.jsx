@@ -29,14 +29,14 @@ const AdminPage = () => {
         {/* LOGO Section */}
         <div className="w-full py-2 flex flex-col items-center">
           <img
-            className="w-[100px] object-cover"
+            className="w-[90px] object-cover"
             src="https://cdn3.f-cdn.com/contestentries/1981694/57156482/6119296dad926_thumb900.jpg"
             alt="img"
           />
           <h1 className="w-full text-center font-semibold mt-1 text-xl">
             Dharan Fitness Club
           </h1>
-          <hr className="w-full mt-1 border-[1px]" />
+          <hr className="w-full mt-[16px] border-[1px]" />
         </div>
 
         <nav className="w-full flex flex-col justify-between h-full pb-5">
