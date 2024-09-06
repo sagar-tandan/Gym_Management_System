@@ -139,7 +139,9 @@ const Inventory = () => {
         `http://localhost:5002/api/inventory/${id}`
       );
       console.log(response);
-      setDeleteModel(false);
+      setTimeout(() => {
+        setDeleteModel(false);
+      }, 100);
       getAllData(); // Refresh data after deleting
     } catch (error) {
       console.log(error);
@@ -237,7 +239,7 @@ const Inventory = () => {
 
       {openModel && (
         <div className="w-full top-0 left-0 right-0 bottom-0 backdrop-blur-sm flex justify-center items-center fixed overflow-y-auto">
-          <div className="w-[450px] bg-[#eaeaea] p-8 rounded-lg shadow-sm">
+          <div className="w-[450px] bg-white border-[1px] p-8 rounded-lg shadow-sm">
             <div className="w-full flex justify-between mb-4 items-center">
               <h1 className="font-medium text-lg text-blue-600">
                 {editable ? "Edit Inventory" : "Add Inventory"}
@@ -271,7 +273,7 @@ const Inventory = () => {
                 type="text"
                 id="itemName"
                 name="itemName"
-                className="p-2 w-full rounded-sm"
+                className="p-2 w-full rounded-sm bg-blue-50"
                 placeholder="Name of Equipment"
                 value={equipments.itemName}
                 onChange={handleChange}
@@ -287,7 +289,7 @@ const Inventory = () => {
                     type="number"
                     id="quantity"
                     name="quantity"
-                    className="p-2 w-full rounded-sm"
+                    className="p-2 w-full rounded-sm bg-blue-50"
                     placeholder="Total Equipments"
                     value={equipments.quantity}
                     onChange={handleChange}
@@ -302,7 +304,7 @@ const Inventory = () => {
                     type="number"
                     id="defect"
                     name="defect"
-                    className="p-2 w-full rounded-sm"
+                    className="p-2 w-full rounded-sm bg-blue-50"
                     placeholder="No. of defective Equipments"
                     value={equipments.defect}
                     onChange={handleChange}
@@ -318,7 +320,7 @@ const Inventory = () => {
                 type="number"
                 id="price"
                 name="price"
-                className="p-2 w-full rounded-sm"
+                className="p-2 w-full rounded-sm bg-blue-50"
                 placeholder="Total price"
                 value={equipments.price}
                 onChange={handleChange}
@@ -331,7 +333,7 @@ const Inventory = () => {
                   className="bg-blue-500 text-[16px] px-6 py-[6px] text-white rounded-sm font-medium hover:bg-blue-700 transition-all duration-300 ease-in-out active:bg-blue-900"
                 >
                   {loading
-                    ? "loading"
+                    ? "updating.."
                     : `${editable ? "Update Item" : "Add Item"}`}
                 </button>
               </div>
@@ -342,7 +344,7 @@ const Inventory = () => {
 
       {openDeleteModel && (
         <div className="w-full top-0 left-0 right-0 bottom-0 backdrop-blur-[6px] flex justify-center items-center fixed overflow-y-auto">
-          <div className="w-[450px] bg-white p-6 rounded-lg border-[2px]">
+          <div className="w-[450px] bg-white p-6 rounded-lg border-[1px]">
             <div className="w-full flex justify-between mb-1 items-center">
               <h1 className="font-medium text-2xl text-black">Delete item</h1>
             </div>
