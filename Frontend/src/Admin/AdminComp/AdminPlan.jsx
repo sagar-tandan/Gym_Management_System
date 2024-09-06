@@ -276,10 +276,13 @@ const AdminPlan = () => {
         <div className="w-full top-0 left-0 right-0 bottom-0 backdrop-blur-[6px] flex justify-center items-center fixed overflow-y-auto">
           <div className="w-[450px] bg-white p-6 rounded-lg border-[1px]">
             <div className="w-full flex justify-between mb-1 items-center">
-              <h1 className="font-medium text-2xl text-black">Delete item</h1>
+              <h1 className="font-medium text-2xl text-black">Delete Plan</h1>
             </div>
-            <p className="text-lg text-[#636363] mb-5">
-              Are you sure you want to delete this item?{" "}
+            <p className="text-lg text-[#636363]">
+              Are you sure you want to delete this plan?
+            </p>
+            <p className="mb-5 text-sm pr-20 text-red-500">
+              All the members associated with this plan will be deleted.
             </p>
 
             <div className="w-full flex justify-end">
