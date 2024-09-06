@@ -249,7 +249,7 @@ const Inventory = () => {
                 className="w-5 h-5 text-red-600 cursor-pointer active:scale-[0.95]"
               />
             </div>
-            <form className="w-full flex flex-col" action="">
+            <form className="w-full flex flex-col" onSubmit={(e) => addItem(e)}>
               <label class="block mb-2 font-medium" for="file_input">
                 Upload file
               </label>
@@ -329,7 +329,7 @@ const Inventory = () => {
 
               <div className="w-full flex justify-end mt-5 px-[2px]">
                 <button
-                  onClick={(e) => addItem(e)}
+                  type="submit"
                   className="bg-blue-500 text-[16px] px-6 py-[6px] text-white rounded-sm font-medium hover:bg-blue-700 transition-all duration-300 ease-in-out active:bg-blue-900"
                 >
                   {loading
