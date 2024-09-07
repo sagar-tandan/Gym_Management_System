@@ -19,6 +19,7 @@ namespace api.Models
         public string? ExpiryDate { get; set; }
         public string? Email { get; set; }
         public decimal Price { get; set; }
+        public string? PlanName { get; set; }
 
         // Foreign Key for Plan
         public int PlanId { get; set; }

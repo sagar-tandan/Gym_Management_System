@@ -21,9 +21,9 @@ const MemberRegister = () => {
     expiryDate: "",
     email: "",
     contact: "",
-    plan: "",
     price: "",
     planName: "",
+    planId: "",
   });
 
   const [openModel, setModel] = useState(false);
@@ -96,8 +96,9 @@ const MemberRegister = () => {
       expiryDate: "",
       email: "",
       contact: "",
-      plan: "",
       price: "",
+      planName: "",
+      planId: "",
     });
     setTimeout(() => {
       setModel(true);
@@ -125,6 +126,7 @@ const MemberRegister = () => {
   const handleRenewModel = (e, data) => {
     setRenew(true);
     setregisterMember(data);
+    console.log(registerMember);
   };
 
   const addItem = async (e) => {
@@ -379,13 +381,13 @@ const MemberRegister = () => {
               {!editable && (
                 <div className="w-full flex gap-3">
                   <div className="w-full flex flex-col">
-                    <label class="block mb-2 font-medium mt-4 " for="plan">
+                    <label class="block mb-2 font-medium mt-4 " for="planId">
                       Plan
                     </label>
                     <select
                       className="outline-none p-2 w-full rounded-sm bg-blue-50"
-                      name="plan"
-                      id="plan"
+                      name="planId"
+                      id="planId"
                       required
                       onChange={handleChange}
                     >
@@ -463,7 +465,7 @@ const MemberRegister = () => {
 
               <div className="w-full flex gap-3">
                 <div className="w-full flex flex-col">
-                  <label class="block mb-2 font-medium mt-4 " for="plan">
+                  <label class="block mb-2 font-medium mt-4" for="plan">
                     Plan
                   </label>
                   <select
@@ -473,10 +475,18 @@ const MemberRegister = () => {
                     required
                     onChange={handleChange}
                   >
-                    <option value="NaN">Select Plan</option>
+                    {registerMember.planId ? (
+                      <option value={registerMember.planId}>
+                        {registerMember.planName}
+                      </option>
+                    ) : (
+                      <option value="NaN">Select Plan</option>
+                    )}
                     {plan &&
                       plan.map((plan) => (
-                        <option value={plan.planId}>{plan.name}</option>
+                        <option key={plan.planId} value={plan.planId}>
+                          {plan.name}
+                        </option>
                       ))}
                   </select>
                 </div>

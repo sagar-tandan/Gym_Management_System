@@ -49,7 +49,8 @@ namespace API.Controllers
                 Price = mRegisterDTO.Price,
                 ExpiryDate = mRegisterDTO.ExpiryDate,
                 Email = mRegisterDTO.Email,
-                PlanId = mRegisterDTO.PlanId
+                PlanId = mRegisterDTO.PlanId,
+                PlanName = mRegisterDTO.PlanName
 
             };
 
