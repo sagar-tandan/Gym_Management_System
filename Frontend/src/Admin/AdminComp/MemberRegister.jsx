@@ -44,11 +44,6 @@ const MemberRegister = () => {
   };
 
   useEffect(() => {
-    // const todayDate = new Date().toISOString().split("T")[0];
-    // setregisterMember((prev) => ({
-    //   ...prev,
-    //   enrolledDate: todayDate,
-    // }));
     const fetchPlan = async () => {
       try {
         const response = await axios.get("http://localhost:5002/api/plan");
@@ -65,27 +60,45 @@ const MemberRegister = () => {
   //AUTO UPDATE PRICE AND EXPIRY DATE ON SELECTING PLAN
   useEffect(() => {
     const selectedPlan = plan.find(
-      (plan) => plan.planId === parseInt(registerMember.plan)
+      (plan) => plan.planId === parseInt(registerMember.planId)
     );
 
     if (selectedPlan) {
-      const enrollment = new Date(registerMember.enrolledDate);
-      const expiry = new Date(
-        enrollment.setMonth(
-          enrollment.getMonth() + selectedPlan.durationInMonths
-        )
-      );
-      setregisterMember((prev) => ({
-        ...prev,
-        price: selectedPlan.cost,
-        expiryDate: expiry && expiry.toISOString().split("T")[0],
-        planName: selectedPlan.name,
-      }));
+      if (renew) {
+        // add duration in month in expiration date
+        const finalDate = new Date(registerMember.expiryDate);
+        console.log(finalDate);
+        const expiry = new Date(
+          finalDate.setMonth(
+            finalDate.getMonth() + selectedPlan.durationInMonths
+          )
+        );
+
+        setregisterMember((prev) => ({
+          ...prev,
+          price: selectedPlan.cost,
+          expiryDate: expiry && expiry.toISOString().split("T")[0],
+          planName: selectedPlan.name,
+        }));
+      } else {
+        const enrollment = new Date(registerMember.enrolledDate);
+        const expiry = new Date(
+          enrollment.setMonth(
+            enrollment.getMonth() + selectedPlan.durationInMonths
+          )
+        );
+        setregisterMember((prev) => ({
+          ...prev,
+          price: selectedPlan.cost,
+          expiryDate: expiry && expiry.toISOString().split("T")[0],
+          planName: selectedPlan.name,
+        }));
+      }
     } else {
       setregisterMember((prev) => ({ ...prev, price: 0, expiryDate: 0 }));
     }
     console.log(registerMember);
-  }, [registerMember.plan]);
+  }, [registerMember.planId]);
 
   const MountModel = (e) => {
     e.preventDefault();
@@ -129,6 +142,12 @@ const MemberRegister = () => {
     console.log(registerMember);
   };
 
+  const RenewMember = async (e) => {
+    e.preventDefault();
+    console.log(registerMember);
+    setRenew(false);
+  };
+
   const addItem = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -155,6 +174,7 @@ const MemberRegister = () => {
         // );
         // console.log(response);
       } else {
+        console.log(registerMember);
         // Add new item
         //   const response = await axios.post(
         //     "http://localhost:5002/api/plan",
