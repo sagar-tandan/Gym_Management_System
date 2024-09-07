@@ -8,6 +8,7 @@ import { GiTireIronCross } from "react-icons/gi";
 const MemberRegister = () => {
   const [selected, setSelected] = useState("allMember");
   const [plan, setPlan] = useState([]);
+  const [allMemberData, setAllMemberData] = useState();
 
   const [registerMember, setregisterMember] = useState({
     cardNo: "",
@@ -26,6 +27,16 @@ const MemberRegister = () => {
   const [itemID, setItemID] = useState();
   const [loading, setLoading] = useState(false);
 
+  const fetchMemberData = async () => {
+    try {
+      const response = await axios.get("http://localhost:5002/api/member");
+      console.table(response.data);
+      setAllMemberData(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     const todayDate = new Date().toISOString().split("T")[0];
     // console.log("Setting enrolledDate to:", todayDate); // Debug log
@@ -43,6 +54,7 @@ const MemberRegister = () => {
       }
     };
     fetchPlan();
+    fetchMemberData();
   }, []);
 
   //AUTO UPDATE PRICE AND EXPIRY DATE ON SELECTING PLAN
@@ -76,9 +88,62 @@ const MemberRegister = () => {
     }, 200);
   };
 
+  const UnMountModel = () => {
+    setTimeout(() => {
+      setModel(false);
+      setEditable(false);
+    }, 200);
+  };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setregisterMember((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleEditModel = (e, data) => {
+    setEditable(true);
+    setregisterMember(data);
+    setModel(true);
+  };
+
+  const addItem = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    await sendDataToBackend();
+    // Reset the form after submission
+    // setPlan({
+    //   name: "",
+    //   durationInMonths: "",
+    //   cost: "",
+    // });
+    setModel(false);
+    setEditable(false);
+    setLoading(false);
+  };
+
+  const sendDataToBackend = async () => {
+    try {
+      if (editable) {
+        console.log(registerMember);
+        // Update existing item
+        // const response = await axios.put(
+        //   `http://localhost:5002/api/plan/${addPlan.planId}`,
+        //   addPlan
+        // );
+        // console.log(response);
+      } else {
+        // Add new item
+        //   const response = await axios.post(
+        //     "http://localhost:5002/api/plan",
+        //     addPlan
+        //   );
+        //   console.log(response);
+        // }
+        // getAllPlan(); // Refresh data after adding/updating
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -129,6 +194,9 @@ const MemberRegister = () => {
                 Member Name
               </th>
               <th className="font-medium text-left pl-4 py-2 text-[#636363]">
+                Contact
+              </th>
+              <th className="font-medium text-left pl-4 py-2 text-[#636363]">
                 Enrolled Date
               </th>
               <th className="font-medium text-left pl-4 py-2 text-[#636363]">
@@ -139,6 +207,47 @@ const MemberRegister = () => {
               </th>
             </tr>
           </thead>
+
+          <tbody>
+            {allMemberData &&
+              allMemberData.map((member, index) => (
+                <tr key={index} className="border-[1px] border-blue-100">
+                  <td className="py-3 px-5 font-medium text-black">
+                    {member.cardNo}
+                  </td>
+                  <td className="py-3 px-5 font-normal text-[#636363]">
+                    {member.memberName}
+                  </td>
+                  <td className="py-3 px-5 font-normal text-[#636363]">
+                    {member.contact}
+                  </td>
+
+                  <td className="py-3 px-5 font-normal text-[#636363]">
+                    {member.enrolledDate}
+                  </td>
+
+                  <td className="py-3 px-5 font-normal text-[#636363]">
+                    {member.expiryDate}
+                  </td>
+
+                  <td className="py-3 px-5 w-[200px]">
+                    <div className="w-full flex gap-8">
+                      <LiaEditSolid
+                        onClick={(e) => handleEditModel(e, member)}
+                        className="w-6 h-6 text-[#636363] hover:text-green-500 cursor-pointer"
+                      />
+                      <MdDeleteOutline
+                        // onClick={() => {
+                        //   setItemID(plan.planId);
+                        //   setDeleteModel(true);
+                        // }}
+                        className="w-6 h-6 text-[#636363] hover:text-red-500 cursor-pointer"
+                      />
+                    </div>
+                  </td>
+                </tr>
+              ))}
+          </tbody>
         </table>
       </section>
 
@@ -152,7 +261,7 @@ const MemberRegister = () => {
                 {editable ? "Edit Member" : "Register Member"}
               </h1>
               <GiTireIronCross
-                // onClick={() => UnMountModel()}
+                onClick={() => UnMountModel()}
                 className="w-5 h-5 text-red-600 cursor-pointer active:scale-[0.95]"
               />
             </div>
@@ -166,7 +275,7 @@ const MemberRegister = () => {
                 name="cardNo"
                 className="p-2 w-full rounded-sm bg-blue-50"
                 placeholder="Member card Number"
-                value={MemberRegister.cardNo}
+                value={registerMember.cardNo}
                 onChange={handleChange}
               />
 
@@ -186,24 +295,26 @@ const MemberRegister = () => {
                     required
                   />
                 </div>
-                <div className="w-full flex flex-col">
-                  <label
-                    class="block mb-2 font-medium mt-4 "
-                    for="enrolledDate"
-                  >
-                    Enrolled Date
-                  </label>
-                  <input
-                    type="date"
-                    id="enrolledDate"
-                    name="enrolledDate"
-                    className="p-2 w-full rounded-sm bg-blue-50"
-                    placeholder="Date"
-                    value={registerMember.enrolledDate}
-                    onChange={handleChange}
-                    required
-                  />
-                </div>
+                {!editable && (
+                  <div className="w-full flex flex-col">
+                    <label
+                      class="block mb-2 font-medium mt-4 "
+                      for="enrolledDate"
+                    >
+                      Enrolled Date
+                    </label>
+                    <input
+                      type="date"
+                      id="enrolledDate"
+                      name="enrolledDate"
+                      className="p-2 w-full rounded-sm bg-blue-50"
+                      placeholder="Date"
+                      value={registerMember.enrolledDate}
+                      onChange={handleChange}
+                      required
+                    />
+                  </div>
+                )}
               </div>
 
               <div className="w-full flex gap-3">
@@ -237,42 +348,43 @@ const MemberRegister = () => {
                   />
                 </div>
               </div>
-
-              <div className="w-full flex gap-3">
-                <div className="w-full flex flex-col">
-                  <label class="block mb-2 font-medium mt-4 " for="plan">
-                    Plan
-                  </label>
-                  <select
-                    className="outline-none p-2 w-full rounded-sm bg-blue-50"
-                    name="plan"
-                    id="plan"
-                    required
-                    onChange={handleChange}
-                  >
-                    <option value="NaN">Select Plan</option>
-                    {plan &&
-                      plan.map((plan) => (
-                        <option value={plan.planId}>{plan.name}</option>
-                      ))}
-                  </select>
+              {!editable && (
+                <div className="w-full flex gap-3">
+                  <div className="w-full flex flex-col">
+                    <label class="block mb-2 font-medium mt-4 " for="plan">
+                      Plan
+                    </label>
+                    <select
+                      className="outline-none p-2 w-full rounded-sm bg-blue-50"
+                      name="plan"
+                      id="plan"
+                      required
+                      onChange={handleChange}
+                    >
+                      <option value="NaN">Select Plan</option>
+                      {plan &&
+                        plan.map((plan) => (
+                          <option value={plan.planId}>{plan.name}</option>
+                        ))}
+                    </select>
+                  </div>
+                  <div className="w-full flex flex-col">
+                    <label class="block mb-2 font-medium mt-4 " for="price">
+                      Price
+                    </label>
+                    <input
+                      type="number"
+                      id="price"
+                      name="price"
+                      className="p-2 w-full rounded-sm bg-blue-50"
+                      placeholder="Total amount"
+                      value={registerMember.price}
+                      onChange={handleChange}
+                      required
+                    />
+                  </div>
                 </div>
-                <div className="w-full flex flex-col">
-                  <label class="block mb-2 font-medium mt-4 " for="price">
-                    Price
-                  </label>
-                  <input
-                    type="number"
-                    id="price"
-                    name="price"
-                    className="p-2 w-full rounded-sm bg-blue-50"
-                    placeholder="Total amount"
-                    value={registerMember.price}
-                    onChange={handleChange}
-                    required
-                  />
-                </div>
-              </div>
+              )}
 
               <div className="w-full flex justify-end mt-6 px-[2px]">
                 <button
