@@ -42,9 +42,12 @@ namespace API.Controllers
             var newMember = new MemberRegistration
             {
                 Id = mRegisterDTO.Id,
-                FullName = mRegisterDTO.FullName,
-                ContactNumber = mRegisterDTO.ContactNumber,
-                RegistrationDate = mRegisterDTO.RegistrationDate,
+                CardNo = mRegisterDTO.CardNo,
+                MemberName = mRegisterDTO.MemberName,
+                Contact = mRegisterDTO.Contact,
+                EnrolledDate = mRegisterDTO.EnrolledDate,
+                Price = mRegisterDTO.Price,
+                ExpiryDate = mRegisterDTO.ExpiryDate,
                 Email = mRegisterDTO.Email,
                 PlanId = mRegisterDTO.PlanId
 

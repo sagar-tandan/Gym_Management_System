@@ -12,11 +12,13 @@ namespace api.Models
     {
 
         public int Id { get; set; }
-        public string? FullName { get; set; }
-        public string? ContactNumber { get; set; }
-        public DateTime RegistrationDate { get; set; }
+        public int CardNo { get; set; }
+        public string? MemberName { get; set; }
+        public string? Contact { get; set; }
+        public string? EnrolledDate { get; set; }
+        public string? ExpiryDate { get; set; }
         public string? Email { get; set; }
-
+        public decimal Price { get; set; }
 
         // Foreign Key for Plan
         public int PlanId { get; set; }
