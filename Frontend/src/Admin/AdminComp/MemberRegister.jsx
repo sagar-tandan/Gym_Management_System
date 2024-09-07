@@ -4,26 +4,32 @@ import { LiaUserAstronautSolid } from "react-icons/lia";
 import { LiaEditSolid } from "react-icons/lia";
 import { MdDeleteOutline } from "react-icons/md";
 import { GiTireIronCross } from "react-icons/gi";
+import { GiTakeMyMoney } from "react-icons/gi";
 
 const MemberRegister = () => {
   const [selected, setSelected] = useState("allMember");
   const [plan, setPlan] = useState([]);
   const [allMemberData, setAllMemberData] = useState();
+  const [todayDate, setTodayDate] = useState(
+    new Date().toISOString().split("T")[0]
+  );
 
   const [registerMember, setregisterMember] = useState({
     cardNo: "",
     memberName: "",
-    enrolledDate: "",
+    enrolledDate: todayDate,
     expiryDate: "",
     email: "",
     contact: "",
     plan: "",
     price: "",
+    planName: "",
   });
 
   const [openModel, setModel] = useState(false);
   const [openDeleteModel, setDeleteModel] = useState(false);
   const [editable, setEditable] = useState(false);
+  const [renew, setRenew] = useState(false);
   const [itemID, setItemID] = useState();
   const [loading, setLoading] = useState(false);
 
@@ -38,12 +44,11 @@ const MemberRegister = () => {
   };
 
   useEffect(() => {
-    const todayDate = new Date().toISOString().split("T")[0];
-    // console.log("Setting enrolledDate to:", todayDate); // Debug log
-    setregisterMember((prev) => ({
-      ...prev,
-      enrolledDate: todayDate,
-    }));
+    // const todayDate = new Date().toISOString().split("T")[0];
+    // setregisterMember((prev) => ({
+    //   ...prev,
+    //   enrolledDate: todayDate,
+    // }));
     const fetchPlan = async () => {
       try {
         const response = await axios.get("http://localhost:5002/api/plan");
@@ -74,6 +79,7 @@ const MemberRegister = () => {
         ...prev,
         price: selectedPlan.cost,
         expiryDate: expiry && expiry.toISOString().split("T")[0],
+        planName: selectedPlan.name,
       }));
     } else {
       setregisterMember((prev) => ({ ...prev, price: 0, expiryDate: 0 }));
@@ -83,6 +89,16 @@ const MemberRegister = () => {
 
   const MountModel = (e) => {
     e.preventDefault();
+    setregisterMember({
+      cardNo: "",
+      memberName: "",
+      enrolledDate: todayDate,
+      expiryDate: "",
+      email: "",
+      contact: "",
+      plan: "",
+      price: "",
+    });
     setTimeout(() => {
       setModel(true);
     }, 200);
@@ -104,6 +120,11 @@ const MemberRegister = () => {
     setEditable(true);
     setregisterMember(data);
     setModel(true);
+  };
+
+  const handleRenewModel = (e, data) => {
+    setRenew(true);
+    setregisterMember(data);
   };
 
   const addItem = async (e) => {
@@ -236,6 +257,11 @@ const MemberRegister = () => {
                         onClick={(e) => handleEditModel(e, member)}
                         className="w-6 h-6 text-[#636363] hover:text-green-500 cursor-pointer"
                       />
+                      <GiTakeMyMoney
+                        onClick={(e) => handleRenewModel(e, member)}
+                        className="w-6 h-6 text-[#636363] hover:text-[#ee0979] cursor-pointer"
+                      />
+
                       <MdDeleteOutline
                         // onClick={() => {
                         //   setItemID(plan.planId);
@@ -266,18 +292,20 @@ const MemberRegister = () => {
               />
             </div>
             <form className="w-full flex flex-col" onSubmit={(e) => addItem(e)}>
-              <label class="block mb-2 font-medium mt-2" for="cardNo">
-                Card Number
-              </label>
-              <input
-                type="number"
-                id="cardNo"
-                name="cardNo"
-                className="p-2 w-full rounded-sm bg-blue-50"
-                placeholder="Member card Number"
-                value={registerMember.cardNo}
-                onChange={handleChange}
-              />
+              <div className="w-full flex flex-col">
+                <label class="block mb-2 font-medium mt-2" for="cardNo">
+                  Card Number
+                </label>
+                <input
+                  type="number"
+                  id="cardNo"
+                  name="cardNo"
+                  className="p-2 w-full rounded-sm bg-blue-50"
+                  placeholder="Member card Number"
+                  value={registerMember.cardNo}
+                  onChange={handleChange}
+                />
+              </div>
 
               <div className="w-full flex gap-3">
                 <div className="w-full flex flex-col">
@@ -394,6 +422,87 @@ const MemberRegister = () => {
                   {loading
                     ? "updating.."
                     : `${editable ? "Update Member" : "Register Member"}`}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {renew && (
+        <div className="w-full top-0 left-0 right-0 bottom-0 backdrop-blur-sm flex justify-center items-center fixed overflow-y-auto">
+          <div className="w-[550px] bg-white border-[1px] p-8 rounded-lg shadow-sm">
+            <div className="w-full flex justify-between mb-4 items-center">
+              <h1 className="font-medium text-lg text-blue-600">
+                Renew Member Plan
+              </h1>
+              <GiTireIronCross
+                onClick={() => setRenew(false)}
+                className="w-5 h-5 text-red-600 cursor-pointer active:scale-[0.95]"
+              />
+            </div>
+            <form
+              className="w-full flex flex-col"
+              onSubmit={(e) => RenewMember(e)}
+            >
+              <div className="w-full flex flex-col">
+                <label class="block mb-2 font-medium mt-2" for="memberName">
+                  Member Name
+                </label>
+                <input
+                  type="text"
+                  id="memberName"
+                  name="memberName"
+                  className="p-2 w-full rounded-sm bg-blue-50"
+                  placeholder="Full Name"
+                  value={registerMember.memberName}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+
+              <div className="w-full flex gap-3">
+                <div className="w-full flex flex-col">
+                  <label class="block mb-2 font-medium mt-4 " for="plan">
+                    Plan
+                  </label>
+                  <select
+                    className="outline-none p-2 w-full rounded-sm bg-blue-50"
+                    name="plan"
+                    id="plan"
+                    required
+                    onChange={handleChange}
+                  >
+                    <option value="NaN">Select Plan</option>
+                    {plan &&
+                      plan.map((plan) => (
+                        <option value={plan.planId}>{plan.name}</option>
+                      ))}
+                  </select>
+                </div>
+                <div className="w-full flex flex-col">
+                  <label class="block mb-2 font-medium mt-4 " for="price">
+                    Price
+                  </label>
+                  <input
+                    type="number"
+                    id="price"
+                    name="price"
+                    className="p-2 w-full rounded-sm bg-blue-50"
+                    placeholder="Total amount"
+                    value={registerMember.price}
+                    onChange={handleChange}
+                    required
+                  />
+                </div>
+              </div>
+
+              <div className="w-full flex justify-end mt-6 px-[2px]">
+                <button
+                  type="submit"
+                  className="bg-blue-500 text-[16px] px-6 py-[6px] text-white rounded-sm font-medium hover:bg-blue-700 transition-all duration-300 ease-in-out active:bg-blue-900"
+                >
+                  {loading ? "Renewing.." : `Renew`}
                 </button>
               </div>
             </form>
