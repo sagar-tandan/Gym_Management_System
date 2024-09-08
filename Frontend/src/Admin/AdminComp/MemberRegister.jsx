@@ -99,10 +99,10 @@ const MemberRegister = () => {
         if (response.data) {
           setallPaidandUnpaidMember(response.data);
           const paid = response.data.filter(
-            (info) => parseInt(info.expiryDate) > parseInt(todayDate)
+            (info) => new Date(info.expiryDate) > new Date(todayDate)
           );
           const Unpaid = response.data.filter(
-            (info) => parseInt(info.expiryDate) <= parseInt(todayDate)
+            (info) => new Date(info.expiryDate) <= new Date(todayDate)
           );
           setAllPaidMember(paid);
           setAllUnPaidMember(Unpaid);
@@ -288,8 +288,15 @@ const MemberRegister = () => {
     }
   };
 
+  const calculateExpiredDay = (today, expiry) => {
+    const day = Math.floor(
+      (new Date(today) - new Date(expiry)) / (1000 * 60 * 60 * 24)
+    );
+    return day;
+  };
+
   return (
-    <div className="w-full flex flex-col gap-2 h-screen">
+    <div className="w-full flex flex-col gap-2 h-screen overflow-x-hidden">
       <div className="w-full flex justify-between px-5 items-center mt-[3px]">
         <div className="flex gap-3">
           <span
@@ -350,51 +357,62 @@ const MemberRegister = () => {
             </tr>
           </thead>
           {selected === "allMember" ? (
-            allMemberData.length > 0 ? (
+            allMemberData && allMemberData.length > 0 ? (
               <tbody>
-                {allMemberData &&
-                  allMemberData.map((member, index) => (
-                    <tr key={index} className="border-[1px] border-blue-100">
-                      <td className="py-3 px-5 font-medium text-black">
-                        {member.cardNo}
-                      </td>
-                      <td className="py-3 px-5 font-normal text-[#636363]">
-                        {member.memberName}
-                      </td>
-                      <td className="py-3 px-5 font-normal text-[#636363]">
-                        {member.contact}
-                      </td>
+                {allMemberData.map((member, index) => (
+                  <tr
+                    key={index}
+                    className={`border-[1px] border-blue-100 ${
+                      new Date(member.expiryDate) <= new Date(todayDate)
+                        ? calculateExpiredDay(todayDate, member.expiryDate) <= 5
+                          ? "bg-red-50"
+                          : calculateExpiredDay(todayDate, member.expiryDate) <=
+                            10
+                          ? "bg-red-100"
+                          : "bg-red-200"
+                        : ""
+                    }`}
+                  >
+                    <td className="py-3 px-5 font-medium text-black">
+                      {member.cardNo}
+                    </td>
+                    <td className="py-3 px-5 font-normal text-[#636363]">
+                      {member.memberName}
+                    </td>
+                    <td className="py-3 px-5 font-normal text-[#636363]">
+                      {member.contact}
+                    </td>
 
-                      <td className="py-3 px-5 font-normal text-[#636363]">
-                        {member.enrolledDate}
-                      </td>
+                    <td className="py-3 px-5 font-normal text-[#636363]">
+                      {member.enrolledDate}
+                    </td>
 
-                      <td className="py-3 px-5 font-normal text-[#636363]">
-                        {member.expiryDate}
-                      </td>
+                    <td className="py-3 px-5 font-normal text-[#636363]">
+                      {member.expiryDate}
+                    </td>
 
-                      <td className="py-3 px-5 w-[200px]">
-                        <div className="w-full flex gap-8">
-                          <LiaEditSolid
-                            onClick={(e) => handleEditModel(e, member)}
-                            className="w-6 h-6 text-[#636363] hover:text-green-500 cursor-pointer"
-                          />
-                          <GiTakeMyMoney
-                            onClick={(e) => handleRenewModel(e, member)}
-                            className="w-6 h-6 text-[#636363] hover:text-[#ee0979] cursor-pointer"
-                          />
+                    <td className="py-3 px-5 w-[200px]">
+                      <div className="w-full flex gap-8">
+                        <LiaEditSolid
+                          onClick={(e) => handleEditModel(e, member)}
+                          className="w-6 h-6 text-[#636363] hover:text-green-500 cursor-pointer"
+                        />
+                        <GiTakeMyMoney
+                          onClick={(e) => handleRenewModel(e, member)}
+                          className="w-6 h-6 text-[#636363] hover:text-[#ee0979] cursor-pointer"
+                        />
 
-                          <MdDeleteOutline
-                            // onClick={() => {
-                            //   setItemID(plan.planId);
-                            //   setDeleteModel(true);
-                            // }}
-                            className="w-6 h-6 text-[#636363] hover:text-red-500 cursor-pointer"
-                          />
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
+                        <MdDeleteOutline
+                          // onClick={() => {
+                          //   setItemID(plan.planId);
+                          //   setDeleteModel(true);
+                          // }}
+                          className="w-6 h-6 text-[#636363] hover:text-red-500 cursor-pointer"
+                        />
+                      </div>
+                    </td>
+                  </tr>
+                ))}
               </tbody>
             ) : (
               <div className="w-full py-2 text-center mt-10 absolute">
@@ -402,61 +420,9 @@ const MemberRegister = () => {
               </div>
             )
           ) : selected === "paid" ? (
-            paginatedPaidMembers.length > 0 ? (
+            paginatedPaidMembers && paginatedPaidMembers.length > 0 ? (
               <tbody>
-                {paginatedPaidMembers &&
-                  paginatedPaidMembers.map((member, index) => (
-                    <tr key={index} className="border-[1px] border-blue-100">
-                      <td className="py-3 px-5 font-medium text-black">
-                        {member.cardNo}
-                      </td>
-                      <td className="py-3 px-5 font-normal text-[#636363]">
-                        {member.memberName}
-                      </td>
-                      <td className="py-3 px-5 font-normal text-[#636363]">
-                        {member.contact}
-                      </td>
-
-                      <td className="py-3 px-5 font-normal text-[#636363]">
-                        {member.enrolledDate}
-                      </td>
-
-                      <td className="py-3 px-5 font-normal text-[#636363]">
-                        {member.expiryDate}
-                      </td>
-
-                      <td className="py-3 px-5 w-[200px]">
-                        <div className="w-full flex gap-8">
-                          <LiaEditSolid
-                            onClick={(e) => handleEditModel(e, member)}
-                            className="w-6 h-6 text-[#636363] hover:text-green-500 cursor-pointer"
-                          />
-                          <GiTakeMyMoney
-                            onClick={(e) => handleRenewModel(e, member)}
-                            className="w-6 h-6 text-[#636363] hover:text-[#ee0979] cursor-pointer"
-                          />
-
-                          <MdDeleteOutline
-                            // onClick={() => {
-                            //   setItemID(plan.planId);
-                            //   setDeleteModel(true);
-                            // }}
-                            className="w-6 h-6 text-[#636363] hover:text-red-500 cursor-pointer"
-                          />
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
-              </tbody>
-            ) : (
-              <div className="w-full py-2 text-center mt-10 absolute">
-                No data found !
-              </div>
-            )
-          ) : paginatedUnpaidMembers.length > 0 ? (
-            <tbody>
-              {paginatedUnpaidMembers &&
-                paginatedUnpaidMembers.map((member, index) => (
+                {paginatedPaidMembers.map((member, index) => (
                   <tr key={index} className="border-[1px] border-blue-100">
                     <td className="py-3 px-5 font-medium text-black">
                       {member.cardNo}
@@ -498,6 +464,56 @@ const MemberRegister = () => {
                     </td>
                   </tr>
                 ))}
+              </tbody>
+            ) : (
+              <div className="w-full py-2 text-center mt-10 absolute">
+                No data found !
+              </div>
+            )
+          ) : paginatedUnpaidMembers && paginatedUnpaidMembers.length > 0 ? (
+            <tbody>
+              {paginatedUnpaidMembers.map((member, index) => (
+                <tr key={index} className="border-[1px] border-blue-100">
+                  <td className="py-3 px-5 font-medium text-black">
+                    {member.cardNo}
+                  </td>
+                  <td className="py-3 px-5 font-normal text-[#636363]">
+                    {member.memberName}
+                  </td>
+                  <td className="py-3 px-5 font-normal text-[#636363]">
+                    {member.contact}
+                  </td>
+
+                  <td className="py-3 px-5 font-normal text-[#636363]">
+                    {member.enrolledDate}
+                  </td>
+
+                  <td className="py-3 px-5 font-normal text-[#636363]">
+                    {member.expiryDate}
+                  </td>
+
+                  <td className="py-3 px-5 w-[200px]">
+                    <div className="w-full flex gap-8">
+                      <LiaEditSolid
+                        onClick={(e) => handleEditModel(e, member)}
+                        className="w-6 h-6 text-[#636363] hover:text-green-500 cursor-pointer"
+                      />
+                      <GiTakeMyMoney
+                        onClick={(e) => handleRenewModel(e, member)}
+                        className="w-6 h-6 text-[#636363] hover:text-[#ee0979] cursor-pointer"
+                      />
+
+                      <MdDeleteOutline
+                        // onClick={() => {
+                        //   setItemID(plan.planId);
+                        //   setDeleteModel(true);
+                        // }}
+                        className="w-6 h-6 text-[#636363] hover:text-red-500 cursor-pointer"
+                      />
+                    </div>
+                  </td>
+                </tr>
+              ))}
             </tbody>
           ) : (
             <div className="w-full py-2 text-center mt-10 absolute">
@@ -530,7 +546,7 @@ const MemberRegister = () => {
       {/* MODEL */}
 
       {openModel && (
-        <div className="w-full top-0 left-0 right-0 bottom-0 backdrop-blur-sm flex justify-center items-center fixed overflow-y-auto">
+        <div className="w-full top-0 left-0 right-0 bottom-0 backdrop-blur-sm flex justify-center items-center fixed overflow-y-auto z-30">
           <div className="w-[550px] bg-white border-[1px] p-8 rounded-lg shadow-sm">
             <div className="w-full flex justify-between mb-4 items-center">
               <h1 className="font-medium text-lg text-blue-600">
@@ -762,7 +778,7 @@ const MemberRegister = () => {
       )}
 
       {renew && (
-        <div className="w-full top-0 left-0 right-0 bottom-0 backdrop-blur-sm flex justify-center items-center fixed overflow-y-auto">
+        <div className="w-full top-0 left-0 right-0 bottom-0 backdrop-blur-sm flex justify-center items-center fixed overflow-y-auto z-30">
           <div className="w-[550px] bg-white border-[1px] p-8 rounded-lg shadow-sm">
             <div className="w-full flex justify-between mb-4 items-center">
               <h1 className="font-medium text-lg text-blue-600">
