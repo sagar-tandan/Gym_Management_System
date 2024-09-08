@@ -58,6 +58,49 @@ const MemberRegister = () => {
   }, []);
 
   //AUTO UPDATE PRICE AND EXPIRY DATE ON SELECTING PLAN
+  // useEffect(() => {
+
+  //   const selectedPlan = plan.find(
+  //     (plan) => plan.planId === parseInt(registerMember.planId)
+  //   );
+
+  //   if (selectedPlan) {
+  //     if (renew) {
+  //       // add duration in month in expiration date
+  //       const finalDate = new Date(registerMember.expiryDate);
+  //       console.log(finalDate);
+  //       const expiry = new Date(
+  //         finalDate.setMonth(
+  //           finalDate.getMonth() + selectedPlan.durationInMonths
+  //         )
+  //       );
+
+  //       setregisterMember((prev) => ({
+  //         ...prev,
+  //         price: selectedPlan.cost,
+  //         expiryDate: expiry && expiry.toISOString().split("T")[0],
+  //         planName: selectedPlan.name,
+  //       }));
+  //     } else {
+  //       const enrollment = new Date(registerMember.enrolledDate);
+  //       const expiry = new Date(
+  //         enrollment.setMonth(
+  //           enrollment.getMonth() + selectedPlan.durationInMonths
+  //         )
+  //       );
+  //       setregisterMember((prev) => ({
+  //         ...prev,
+  //         price: selectedPlan.cost,
+  //         expiryDate: expiry && expiry.toISOString().split("T")[0],
+  //         planName: selectedPlan.name,
+  //       }));
+  //     }
+  //   } else {
+  //     setregisterMember((prev) => ({ ...prev, price: 0, expiryDate: 0 }));
+  //   }
+  //   console.log(registerMember);
+  // }, [registerMember.planId, renew]);
+
   useEffect(() => {
     const selectedPlan = plan.find(
       (plan) => plan.planId === parseInt(registerMember.planId)
@@ -65,9 +108,8 @@ const MemberRegister = () => {
 
     if (selectedPlan) {
       if (renew) {
-        // add duration in month in expiration date
+        // Renewing the plan by adding duration to the current expiry date
         const finalDate = new Date(registerMember.expiryDate);
-        console.log(finalDate);
         const expiry = new Date(
           finalDate.setMonth(
             finalDate.getMonth() + selectedPlan.durationInMonths
@@ -77,28 +119,30 @@ const MemberRegister = () => {
         setregisterMember((prev) => ({
           ...prev,
           price: selectedPlan.cost,
-          expiryDate: expiry && expiry.toISOString().split("T")[0],
+          expiryDate: expiry.toISOString().split("T")[0], // Format as YYYY-MM-DD
           planName: selectedPlan.name,
         }));
       } else {
+        // New enrollment, add duration from enrollment date
         const enrollment = new Date(registerMember.enrolledDate);
         const expiry = new Date(
           enrollment.setMonth(
             enrollment.getMonth() + selectedPlan.durationInMonths
           )
         );
+
         setregisterMember((prev) => ({
           ...prev,
           price: selectedPlan.cost,
-          expiryDate: expiry && expiry.toISOString().split("T")[0],
+          expiryDate: expiry.toISOString().split("T")[0], // Format as YYYY-MM-DD
           planName: selectedPlan.name,
         }));
       }
     } else {
-      setregisterMember((prev) => ({ ...prev, price: 0, expiryDate: 0 }));
+      // Reset when no plan is selected
+      setregisterMember((prev) => ({ ...prev, price: 0, expiryDate: "" }));
     }
-    console.log(registerMember);
-  }, [registerMember.planId]);
+  }, [registerMember.planId, renew]);
 
   const MountModel = (e) => {
     e.preventDefault();
@@ -139,7 +183,6 @@ const MemberRegister = () => {
   const handleRenewModel = (e, data) => {
     setRenew(true);
     setregisterMember(data);
-    console.log(registerMember);
   };
 
   const RenewMember = async (e) => {
@@ -153,11 +196,7 @@ const MemberRegister = () => {
     setLoading(true);
     await sendDataToBackend();
     // Reset the form after submission
-    // setPlan({
-    //   name: "",
-    //   durationInMonths: "",
-    //   cost: "",
-    // });
+
     setModel(false);
     setEditable(false);
     setLoading(false);

@@ -68,7 +68,6 @@ namespace API.Controllers
         }
 
         [HttpGet]
-
         public async Task<IActionResult> GetAllMembers()
         {
             var allMembers = await _context.MemberRegistrations.ToListAsync();
@@ -77,7 +76,63 @@ namespace API.Controllers
                 return NotFound();
             }
 
-            return Ok(allMembers);
+            var sendMember = allMembers.Select(member => new MRegisterDTO
+            {
+
+                Id = member.Id,
+                CardNo = member.CardNo,
+                MemberName = member.MemberName,
+                Contact = member.Contact,
+                EnrolledDate = member.EnrolledDate,
+                Price = member.Price,
+                ExpiryDate = member.ExpiryDate,
+                Email = member.Email,
+                PlanId = member.PlanId,
+                PlanName = member.PlanName
+            });
+
+            return Ok(sendMember);
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateMember(int id, [FromBody] MRegisterDTO mRegisterDTO)
+        {
+            var memberToBeUpdated = await _context.MemberRegistrations.FindAsync(id);
+
+            if (memberToBeUpdated == null)
+            {
+                return NotFound();
+            }
+            memberToBeUpdated.CardNo = mRegisterDTO.CardNo;
+            memberToBeUpdated.MemberName = mRegisterDTO.MemberName;
+            memberToBeUpdated.Contact = mRegisterDTO.Contact;
+            memberToBeUpdated.EnrolledDate = mRegisterDTO.EnrolledDate;
+            memberToBeUpdated.Price = mRegisterDTO.Price;
+            memberToBeUpdated.ExpiryDate = mRegisterDTO.ExpiryDate;
+            memberToBeUpdated.Email = mRegisterDTO.Email;
+            memberToBeUpdated.PlanId = mRegisterDTO.PlanId;
+            memberToBeUpdated.PlanName = mRegisterDTO.PlanName;
+
+            _context.Entry(memberToBeUpdated).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+
+            return Ok(memberToBeUpdated);
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> deleteMember([FromRoute] int id)
+        {
+
+            var memberToBeDeleted = await _context.MemberRegistrations.FindAsync(id);
+            if (memberToBeDeleted == null)
+            {
+                return NotFound();
+            }
+
+            _context.MemberRegistrations.Remove(memberToBeDeleted);
+            await _context.SaveChangesAsync();
+            return StatusCode(200, "Member deleted Successfully!");
+
         }
 
 
