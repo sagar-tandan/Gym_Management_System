@@ -12,10 +12,24 @@ const MemberRegister = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [selected, setSelected] = useState("allMember");
   const [plan, setPlan] = useState([]);
-  // const [pageNumber, setPageNumber] = useState(1);
   const [totalPages, setTotalPage] = useState();
-  const [memberInfo, setMemberInfo] = useState(1);
+  const [memberInfo, setMemberInfo] = useState();
   const [allMemberData, setAllMemberData] = useState();
+
+  //Paid and Unpaid pagination
+  const [allPaidandUnpaidMember, setallPaidandUnpaidMember] = useState([]);
+  const [allPaidMember, setAllPaidMember] = useState();
+  const [allUnPaidMember, setAllUnPaidMember] = useState();
+  const [currentPagePaid, setCurrentPagePaid] = useState(1);
+  const [currentPageUnpaid, setCurrentUnPagePaid] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(8); // Adjust as needed
+  const [paginatedPaidMembers, setPaginatedPaidMembers] = useState([]);
+
+  const [totalPaidPage, setTotalPagePaid] = useState();
+  const [totalUnPaidPage, setTotalPageUnPaid] = useState();
+
+  const [paginatedUnpaidMembers, setPaginatedUnpaidMembers] = useState([]);
+
   const [todayDate, setTodayDate] = useState(
     new Date().toISOString().split("T")[0]
   );
@@ -32,16 +46,73 @@ const MemberRegister = () => {
     planId: "",
   });
 
-  useEffect(() => {
-    fetchMemberData();
-  }, [currentPage]);
-
   const [openModel, setModel] = useState(false);
   const [openDeleteModel, setDeleteModel] = useState(false);
   const [editable, setEditable] = useState(false);
   const [renew, setRenew] = useState(false);
   const [itemID, setItemID] = useState();
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    fetchMemberData();
+  }, [currentPage]);
+
+  // Pagination logic for paid and unpaid
+  const paginate = (members, page, itemsPerPage) => {
+    const startIndex = (page - 1) * itemsPerPage;
+    return members && members.slice(startIndex, startIndex + itemsPerPage);
+  };
+
+  useEffect(() => {
+    setTotalPagePaid(
+      Math.ceil(allPaidMember && allPaidMember.length / itemsPerPage)
+    );
+    setTotalPageUnPaid(
+      Math.ceil(allUnPaidMember && allUnPaidMember.length / itemsPerPage)
+    );
+    setPaginatedPaidMembers(
+      paginate(allPaidMember, currentPagePaid, itemsPerPage)
+    );
+    setPaginatedUnpaidMembers(
+      paginate(allUnPaidMember, currentPageUnpaid, itemsPerPage)
+    );
+  }, [allPaidMember, allUnPaidMember]);
+
+  useEffect(() => {
+    setPaginatedPaidMembers(
+      paginate(allPaidMember, currentPagePaid, itemsPerPage)
+    );
+  }, [currentPagePaid]);
+
+  useEffect(() => {
+    setPaginatedUnpaidMembers(
+      paginate(allUnPaidMember, currentPageUnpaid, itemsPerPage)
+    );
+  }, [currentPageUnpaid]);
+
+  useEffect(() => {
+    const fetchMemberData = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:5002/api/member/getAllMembers`
+        );
+        if (response.data) {
+          setallPaidandUnpaidMember(response.data);
+          const paid = response.data.filter(
+            (info) => parseInt(info.expiryDate) > parseInt(todayDate)
+          );
+          const Unpaid = response.data.filter(
+            (info) => parseInt(info.expiryDate) <= parseInt(todayDate)
+          );
+          setAllPaidMember(paid);
+          setAllUnPaidMember(Unpaid);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchMemberData();
+  }, []);
 
   const fetchMemberData = async () => {
     try {
@@ -278,60 +349,167 @@ const MemberRegister = () => {
               </th>
             </tr>
           </thead>
+          {selected === "allMember" ? (
+            <tbody>
+              {allMemberData &&
+                allMemberData.map((member, index) => (
+                  <tr key={index} className="border-[1px] border-blue-100">
+                    <td className="py-3 px-5 font-medium text-black">
+                      {member.cardNo}
+                    </td>
+                    <td className="py-3 px-5 font-normal text-[#636363]">
+                      {member.memberName}
+                    </td>
+                    <td className="py-3 px-5 font-normal text-[#636363]">
+                      {member.contact}
+                    </td>
 
-          <tbody>
-            {allMemberData &&
-              allMemberData.map((member, index) => (
-                <tr key={index} className="border-[1px] border-blue-100">
-                  <td className="py-3 px-5 font-medium text-black">
-                    {member.cardNo}
-                  </td>
-                  <td className="py-3 px-5 font-normal text-[#636363]">
-                    {member.memberName}
-                  </td>
-                  <td className="py-3 px-5 font-normal text-[#636363]">
-                    {member.contact}
-                  </td>
+                    <td className="py-3 px-5 font-normal text-[#636363]">
+                      {member.enrolledDate}
+                    </td>
 
-                  <td className="py-3 px-5 font-normal text-[#636363]">
-                    {member.enrolledDate}
-                  </td>
+                    <td className="py-3 px-5 font-normal text-[#636363]">
+                      {member.expiryDate}
+                    </td>
 
-                  <td className="py-3 px-5 font-normal text-[#636363]">
-                    {member.expiryDate}
-                  </td>
+                    <td className="py-3 px-5 w-[200px]">
+                      <div className="w-full flex gap-8">
+                        <LiaEditSolid
+                          onClick={(e) => handleEditModel(e, member)}
+                          className="w-6 h-6 text-[#636363] hover:text-green-500 cursor-pointer"
+                        />
+                        <GiTakeMyMoney
+                          onClick={(e) => handleRenewModel(e, member)}
+                          className="w-6 h-6 text-[#636363] hover:text-[#ee0979] cursor-pointer"
+                        />
 
-                  <td className="py-3 px-5 w-[200px]">
-                    <div className="w-full flex gap-8">
-                      <LiaEditSolid
-                        onClick={(e) => handleEditModel(e, member)}
-                        className="w-6 h-6 text-[#636363] hover:text-green-500 cursor-pointer"
-                      />
-                      <GiTakeMyMoney
-                        onClick={(e) => handleRenewModel(e, member)}
-                        className="w-6 h-6 text-[#636363] hover:text-[#ee0979] cursor-pointer"
-                      />
+                        <MdDeleteOutline
+                          // onClick={() => {
+                          //   setItemID(plan.planId);
+                          //   setDeleteModel(true);
+                          // }}
+                          className="w-6 h-6 text-[#636363] hover:text-red-500 cursor-pointer"
+                        />
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+            </tbody>
+          ) : selected === "paid" ? (
+            <tbody>
+              {paginatedPaidMembers &&
+                paginatedPaidMembers.map((member, index) => (
+                  <tr key={index} className="border-[1px] border-blue-100">
+                    <td className="py-3 px-5 font-medium text-black">
+                      {member.cardNo}
+                    </td>
+                    <td className="py-3 px-5 font-normal text-[#636363]">
+                      {member.memberName}
+                    </td>
+                    <td className="py-3 px-5 font-normal text-[#636363]">
+                      {member.contact}
+                    </td>
 
-                      <MdDeleteOutline
-                        // onClick={() => {
-                        //   setItemID(plan.planId);
-                        //   setDeleteModel(true);
-                        // }}
-                        className="w-6 h-6 text-[#636363] hover:text-red-500 cursor-pointer"
-                      />
-                    </div>
-                  </td>
-                </tr>
-              ))}
-          </tbody>
+                    <td className="py-3 px-5 font-normal text-[#636363]">
+                      {member.enrolledDate}
+                    </td>
+
+                    <td className="py-3 px-5 font-normal text-[#636363]">
+                      {member.expiryDate}
+                    </td>
+
+                    <td className="py-3 px-5 w-[200px]">
+                      <div className="w-full flex gap-8">
+                        <LiaEditSolid
+                          onClick={(e) => handleEditModel(e, member)}
+                          className="w-6 h-6 text-[#636363] hover:text-green-500 cursor-pointer"
+                        />
+                        <GiTakeMyMoney
+                          onClick={(e) => handleRenewModel(e, member)}
+                          className="w-6 h-6 text-[#636363] hover:text-[#ee0979] cursor-pointer"
+                        />
+
+                        <MdDeleteOutline
+                          // onClick={() => {
+                          //   setItemID(plan.planId);
+                          //   setDeleteModel(true);
+                          // }}
+                          className="w-6 h-6 text-[#636363] hover:text-red-500 cursor-pointer"
+                        />
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+            </tbody>
+          ) : (
+            <tbody>
+              {allUnPaidMember &&
+                allUnPaidMember.map((member, index) => (
+                  <tr key={index} className="border-[1px] border-blue-100">
+                    <td className="py-3 px-5 font-medium text-black">
+                      {member.cardNo}
+                    </td>
+                    <td className="py-3 px-5 font-normal text-[#636363]">
+                      {member.memberName}
+                    </td>
+                    <td className="py-3 px-5 font-normal text-[#636363]">
+                      {member.contact}
+                    </td>
+
+                    <td className="py-3 px-5 font-normal text-[#636363]">
+                      {member.enrolledDate}
+                    </td>
+
+                    <td className="py-3 px-5 font-normal text-[#636363]">
+                      {member.expiryDate}
+                    </td>
+
+                    <td className="py-3 px-5 w-[200px]">
+                      <div className="w-full flex gap-8">
+                        <LiaEditSolid
+                          onClick={(e) => handleEditModel(e, member)}
+                          className="w-6 h-6 text-[#636363] hover:text-green-500 cursor-pointer"
+                        />
+                        <GiTakeMyMoney
+                          onClick={(e) => handleRenewModel(e, member)}
+                          className="w-6 h-6 text-[#636363] hover:text-[#ee0979] cursor-pointer"
+                        />
+
+                        <MdDeleteOutline
+                          // onClick={() => {
+                          //   setItemID(plan.planId);
+                          //   setDeleteModel(true);
+                          // }}
+                          className="w-6 h-6 text-[#636363] hover:text-red-500 cursor-pointer"
+                        />
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+            </tbody>
+          )}
         </table>
       </section>
 
-      <ResponsivePagination
-        current={currentPage}
-        total={totalPages}
-        onPageChange={setCurrentPage}
-      />
+      {selected === "allMember" ? (
+        <ResponsivePagination
+          current={currentPage}
+          total={totalPages}
+          onPageChange={setCurrentPage}
+        />
+      ) : selected === "paid" ? (
+        <ResponsivePagination
+          current={currentPagePaid}
+          total={totalPaidPage}
+          onPageChange={setCurrentPagePaid}
+        />
+      ) : (
+        <ResponsivePagination
+          current={currentPageUnpaid}
+          total={totalUnPaidPage}
+          onPageChange={setCurrentUnPagePaid}
+        />
+      )}
 
       {/* MODEL */}
 
