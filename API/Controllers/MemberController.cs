@@ -117,6 +117,45 @@ namespace API.Controllers
             return Ok(paginationResult);
         }
 
+        [HttpGet("getAllMembers")]
+        public async Task<IActionResult> GetAllMemberss()
+        {
+
+            var allMember = _context.MemberRegistrations.OrderBy(m => m.MemberName);
+
+            // Get the total count of members
+            var totalRecords = await allMember.CountAsync();
+
+
+
+            if (allMember == null)
+            {
+                return NotFound();
+            }
+
+
+            var sendMember = allMember.Select(member => new MRegisterDTO
+            {
+
+                Id = member.Id,
+                CardNo = member.CardNo,
+                MemberName = member.MemberName,
+                Contact = member.Contact,
+                EnrolledDate = member.EnrolledDate,
+                Price = member.Price,
+                ExpiryDate = member.ExpiryDate,
+                Email = member.Email,
+                PlanId = member.PlanId,
+                PlanName = member.PlanName
+            });
+
+
+
+            return Ok(allMember);
+        }
+
+
+
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateMember(int id, [FromBody] MRegisterDTO mRegisterDTO)
         {
@@ -157,6 +196,38 @@ namespace API.Controllers
             return StatusCode(200, "Member deleted Successfully!");
 
         }
+
+        // [HttpGet("paid")]
+        // public async Task<IActionResult> GetPaidMember(int pageNumber = 1, int pageSize = 8)
+        // {
+        //     var today = DateTime.Now;
+
+        //     // Fetch all members asynchronously first
+        //     var allMembers = await _context.MemberRegistrations.ToListAsync();
+
+        //     // Filter members whose expiry date is greater than today
+        //     var paidMembers = allMembers
+        //         .Where(m => DateTime.TryParse(m.ExpiryDate, out var expiryDate) && expiryDate > today)
+        //         .ToList();
+
+        //     // Apply pagination
+        //     var paginatedMembers = paidMembers
+        //         .Skip((pageNumber - 1) * pageSize)
+        //         .Take(pageSize)
+        //         .ToList();
+
+        //     // Return paginated results
+        //     return Ok(new
+        //     {
+        //         PageNumber = pageNumber,
+        //         PageSize = pageSize,
+        //         TotalRecords = paidMembers.Count,
+        //         Data = paginatedMembers
+        //     });
+        // }
+
+
+
 
 
 
