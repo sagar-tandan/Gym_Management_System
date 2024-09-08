@@ -187,7 +187,16 @@ const MemberRegister = () => {
 
   const RenewMember = async (e) => {
     e.preventDefault();
-    console.log(registerMember);
+    try {
+      const response = await axios.put(
+        `http://localhost:5002/api/member/${registerMember.id}`,
+        registerMember
+      );
+      console.log(response);
+      fetchMemberData();
+    } catch (error) {
+      console.log(error);
+    }
     setRenew(false);
   };
 
@@ -196,7 +205,17 @@ const MemberRegister = () => {
     setLoading(true);
     await sendDataToBackend();
     // Reset the form after submission
-
+    setregisterMember({
+      cardNo: "",
+      memberName: "",
+      enrolledDate: todayDate,
+      expiryDate: "",
+      email: "",
+      contact: "",
+      price: "",
+      planName: "",
+      planId: "",
+    });
     setModel(false);
     setEditable(false);
     setLoading(false);
@@ -207,22 +226,20 @@ const MemberRegister = () => {
       if (editable) {
         console.log(registerMember);
         // Update existing item
-        // const response = await axios.put(
-        //   `http://localhost:5002/api/plan/${addPlan.planId}`,
-        //   addPlan
-        // );
+        const response = await axios.put(
+          `http://localhost:5002/api/member/${registerMember.id}`,
+          registerMember
+        );
         // console.log(response);
       } else {
-        console.log(registerMember);
-        // Add new item
-        //   const response = await axios.post(
-        //     "http://localhost:5002/api/plan",
-        //     addPlan
-        //   );
-        //   console.log(response);
-        // }
-        // getAllPlan(); // Refresh data after adding/updating
+        // Add new member
+        const response = await axios.post(
+          "http://localhost:5002/api/member",
+          registerMember
+        );
+        console.log(response);
       }
+      fetchMemberData(); // Refresh data after adding/updating
     } catch (error) {
       console.log(error);
     }
@@ -405,6 +422,49 @@ const MemberRegister = () => {
                   </div>
                 )}
               </div>
+
+              {editable && (
+                <div className="w-full flex gap-3">
+                  <div className="w-full flex flex-col">
+                    <div className="w-full flex flex-col">
+                      <label
+                        class="block mb-2 font-medium mt-4 "
+                        for="enrolledDate"
+                      >
+                        Enrolled Date
+                      </label>
+                      <input
+                        type="date"
+                        id="enrolledDate"
+                        name="enrolledDate"
+                        className="p-2 w-full rounded-sm bg-blue-50"
+                        placeholder="Date"
+                        value={registerMember.enrolledDate}
+                        onChange={handleChange}
+                        required
+                      />
+                    </div>
+                  </div>
+                  <div className="w-full flex flex-col">
+                    <label
+                      class="block mb-2 font-medium mt-4 "
+                      for="expiryDate"
+                    >
+                      Expiration Date
+                    </label>
+                    <input
+                      type="date"
+                      id="expiryDate"
+                      name="expiryDate"
+                      className="p-2 w-full rounded-sm bg-blue-50"
+                      placeholder="Date"
+                      value={registerMember.expiryDate}
+                      onChange={handleChange}
+                      required
+                    />
+                  </div>
+                </div>
+              )}
 
               <div className="w-full flex gap-3">
                 <div className="w-full flex flex-col">

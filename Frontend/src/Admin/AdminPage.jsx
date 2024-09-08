@@ -74,7 +74,7 @@ const AdminPage = () => {
               } w-full flex gap-2 cursor-pointer hover:bg-blue-200 hover:text-blue-600 py-[6px] px-3 rounded-sm transition-all duration-300 ease-in-out group`}
             >
               <MdOutlineGroupAdd className="w-6 h-6" />
-              <h1>Register Member</h1>
+              <h1>Members</h1>
             </div>
 
             <div
