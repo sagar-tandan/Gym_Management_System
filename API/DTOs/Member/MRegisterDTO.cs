@@ -16,7 +16,6 @@ namespace API.DTOs.Member
         public string? Email { get; set; }
         public decimal Price { get; set; }
         public string? PlanName { get; set; }
-
         public int PlanId { get; set; }
 
     }
