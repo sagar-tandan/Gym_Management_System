@@ -1,5 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import ResponsivePagination from "react-responsive-pagination";
+import "react-responsive-pagination/themes/classic.css";
 import { LiaUserAstronautSolid } from "react-icons/lia";
 import { LiaEditSolid } from "react-icons/lia";
 import { MdDeleteOutline } from "react-icons/md";
@@ -7,10 +9,11 @@ import { GiTireIronCross } from "react-icons/gi";
 import { GiTakeMyMoney } from "react-icons/gi";
 
 const MemberRegister = () => {
+  const [currentPage, setCurrentPage] = useState(1);
   const [selected, setSelected] = useState("allMember");
   const [plan, setPlan] = useState([]);
-  const [pageNumber, setPageNumber] = useState(1);
-  // const [totalPages, setTotalPage] = useState();
+  // const [pageNumber, setPageNumber] = useState(1);
+  const [totalPages, setTotalPage] = useState();
   const [memberInfo, setMemberInfo] = useState(1);
   const [allMemberData, setAllMemberData] = useState();
   const [todayDate, setTodayDate] = useState(
@@ -29,6 +32,10 @@ const MemberRegister = () => {
     planId: "",
   });
 
+  useEffect(() => {
+    fetchMemberData();
+  }, [currentPage]);
+
   const [openModel, setModel] = useState(false);
   const [openDeleteModel, setDeleteModel] = useState(false);
   const [editable, setEditable] = useState(false);
@@ -39,11 +46,12 @@ const MemberRegister = () => {
   const fetchMemberData = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:5002/api/member?pageNumber=${pageNumber}&pageSize=8`
+        `http://localhost:5002/api/member?pageNumber=${currentPage}&pageSize=8`
       );
       console.table(response.data);
       setAllMemberData(response.data.members);
       setMemberInfo(response.data);
+      setTotalPage(Math.ceil(response.data.totalRecords / 8));
     } catch (error) {
       console.log(error);
     }
@@ -318,6 +326,12 @@ const MemberRegister = () => {
           </tbody>
         </table>
       </section>
+
+      <ResponsivePagination
+        current={currentPage}
+        total={totalPages}
+        onPageChange={setCurrentPage}
+      />
 
       {/* MODEL */}
 
