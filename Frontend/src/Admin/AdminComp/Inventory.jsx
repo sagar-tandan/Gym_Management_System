@@ -149,7 +149,7 @@ const Inventory = () => {
   };
 
   return (
-    <div className="w-full flex flex-col gap-2 h-screen">
+    <div className="w-full flex flex-col gap-2 h-screen mt-1">
       <div className="w-full flex justify-end px-5">
         <button
           onClick={(e) => MountModel(e)}

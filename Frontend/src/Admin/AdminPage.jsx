@@ -88,18 +88,6 @@ const AdminPage = () => {
             </div>
 
             <div
-              onClick={(e) => handleClick(e, "member")}
-              className={`${
-                active === "member"
-                  ? "bg-blue-200 text-blue-600 font-normal"
-                  : ""
-              } w-full flex gap-2 cursor-pointer hover:bg-blue-200 hover:text-blue-600 py-[6px] px-3 rounded-sm transition-all duration-300 ease-in-out group`}
-            >
-              <MdOutlineSportsGymnastics className="w-6 h-6" />
-              <h1>View Members</h1>
-            </div>
-
-            <div
               onClick={(e) => handleClick(e, "inventory")}
               className={`${
                 active === "inventory"
@@ -150,8 +138,6 @@ const AdminPage = () => {
           <MemberRegister />
         ) : active === "plan" ? (
           <AdminPlan />
-        ) : active === "member" ? (
-          <ViewMember />
         ) : active === "inventory" ? (
           <Inventory />
         ) : (

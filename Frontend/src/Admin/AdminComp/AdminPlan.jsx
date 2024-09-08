@@ -115,11 +115,11 @@ const AdminPlan = () => {
   };
 
   return (
-    <div className="w-full flex flex-col gap-2 h-screen">
+    <div className="w-full flex flex-col gap-2 h-screen mt-1">
       <div className="w-full flex justify-end px-5">
         <button
           onClick={(e) => MountModel(e)}
-          className="px-3 py-[6px] bg-blue-500 text-white rounded-sm hover:bg-blue-600 active:bg-blue-900 transition-all duration-300 ease-in-out font-medium "
+          className="px-8 py-[6px] bg-blue-500 text-white rounded-sm hover:bg-blue-600 active:bg-blue-900 transition-all duration-300 ease-in-out font-medium "
         >
           Add Plan
         </button>
