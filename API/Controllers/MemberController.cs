@@ -68,7 +68,7 @@ namespace API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllMembers(int pageNumber = 1, int pageSize = 10)
+        public async Task<IActionResult> GetAllMembers(int pageNumber = 1, int pageSize = 8)
         {
 
             var allMember = _context.MemberRegistrations.OrderBy(m => m.MemberName);
