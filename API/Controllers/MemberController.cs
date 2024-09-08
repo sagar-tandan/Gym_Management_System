@@ -68,15 +68,29 @@ namespace API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllMembers()
+        public async Task<IActionResult> GetAllMembers(int pageNumber = 1, int pageSize = 10)
         {
-            var allMembers = await _context.MemberRegistrations.ToListAsync();
-            if (allMembers == null)
+
+            var allMember = _context.MemberRegistrations.OrderBy(m => m.MemberName);
+
+            // Get the total count of members
+            var totalRecords = await allMember.CountAsync();
+
+
+            // Apply pagination with Skip and Take
+            var members = await allMember
+                                .Skip((pageNumber - 1) * pageSize) // Skip previous pages
+                                .Take(pageSize) // Take only the required number of results
+                                .ToListAsync();
+
+
+            if (members == null)
             {
                 return NotFound();
             }
 
-            var sendMember = allMembers.Select(member => new MRegisterDTO
+
+            var sendMember = members.Select(member => new MRegisterDTO
             {
 
                 Id = member.Id,
@@ -91,7 +105,16 @@ namespace API.Controllers
                 PlanName = member.PlanName
             });
 
-            return Ok(sendMember);
+            // Return the members along with pagination metadata
+            var paginationResult = new
+            {
+                TotalRecords = totalRecords,
+                PageNumber = pageNumber,
+                PageSize = pageSize,
+                Members = sendMember
+            };
+
+            return Ok(paginationResult);
         }
 
         [HttpPut("{id}")]

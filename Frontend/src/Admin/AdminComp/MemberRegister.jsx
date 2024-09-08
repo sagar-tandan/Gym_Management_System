@@ -370,38 +370,77 @@ const MemberRegister = () => {
               />
             </div>
             <form className="w-full flex flex-col" onSubmit={(e) => addItem(e)}>
-              <div className="w-full flex flex-col">
-                <label class="block mb-2 font-medium mt-2" for="cardNo">
-                  Card Number
-                </label>
-                <input
-                  type="number"
-                  id="cardNo"
-                  name="cardNo"
-                  className="p-2 w-full rounded-sm bg-blue-50"
-                  placeholder="Member card Number"
-                  value={registerMember.cardNo}
-                  onChange={handleChange}
-                />
-              </div>
+              {editable && (
+                <div className="w-full flex gap-3">
+                  <div className="w-full flex flex-col">
+                    <label class="block mb-2 font-medium mt-2" for="cardNo">
+                      Card Number
+                    </label>
+                    <input
+                      type="number"
+                      id="cardNo"
+                      name="cardNo"
+                      className="p-2 w-full rounded-sm bg-blue-50"
+                      placeholder="Member card Number"
+                      value={registerMember.cardNo}
+                      onChange={handleChange}
+                    />
+                  </div>
 
-              <div className="w-full flex gap-3">
+                  <div className="w-full flex flex-col">
+                    <label class="block mb-2 font-medium mt-2" for="memberName">
+                      Member Name
+                    </label>
+                    <input
+                      type="text"
+                      id="memberName"
+                      name="memberName"
+                      className="p-2 w-full rounded-sm bg-blue-50"
+                      placeholder="Full Name"
+                      value={registerMember.memberName}
+                      onChange={handleChange}
+                      required
+                    />
+                  </div>
+                </div>
+              )}
+              {!editable && (
                 <div className="w-full flex flex-col">
-                  <label class="block mb-2 font-medium mt-4 " for="memberName">
-                    Member Name
+                  <label class="block mb-2 font-medium mt-2" for="cardNo">
+                    Card Number
                   </label>
                   <input
-                    type="text"
-                    id="memberName"
-                    name="memberName"
+                    type="number"
+                    id="cardNo"
+                    name="cardNo"
                     className="p-2 w-full rounded-sm bg-blue-50"
-                    placeholder="Full Name"
-                    value={registerMember.memberName}
+                    placeholder="Member card Number"
+                    value={registerMember.cardNo}
                     onChange={handleChange}
-                    required
                   />
                 </div>
-                {!editable && (
+              )}
+              {!editable && (
+                <div className="w-full flex gap-3">
+                  <div className="w-full flex flex-col">
+                    <label
+                      class="block mb-2 font-medium mt-4 "
+                      for="memberName"
+                    >
+                      Member Name
+                    </label>
+                    <input
+                      type="text"
+                      id="memberName"
+                      name="memberName"
+                      className="p-2 w-full rounded-sm bg-blue-50"
+                      placeholder="Full Name"
+                      value={registerMember.memberName}
+                      onChange={handleChange}
+                      required
+                    />
+                  </div>
+
                   <div className="w-full flex flex-col">
                     <label
                       class="block mb-2 font-medium mt-4 "
@@ -420,8 +459,8 @@ const MemberRegister = () => {
                       required
                     />
                   </div>
-                )}
-              </div>
+                </div>
+              )}
 
               {editable && (
                 <div className="w-full flex gap-3">
