@@ -325,8 +325,8 @@ const MemberRegister = () => {
         </button>
       </div>
       <hr className="w-full mt-1 border-[1px]" />
-      <section className="w-full py-1 px-3">
-        <table className="w-full">
+      <section className="w-full py-1 px-3 relative">
+        <table className="w-full ">
           <thead>
             <tr className="w-full border-[1px] border-blue-100 bg-blue-50 rounded-sm">
               <th className="font-medium text-left pl-4 py-2 text-[#636363]">
@@ -350,55 +350,113 @@ const MemberRegister = () => {
             </tr>
           </thead>
           {selected === "allMember" ? (
-            <tbody>
-              {allMemberData &&
-                allMemberData.map((member, index) => (
-                  <tr key={index} className="border-[1px] border-blue-100">
-                    <td className="py-3 px-5 font-medium text-black">
-                      {member.cardNo}
-                    </td>
-                    <td className="py-3 px-5 font-normal text-[#636363]">
-                      {member.memberName}
-                    </td>
-                    <td className="py-3 px-5 font-normal text-[#636363]">
-                      {member.contact}
-                    </td>
+            allMemberData.length > 0 ? (
+              <tbody>
+                {allMemberData &&
+                  allMemberData.map((member, index) => (
+                    <tr key={index} className="border-[1px] border-blue-100">
+                      <td className="py-3 px-5 font-medium text-black">
+                        {member.cardNo}
+                      </td>
+                      <td className="py-3 px-5 font-normal text-[#636363]">
+                        {member.memberName}
+                      </td>
+                      <td className="py-3 px-5 font-normal text-[#636363]">
+                        {member.contact}
+                      </td>
 
-                    <td className="py-3 px-5 font-normal text-[#636363]">
-                      {member.enrolledDate}
-                    </td>
+                      <td className="py-3 px-5 font-normal text-[#636363]">
+                        {member.enrolledDate}
+                      </td>
 
-                    <td className="py-3 px-5 font-normal text-[#636363]">
-                      {member.expiryDate}
-                    </td>
+                      <td className="py-3 px-5 font-normal text-[#636363]">
+                        {member.expiryDate}
+                      </td>
 
-                    <td className="py-3 px-5 w-[200px]">
-                      <div className="w-full flex gap-8">
-                        <LiaEditSolid
-                          onClick={(e) => handleEditModel(e, member)}
-                          className="w-6 h-6 text-[#636363] hover:text-green-500 cursor-pointer"
-                        />
-                        <GiTakeMyMoney
-                          onClick={(e) => handleRenewModel(e, member)}
-                          className="w-6 h-6 text-[#636363] hover:text-[#ee0979] cursor-pointer"
-                        />
+                      <td className="py-3 px-5 w-[200px]">
+                        <div className="w-full flex gap-8">
+                          <LiaEditSolid
+                            onClick={(e) => handleEditModel(e, member)}
+                            className="w-6 h-6 text-[#636363] hover:text-green-500 cursor-pointer"
+                          />
+                          <GiTakeMyMoney
+                            onClick={(e) => handleRenewModel(e, member)}
+                            className="w-6 h-6 text-[#636363] hover:text-[#ee0979] cursor-pointer"
+                          />
 
-                        <MdDeleteOutline
-                          // onClick={() => {
-                          //   setItemID(plan.planId);
-                          //   setDeleteModel(true);
-                          // }}
-                          className="w-6 h-6 text-[#636363] hover:text-red-500 cursor-pointer"
-                        />
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-            </tbody>
+                          <MdDeleteOutline
+                            // onClick={() => {
+                            //   setItemID(plan.planId);
+                            //   setDeleteModel(true);
+                            // }}
+                            className="w-6 h-6 text-[#636363] hover:text-red-500 cursor-pointer"
+                          />
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+              </tbody>
+            ) : (
+              <div className="w-full py-2 text-center mt-10 absolute">
+                No data found !
+              </div>
+            )
           ) : selected === "paid" ? (
+            paginatedPaidMembers.length > 0 ? (
+              <tbody>
+                {paginatedPaidMembers &&
+                  paginatedPaidMembers.map((member, index) => (
+                    <tr key={index} className="border-[1px] border-blue-100">
+                      <td className="py-3 px-5 font-medium text-black">
+                        {member.cardNo}
+                      </td>
+                      <td className="py-3 px-5 font-normal text-[#636363]">
+                        {member.memberName}
+                      </td>
+                      <td className="py-3 px-5 font-normal text-[#636363]">
+                        {member.contact}
+                      </td>
+
+                      <td className="py-3 px-5 font-normal text-[#636363]">
+                        {member.enrolledDate}
+                      </td>
+
+                      <td className="py-3 px-5 font-normal text-[#636363]">
+                        {member.expiryDate}
+                      </td>
+
+                      <td className="py-3 px-5 w-[200px]">
+                        <div className="w-full flex gap-8">
+                          <LiaEditSolid
+                            onClick={(e) => handleEditModel(e, member)}
+                            className="w-6 h-6 text-[#636363] hover:text-green-500 cursor-pointer"
+                          />
+                          <GiTakeMyMoney
+                            onClick={(e) => handleRenewModel(e, member)}
+                            className="w-6 h-6 text-[#636363] hover:text-[#ee0979] cursor-pointer"
+                          />
+
+                          <MdDeleteOutline
+                            // onClick={() => {
+                            //   setItemID(plan.planId);
+                            //   setDeleteModel(true);
+                            // }}
+                            className="w-6 h-6 text-[#636363] hover:text-red-500 cursor-pointer"
+                          />
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+              </tbody>
+            ) : (
+              <div className="w-full py-2 text-center mt-10 absolute">
+                No data found !
+              </div>
+            )
+          ) : paginatedUnpaidMembers.length > 0 ? (
             <tbody>
-              {paginatedPaidMembers &&
-                paginatedPaidMembers.map((member, index) => (
+              {paginatedUnpaidMembers &&
+                paginatedUnpaidMembers.map((member, index) => (
                   <tr key={index} className="border-[1px] border-blue-100">
                     <td className="py-3 px-5 font-medium text-black">
                       {member.cardNo}
@@ -442,51 +500,9 @@ const MemberRegister = () => {
                 ))}
             </tbody>
           ) : (
-            <tbody>
-              {allUnPaidMember &&
-                allUnPaidMember.map((member, index) => (
-                  <tr key={index} className="border-[1px] border-blue-100">
-                    <td className="py-3 px-5 font-medium text-black">
-                      {member.cardNo}
-                    </td>
-                    <td className="py-3 px-5 font-normal text-[#636363]">
-                      {member.memberName}
-                    </td>
-                    <td className="py-3 px-5 font-normal text-[#636363]">
-                      {member.contact}
-                    </td>
-
-                    <td className="py-3 px-5 font-normal text-[#636363]">
-                      {member.enrolledDate}
-                    </td>
-
-                    <td className="py-3 px-5 font-normal text-[#636363]">
-                      {member.expiryDate}
-                    </td>
-
-                    <td className="py-3 px-5 w-[200px]">
-                      <div className="w-full flex gap-8">
-                        <LiaEditSolid
-                          onClick={(e) => handleEditModel(e, member)}
-                          className="w-6 h-6 text-[#636363] hover:text-green-500 cursor-pointer"
-                        />
-                        <GiTakeMyMoney
-                          onClick={(e) => handleRenewModel(e, member)}
-                          className="w-6 h-6 text-[#636363] hover:text-[#ee0979] cursor-pointer"
-                        />
-
-                        <MdDeleteOutline
-                          // onClick={() => {
-                          //   setItemID(plan.planId);
-                          //   setDeleteModel(true);
-                          // }}
-                          className="w-6 h-6 text-[#636363] hover:text-red-500 cursor-pointer"
-                        />
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-            </tbody>
+            <div className="w-full py-2 text-center mt-10 absolute">
+              No data found !
+            </div>
           )}
         </table>
       </section>
