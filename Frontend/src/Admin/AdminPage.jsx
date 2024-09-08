@@ -11,7 +11,6 @@ import AdminDashboard from "./AdminComp/AdminDashboard";
 import AdminProfile from "./AdminComp/AdminProfile";
 import MemberRegister from "./AdminComp/MemberRegister";
 import AdminPlan from "./AdminComp/AdminPlan";
-import ViewMember from "./AdminComp/ViewMember";
 import Inventory from "./AdminComp/Inventory";
 import AdminReport from "./AdminComp/AdminReport";
 
