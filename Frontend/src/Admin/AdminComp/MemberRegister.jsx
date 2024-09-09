@@ -90,28 +90,29 @@ const MemberRegister = () => {
     );
   }, [currentPageUnpaid]);
 
-  useEffect(() => {
-    const fetchMemberData = async () => {
-      try {
-        const response = await axios.get(
-          `http://localhost:5002/api/member/getAllMembers`
+  const fetchAllMemberData = async () => {
+    try {
+      const response = await axios.get(
+        `http://localhost:5002/api/member/getAllMembers`
+      );
+      if (response.data) {
+        setallPaidandUnpaidMember(response.data);
+        const paid = response.data.filter(
+          (info) => new Date(info.expiryDate) > new Date(todayDate)
         );
-        if (response.data) {
-          setallPaidandUnpaidMember(response.data);
-          const paid = response.data.filter(
-            (info) => new Date(info.expiryDate) > new Date(todayDate)
-          );
-          const Unpaid = response.data.filter(
-            (info) => new Date(info.expiryDate) <= new Date(todayDate)
-          );
-          setAllPaidMember(paid);
-          setAllUnPaidMember(Unpaid);
-        }
-      } catch (error) {
-        console.log(error);
+        const Unpaid = response.data.filter(
+          (info) => new Date(info.expiryDate) <= new Date(todayDate)
+        );
+        setAllPaidMember(paid);
+        setAllUnPaidMember(Unpaid);
       }
-    };
-    fetchMemberData();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchAllMemberData();
   }, []);
 
   const fetchMemberData = async () => {
@@ -144,6 +145,50 @@ const MemberRegister = () => {
 
   //AUTO UPDATE PRICE AND EXPIRY DATE ON SELECTING PLAN
 
+  // useEffect(() => {
+  //   const selectedPlan = plan.find(
+  //     (plan) => plan.planId === parseInt(registerMember.planId)
+  //   );
+
+  //   if (selectedPlan) {
+  //     if (renew) {
+  //       console.log("The selected plan", selectedPlan)
+  //       // Renewing the plan by adding duration to the current expiry date
+  //       const finalDate = new Date(registerMember.expiryDate);
+  //       const expiry = new Date(
+  //         finalDate.setMonth(
+  //           finalDate.getMonth() + selectedPlan.durationInMonths
+  //         )
+  //       );
+
+  //       setregisterMember((prev) => ({
+  //         ...prev,
+  //         price: selectedPlan.cost,
+  //         expiryDate: expiry.toISOString().split("T")[0], // Format as YYYY-MM-DD
+  //         planName: selectedPlan.name,
+  //       }));
+  //     } else {
+  //       // New enrollment, add duration from enrollment date
+  //       const enrollment = new Date(registerMember.enrolledDate);
+  //       const expiry = new Date(
+  //         enrollment.setMonth(
+  //           enrollment.getMonth() + selectedPlan.durationInMonths
+  //         )
+  //       );
+
+  //       setregisterMember((prev) => ({
+  //         ...prev,
+  //         price: selectedPlan.cost,
+  //         expiryDate: expiry.toISOString().split("T")[0], // Format as YYYY-MM-DD
+  //         planName: selectedPlan.name,
+  //       }));
+  //     }
+  //   } else {
+  //     // Reset when no plan is selected
+  //     setregisterMember((prev) => ({ ...prev, price: 0, expiryDate: "" }));
+  //   }
+  // }, [registerMember.planId, renew]);
+
   useEffect(() => {
     const selectedPlan = plan.find(
       (plan) => plan.planId === parseInt(registerMember.planId)
@@ -158,7 +203,6 @@ const MemberRegister = () => {
             finalDate.getMonth() + selectedPlan.durationInMonths
           )
         );
-
         setregisterMember((prev) => ({
           ...prev,
           price: selectedPlan.cost,
@@ -173,7 +217,6 @@ const MemberRegister = () => {
             enrollment.getMonth() + selectedPlan.durationInMonths
           )
         );
-
         setregisterMember((prev) => ({
           ...prev,
           price: selectedPlan.cost,
@@ -185,7 +228,28 @@ const MemberRegister = () => {
       // Reset when no plan is selected
       setregisterMember((prev) => ({ ...prev, price: 0, expiryDate: "" }));
     }
-  }, [registerMember.planId, renew]);
+  }, [registerMember.planId, renew, plan]);
+
+  // useEffect(() => {
+  //   const selectedPlan = plan.find(
+  //     (plan) => plan.planId === parseInt(registerMember.planId)
+  //   );
+
+  //   if (selectedPlan) {
+  //     // Renewing the plan by adding duration to the current expiry date
+  //     const finalDate = new Date(registerMember.expiryDate);
+  //     const expiry = new Date(
+  //       finalDate.setMonth(finalDate.getMonth() + selectedPlan.durationInMonths)
+  //     );
+
+  //     setregisterMember((prev) => ({
+  //       ...prev,
+  //       price: selectedPlan.cost,
+  //       expiryDate: expiry.toISOString().split("T")[0], // Format as YYYY-MM-DD
+  //       planName: selectedPlan.name,
+  //     }));
+  //   }
+  // }, [renew]);
 
   const MountModel = (e) => {
     e.preventDefault();
@@ -214,6 +278,7 @@ const MemberRegister = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+    console.log("Changing planId to:",name, value); // Debugging line
     setregisterMember((prev) => ({ ...prev, [name]: value }));
   };
 
@@ -282,7 +347,8 @@ const MemberRegister = () => {
         );
         console.log(response);
       }
-      fetchMemberData(); // Refresh data after adding/updating
+      fetchMemberData();
+      fetchAllMemberData(); // Refresh data after adding/updating
     } catch (error) {
       console.log(error);
     }
@@ -293,6 +359,23 @@ const MemberRegister = () => {
       (new Date(today) - new Date(expiry)) / (1000 * 60 * 60 * 24)
     );
     return day;
+  };
+
+  //Function for deleting Data
+  const deleteItem = async (e, id) => {
+    try {
+      // Send a DELETE request to the backend
+      const response = await axios.delete(
+        `http://localhost:5002/api/member/${id}`
+      );
+      setTimeout(() => {
+        setDeleteModel(false);
+      }, 100);
+      fetchMemberData();
+      fetchAllMemberData(0); // Refresh data after deleting
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -403,10 +486,10 @@ const MemberRegister = () => {
                         />
 
                         <MdDeleteOutline
-                          // onClick={() => {
-                          //   setItemID(plan.planId);
-                          //   setDeleteModel(true);
-                          // }}
+                          onClick={() => {
+                            setDeleteModel(true);
+                            setItemID(member.id);
+                          }}
                           className="w-6 h-6 text-[#636363] hover:text-red-500 cursor-pointer"
                         />
                       </div>
@@ -454,10 +537,10 @@ const MemberRegister = () => {
                         />
 
                         <MdDeleteOutline
-                          // onClick={() => {
-                          //   setItemID(plan.planId);
-                          //   setDeleteModel(true);
-                          // }}
+                          onClick={() => {
+                            setItemID(member.id);
+                            setDeleteModel(true);
+                          }}
                           className="w-6 h-6 text-[#636363] hover:text-red-500 cursor-pointer"
                         />
                       </div>
@@ -504,10 +587,10 @@ const MemberRegister = () => {
                       />
 
                       <MdDeleteOutline
-                        // onClick={() => {
-                        //   setItemID(plan.planId);
-                        //   setDeleteModel(true);
-                        // }}
+                        onClick={() => {
+                          setItemID(member.id);
+                          setDeleteModel(true);
+                        }}
                         className="w-6 h-6 text-[#636363] hover:text-red-500 cursor-pointer"
                       />
                     </div>
@@ -811,13 +894,13 @@ const MemberRegister = () => {
 
               <div className="w-full flex gap-3">
                 <div className="w-full flex flex-col">
-                  <label class="block mb-2 font-medium mt-4" for="plan">
+                  <label class="block mb-2 font-medium mt-4" for="planId">
                     Plan
                   </label>
                   <select
                     className="outline-none p-2 w-full rounded-sm bg-blue-50"
-                    name="plan"
-                    id="plan"
+                    name="planId"
+                    id="planId"
                     required
                     onChange={handleChange}
                   >
@@ -862,6 +945,42 @@ const MemberRegister = () => {
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {openDeleteModel && (
+        <div className="w-full top-0 left-0 right-0 bottom-0 backdrop-blur-[6px] flex justify-center items-center fixed overflow-y-auto z-30">
+          <div className="w-[450px] bg-white p-6 rounded-lg border-[1px]">
+            <div className="w-full flex justify-between mb-1 items-center">
+              <h1 className="font-medium text-2xl text-black">Delete Member</h1>
+            </div>
+            <p className="text-lg text-[#636363] mb-3">
+              Are you sure you want to delete this Member?
+            </p>
+
+            <div className="w-full flex justify-end">
+              <div className="flex gap-5">
+                <button
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setItemID("");
+                    setTimeout(() => {
+                      setDeleteModel(false);
+                    }, 200);
+                  }}
+                  className="font-medium text-[16px]"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={(e) => deleteItem(e, itemID)}
+                  className="font-medium text-red-500 text-[16px]"
+                >
+                  Delete
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       )}

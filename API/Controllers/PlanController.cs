@@ -27,6 +27,7 @@ namespace API.Controllers
         {
             // We use Include to eagerly load the MemberRegistrations related to each Plan
             var allData = await _context.Plans
+                                        .OrderBy(p => p.Name)
                                         .Include(p => p.MemberRegistrations) // Eagerly loading MemberRegistrations for each Plan
                                         .ToListAsync();
 
