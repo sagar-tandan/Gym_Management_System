@@ -155,7 +155,7 @@ const AdminPlan = () => {
               PlanData.map((plan, index) => (
                 <tr key={index} className="border-[1px] border-blue-100">
                   <td className="py-3 px-5 font-medium text-black">{index}</td>
-                  <td className="py-3 px-5 font-normal text-[#636363]">
+                  <td className="py-3 px-5 font-medium text-black">
                     {plan.name}
                   </td>
                   <td className="py-3 px-5 font-normal text-[#636363]">
