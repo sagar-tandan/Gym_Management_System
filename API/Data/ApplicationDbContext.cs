@@ -4,13 +4,15 @@ using System.Linq;
 using System.Threading.Tasks;
 using api.Models;
 using API.Models;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace api.Data
 {
-    public class ApplicationDbContext : DbContext
+    public class ApplicationDbContext : IdentityDbContext<AppUser>
     {
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
+        public ApplicationDbContext(DbContextOptions dbContextOptions) : base(dbContextOptions)
         {
 
         }
@@ -21,5 +23,25 @@ namespace api.Data
         public DbSet<Inventory> Inventories { get; set; }
         public DbSet<Payment> Payments { get; set; }
 
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
+
+            List<IdentityRole> role = new List<IdentityRole> {
+                new IdentityRole{
+                    Name = "Admin",
+                    NormalizedName = "ADMIN"
+                },
+                new IdentityRole{
+                    Name = "User",
+                    NormalizedName = "USER"
+                }
+            };
+
+            builder.Entity<IdentityRole>().HasData(role);
+        }
+
     }
+
+
 }
