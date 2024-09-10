@@ -1,6 +1,7 @@
 using System.Text;
 using api.Data;
 using API.Models;
+using API.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -105,6 +106,9 @@ builder.Services.AddAuthentication(options =>
     };
 
 });
+
+builder.Services.AddScoped<TokenService>();
+
 
 
 var app = builder.Build();
