@@ -165,7 +165,7 @@ const AdminPlan = () => {
                   <td className="py-3 px-5 font-normal text-[#636363]">
                     Rs. {plan.cost}
                   </td>
-                  <td className="py-3 px-5 font-normal text-[#636363]">
+                  <td className="py-3 px-5 font-medium text-black">
                     {
                       (plan.memberRegistrations && plan.memberRegistrations)
                         .length
