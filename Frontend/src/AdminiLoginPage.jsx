@@ -1,13 +1,18 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { CgPassword } from "react-icons/cg";
 import { FaUser, FaLock } from "react-icons/fa";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { AllContext } from "./Context/Context";
 
 const AdminiLoginPage = () => {
   const [loginForm, setLoginForm] = useState({
     email: "",
     password: "",
   });
+  const { token, setToken } = useContext(AllContext);
+
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -25,7 +30,6 @@ const AdminiLoginPage = () => {
         "http://localhost:5002/api/auth/login",
         loginForm
       );
-      // console.table(response);
       if (response.status == 200) {
         SaveDataToLocalStorage(response.data);
       }
@@ -35,11 +39,15 @@ const AdminiLoginPage = () => {
   }
 
   function SaveDataToLocalStorage(data) {
+    const expiryTime = new Date().getTime() + 7 * 24 * 60 * 60 * 1000;
+
     localStorage.setItem("username", data.username);
     localStorage.setItem("AdminEmail", data.email);
     localStorage.setItem("token", data.token);
     localStorage.setItem("role", data.roles[0]);
-    console.log("Data stored!!");
+    localStorage.setItem("expiryTime", expiryTime);
+    setToken(data.token);
+    navigate("/adminDashboard");
   }
 
   return (
@@ -91,7 +99,7 @@ const AdminiLoginPage = () => {
           Dharan Fitness Club Login
         </p>
         <div className="w-full max-w-lg p-8 space-y-6 bg-white shadow-blue-custom rounded-lg">
-          <div className="text-center">
+          <div className="text-center mb-10">
             <p className="mt-2 text-sm text-gray-600">
               Please fill in your unique admin login details below.
             </p>
