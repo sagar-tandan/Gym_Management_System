@@ -38,11 +38,11 @@ namespace API.Controllers
                 return BadRequest(ModelState);
             };
 
-            var user = await _userManager.Users.FirstOrDefaultAsync(x => x.UserName == loginDTO.Username);
-            if (user == null) return Unauthorized("Invalid username!");
+            var user = await _userManager.Users.FirstOrDefaultAsync(x => x.Email == loginDTO.Email);
+            if (user == null) return Unauthorized("Invalid Email!");
             var result = await _signinManager.CheckPasswordSignInAsync(user, loginDTO.Password, false);
 
-            if (!result.Succeeded) return Unauthorized("Username not found and/or password incorrect");
+            if (!result.Succeeded) return Unauthorized("Email not found and/or password incorrect");
             var roles = await _userManager.GetRolesAsync(user);
 
             return Ok(
@@ -69,6 +69,16 @@ namespace API.Controllers
                 if (!ModelState.IsValid)
                     return BadRequest(ModelState);
 
+
+
+                var checkEmailDuplicate = await _userManager.FindByEmailAsync(registerDTO.Email);
+
+                if (checkEmailDuplicate != null)
+                {
+                    return StatusCode(500, "Email already exists!!");
+
+                }
+
                 var appUser = new AppUser
                 {
                     UserName = registerDTO.Username,
@@ -78,7 +88,7 @@ namespace API.Controllers
 
                 if (createdUser.Succeeded)
                 {
-                    var roleResult = await _userManager.AddToRoleAsync(appUser, "User");
+                    var roleResult = await _userManager.AddToRoleAsync(appUser, registerDTO.Role);
                     if (roleResult.Succeeded)
                     {
                         return Ok(
@@ -118,7 +128,14 @@ namespace API.Controllers
             // }
             // var roles = await _userManager.GetRolesAsync(user);
 
-            return Ok("Verified!!");
+            var allUser = await _userManager.Users.ToListAsync();
+            if (allUser == null)
+            {
+                return NotFound();
+
+            }
+
+            return Ok(allUser);
         }
 
 
