@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import { CgPassword } from "react-icons/cg";
 import { FaUser, FaLock } from "react-icons/fa";
+import axios from "axios";
 
 const AdminiLoginPage = () => {
   const [loginForm, setLoginForm] = useState({
     email: "",
     password: "",
-    role: "",
   });
 
   const handleChange = (e) => {
@@ -17,9 +17,14 @@ const AdminiLoginPage = () => {
     }));
   };
 
-  function LoginDataSubmit(e) {
+  async function LoginDataSubmit(e) {
     e.preventDefault();
     console.log(loginForm);
+    const response = await axios.post(
+      "http://localhost:5002/api/auth/login",
+      loginForm
+    );
+    console.table(response.data);
   }
 
   return (
