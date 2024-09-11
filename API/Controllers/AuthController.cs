@@ -45,6 +45,8 @@ namespace API.Controllers
             if (!result.Succeeded) return Unauthorized("Email not found and/or password incorrect");
             var roles = await _userManager.GetRolesAsync(user);
 
+
+
             return Ok(
                 new NewUserDTO
                 {
