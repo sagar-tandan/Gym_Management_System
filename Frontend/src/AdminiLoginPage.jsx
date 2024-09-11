@@ -20,11 +20,26 @@ const AdminiLoginPage = () => {
   async function LoginDataSubmit(e) {
     e.preventDefault();
     console.log(loginForm);
-    const response = await axios.post(
-      "http://localhost:5002/api/auth/login",
-      loginForm
-    );
-    console.table(response.data);
+    try {
+      const response = await axios.post(
+        "http://localhost:5002/api/auth/login",
+        loginForm
+      );
+      // console.table(response);
+      if (response.status == 200) {
+        SaveDataToLocalStorage(response.data);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  function SaveDataToLocalStorage(data) {
+    localStorage.setItem("username", data.username);
+    localStorage.setItem("AdminEmail", data.email);
+    localStorage.setItem("token", data.token);
+    localStorage.setItem("role", data.roles[0]);
+    console.log("Data stored!!");
   }
 
   return (
