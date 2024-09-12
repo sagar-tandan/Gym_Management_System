@@ -55,7 +55,6 @@ namespace API.Controllers
                     Token = _tokenService.CreateToken(user),
                     UserId = user.Id,
                     Roles = roles
-
                 }
             );
 
@@ -71,8 +70,6 @@ namespace API.Controllers
                 if (!ModelState.IsValid)
                     return BadRequest(ModelState);
 
-
-
                 var checkEmailDuplicate = await _userManager.FindByEmailAsync(registerDTO.Email);
 
                 if (checkEmailDuplicate != null)
@@ -84,7 +81,10 @@ namespace API.Controllers
                 var appUser = new AppUser
                 {
                     UserName = registerDTO.Username,
-                    Email = registerDTO.Email
+                    Email = registerDTO.Email,
+                    ProfilePic = registerDTO.ProfilePic,
+                    CoverPic = registerDTO.CoverPic
+
                 };
                 var createdUser = await _userManager.CreateAsync(appUser, registerDTO.Password);
 
@@ -122,13 +122,7 @@ namespace API.Controllers
         [HttpGet("verify-token")]
         public async Task<IActionResult> VerifyToken()
         {
-            // var userId = User.GetUserId();
-            // var user = await _userManager.FindByIdAsync(userId);
-            // if (user == null)
-            // {
-            //     return NotFound();
-            // }
-            // var roles = await _userManager.GetRolesAsync(user);
+            
 
             var allUser = await _userManager.Users.ToListAsync();
             if (allUser == null)

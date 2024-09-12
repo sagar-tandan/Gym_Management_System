@@ -8,6 +8,8 @@ namespace API.Models
 {
     public class AppUser : IdentityUser
     {
+        public string? ProfilePic { get; set; }
 
+        public string? CoverPic { get; set; }
     }
 }
