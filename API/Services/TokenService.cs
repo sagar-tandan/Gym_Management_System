@@ -36,7 +36,7 @@ namespace API.Services
             {
 
                 Subject = new ClaimsIdentity(Claims),
-                Expires = DateTime.Now.AddMinutes(1),
+                Expires = DateTime.Now.AddDays(7),
                 SigningCredentials = creds,
                 Issuer = _config["JWT:Issuer"],
                 Audience = _config["JWT:Audience"],

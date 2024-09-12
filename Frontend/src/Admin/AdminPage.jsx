@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { LuLayoutDashboard } from "react-icons/lu";
 import { MdOutlineSportsGymnastics } from "react-icons/md";
 import { MdOutlineGroupAdd } from "react-icons/md";
@@ -13,13 +13,18 @@ import MemberRegister from "./AdminComp/MemberRegister";
 import AdminPlan from "./AdminComp/AdminPlan";
 import Inventory from "./AdminComp/Inventory";
 import AdminReport from "./AdminComp/AdminReport";
+import { useNavigate } from "react-router-dom";
+import { AllContext } from "../Context/Context";
 
 const AdminPage = () => {
   const [active, setActive] = useState("dashboard");
+  const { token, setToken } = useContext(AllContext);
 
   const handleClick = (e, act) => {
     setActive(act);
   };
+
+  const navigate = useNavigate();
 
   return (
     <div className="w-full max-w-screen-2xl mx-auto flex relative h-screen">
@@ -112,7 +117,11 @@ const AdminPage = () => {
           </div>
 
           <div
-            // onClick={(e) => handleClick(e)}
+            onClick={(e) => {
+              setToken(null);
+              navigate("/adminlogin");
+              localStorage.clear();
+            }}
             className={`w-full flex gap-2 cursor-pointer hover:text-blue-600 py-[6px] px-3 rounded-sm transition-all duration-300 ease-in-out group`}
           >
             <IoMdLogOut className="w-6 h-6" />
