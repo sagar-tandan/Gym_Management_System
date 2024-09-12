@@ -118,21 +118,52 @@ namespace API.Controllers
             }
         }
 
-        [Authorize]
+        // // [Authorize]
+        // [HttpGet("verify-token")]
+        // public async Task<IActionResult> VerifyToken()
+        // {
+        //     // Fetch all users from the database
+        //     var allUsers = await _userManager.Users.ToListAsync();
+
+        //     // Create a list to store the user info along with their roles
+        //     var userDtos = new List<GetAdminDto>();
+
+        //     // Loop through each user and retrieve their roles
+        //     foreach (var user in allUsers)
+        //     {
+        //         var roles = await _userManager.GetRolesAsync(user);
+
+        //         userDtos.Add(new GetAdminDto
+        //         {
+        //             Username = user.UserName,
+        //             Email = user.Email,
+        //             Role = roles 
+        //         });
+        //     }
+        //     return Ok(userDtos);
+        // }
+
         [HttpGet("verify-token")]
         public async Task<IActionResult> VerifyToken()
         {
+            var allUsers = await _userManager.Users.ToListAsync();
+            var userDtos = new List<GetAdminDto>();
 
-
-            var allUser = await _userManager.Users.ToListAsync();
-            if (allUser == null)
+            foreach (var user in allUsers)
             {
-                return NotFound();
+                var roles = await _userManager.GetRolesAsync(user);
 
+                userDtos.Add(new GetAdminDto
+                {
+                    Username = user.UserName,
+                    Email = user.Email,
+                    Roles = roles
+                });
             }
 
-            return Ok(allUser);
+            return Ok(userDtos);
         }
+
 
         [HttpGet("{Id}")]
         public async Task<IActionResult> GetUserInfroFromUid([FromRoute] string Id)
