@@ -11,6 +11,7 @@ const AdminiLoginPage = () => {
     password: "",
   });
   const { token, setToken } = useContext(AllContext);
+  const { role, setRole } = useContext(AllContext);
 
   const navigate = useNavigate();
 
@@ -49,6 +50,7 @@ const AdminiLoginPage = () => {
     localStorage.setItem("role", data.roles[0]);
     localStorage.setItem("expiryTime", expiryTime);
     setToken(data.token);
+    setRole(data.roles[0]);
     navigate("/adminDashboard");
   }
 
