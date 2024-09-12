@@ -7,23 +7,25 @@ import { AllContext } from "./Context/Context";
 
 function App() {
   const { token, setToken } = useContext(AllContext);
+  const { role, setRole } = useContext(AllContext);
 
   function GetDataFromLocalStorage() {
     const tkn = localStorage.getItem("token");
     const expiryTime = localStorage.getItem("expiryTime");
+    const role = localStorage.getItem("role");
 
     if (expiryTime && new Date().getTime() > expiryTime) {
       localStorage.clear();
       setToken(null);
     } else if (tkn) {
       setToken(tkn);
+      setRole(role);
     }
   }
 
   useEffect(() => {
     GetDataFromLocalStorage();
   }, []);
-
 
   return (
     <>
@@ -32,12 +34,22 @@ function App() {
           <Route
             path="/adminlogin"
             element={
-              token ? <Navigate to="/adminDashboard" /> : <AdminiLoginPage />
+              token && role != "User" ? (
+                <Navigate to="/adminDashboard" />
+              ) : (
+                <AdminiLoginPage />
+              )
             }
           />
           <Route
             path="/adminDashboard"
-            element={token ? <AdminPage /> : <Navigate to="/adminlogin" />}
+            element={
+              token && role != "User" ? (
+                <AdminPage />
+              ) : (
+                <Navigate to="/adminlogin" />
+              )
+            }
           />
         </Routes>
       </BrowserRouter>

@@ -134,6 +134,78 @@ namespace API.Controllers
             return Ok(allUser);
         }
 
+        [HttpGet("{Id}")]
+        public async Task<IActionResult> GetUserInfroFromUid([FromRoute] string Id)
+        {
 
+            try
+            {
+
+                var getUser = await _userManager.FindByIdAsync(Id);
+                if (getUser == null)
+                {
+                    return NotFound();
+                }
+
+
+                var images = new AdminImageDto
+                {
+                    ProfilePic = getUser.ProfilePic,
+                    CoverPic = getUser.CoverPic
+                };
+                return StatusCode(200, images);
+            }
+            catch (Exception error)
+            {
+
+                return StatusCode(500, error);
+            }
+
+        }
+
+        [HttpPut("update-images/{AdminId}")]
+        public async Task<IActionResult> UpdateImagesOfAdmin(string AdminId, [FromBody] AdminImageDto adminImageDto)
+        {
+            var findAdminProfile = await _userManager.FindByIdAsync(AdminId);
+            if (findAdminProfile == null)
+            {
+                return NotFound();
+            }
+
+            findAdminProfile.ProfilePic = adminImageDto.ProfilePic;
+            findAdminProfile.CoverPic = adminImageDto.CoverPic;
+
+            var result = await _userManager.UpdateAsync(findAdminProfile);
+
+            if (result.Succeeded)
+            {
+                return Ok(new { Message = "Admin images updated successfully." });
+            }
+
+            return StatusCode(500, result.Errors);
+        }
+
+        // Update Admin Info
+        [HttpPut("update-info/{id}")]
+        public async Task<IActionResult> UpdateAdminInfo(string id, [FromBody] UpdateAdmin update)
+        {
+            var findAdminProfile = await _userManager.FindByIdAsync(id);
+            if (findAdminProfile == null)
+            {
+                return NotFound();
+            }
+
+            findAdminProfile.UserName = update.Username;
+            findAdminProfile.Email = update.Email;
+
+            var result = await _userManager.UpdateAsync(findAdminProfile);
+
+            if (result.Succeeded)
+            {
+                return Ok(new { Message = "Admin info updated successfully." });
+            }
+
+            return StatusCode(500, result.Errors);
+        }
     }
 }
