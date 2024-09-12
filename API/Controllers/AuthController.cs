@@ -84,7 +84,6 @@ namespace API.Controllers
                     Email = registerDTO.Email,
                     ProfilePic = registerDTO.ProfilePic,
                     CoverPic = registerDTO.CoverPic,
-
                 };
                 var createdUser = await _userManager.CreateAsync(appUser, registerDTO.Password);
 
@@ -118,31 +117,6 @@ namespace API.Controllers
             }
         }
 
-        // // [Authorize]
-        // [HttpGet("verify-token")]
-        // public async Task<IActionResult> VerifyToken()
-        // {
-        //     // Fetch all users from the database
-        //     var allUsers = await _userManager.Users.ToListAsync();
-
-        //     // Create a list to store the user info along with their roles
-        //     var userDtos = new List<GetAdminDto>();
-
-        //     // Loop through each user and retrieve their roles
-        //     foreach (var user in allUsers)
-        //     {
-        //         var roles = await _userManager.GetRolesAsync(user);
-
-        //         userDtos.Add(new GetAdminDto
-        //         {
-        //             Username = user.UserName,
-        //             Email = user.Email,
-        //             Role = roles 
-        //         });
-        //     }
-        //     return Ok(userDtos);
-        // }
-
         [HttpGet("verify-token")]
         public async Task<IActionResult> VerifyToken()
         {
@@ -168,54 +142,30 @@ namespace API.Controllers
         [HttpGet("{Id}")]
         public async Task<IActionResult> GetUserInfroFromUid([FromRoute] string Id)
         {
-
             try
             {
-
                 var getUser = await _userManager.FindByIdAsync(Id);
                 if (getUser == null)
                 {
                     return NotFound();
                 }
 
-
-                var images = new AdminImageDto
+                var allInfo = new AdminImageDto
                 {
+                    CoverPic = getUser.CoverPic,
                     ProfilePic = getUser.ProfilePic,
-                    CoverPic = getUser.CoverPic
+                    Username = getUser.UserName,
+                    Email = getUser.Email
                 };
-                return StatusCode(200, images);
+                return StatusCode(200, allInfo);
             }
             catch (Exception error)
             {
-
                 return StatusCode(500, error);
             }
 
         }
-
-        [HttpPut("update-images/{AdminId}")]
-        public async Task<IActionResult> UpdateImagesOfAdmin(string AdminId, [FromBody] AdminImageDto adminImageDto)
-        {
-            var findAdminProfile = await _userManager.FindByIdAsync(AdminId);
-            if (findAdminProfile == null)
-            {
-                return NotFound();
-            }
-
-            findAdminProfile.ProfilePic = adminImageDto.ProfilePic;
-            findAdminProfile.CoverPic = adminImageDto.CoverPic;
-
-            var result = await _userManager.UpdateAsync(findAdminProfile);
-
-            if (result.Succeeded)
-            {
-                return Ok(new { Message = "Admin images updated successfully." });
-            }
-
-            return StatusCode(500, result.Errors);
-        }
-
+        
         // Update Admin Info
         [HttpPut("update-info/{id}")]
         public async Task<IActionResult> UpdateAdminInfo(string id, [FromBody] UpdateAdmin update)
@@ -228,12 +178,21 @@ namespace API.Controllers
 
             findAdminProfile.UserName = update.Username;
             findAdminProfile.Email = update.Email;
+            findAdminProfile.ProfilePic = update.ProfilePic;
+            findAdminProfile.CoverPic = update.CoverPic;
 
             var result = await _userManager.UpdateAsync(findAdminProfile);
 
             if (result.Succeeded)
             {
-                return Ok(new { Message = "Admin info updated successfully." });
+                var updatedInfo = new GetAdminDto
+                {
+                    Username = findAdminProfile.UserName,
+                    Email = findAdminProfile.Email,
+                    ProfilePic = findAdminProfile.ProfilePic,
+                    CoverPic = findAdminProfile.CoverPic
+                };
+                return Ok(updatedInfo);
             }
 
             return StatusCode(500, result.Errors);

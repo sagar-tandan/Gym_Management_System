@@ -66,6 +66,7 @@ builder.Services.AddControllers().AddNewtonsoftJson(options =>
 builder.Services.AddIdentity<AppUser, IdentityRole>(
     options =>
     {
+        options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 ";
         options.Password.RequireDigit = true;
         options.Password.RequireLowercase = true;
         options.Password.RequireNonAlphanumeric = true;

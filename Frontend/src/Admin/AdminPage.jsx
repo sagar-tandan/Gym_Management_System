@@ -40,7 +40,7 @@ const AdminPage = () => {
           <h1 className="w-full text-center font-semibold mt-1 text-xl">
             Dharan Fitness Club
           </h1>
-          <hr className="w-full mt-[16px] border-[1px]" />
+          {/* <hr className="w-full mt-[16px] border-[1px]" /> */}
         </div>
 
         <nav className="w-full flex flex-col justify-between h-full pb-5">
