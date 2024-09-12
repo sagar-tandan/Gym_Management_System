@@ -30,6 +30,7 @@ const AdminiLoginPage = () => {
         "http://localhost:5002/api/auth/login",
         loginForm
       );
+      console.log(response);
       if (response.status == 200) {
         SaveDataToLocalStorage(response.data);
       }
@@ -44,6 +45,7 @@ const AdminiLoginPage = () => {
     localStorage.setItem("username", data.username);
     localStorage.setItem("AdminEmail", data.email);
     localStorage.setItem("token", data.token);
+    localStorage.setItem("uid", data.userId);
     localStorage.setItem("role", data.roles[0]);
     localStorage.setItem("expiryTime", expiryTime);
     setToken(data.token);

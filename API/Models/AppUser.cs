@@ -11,5 +11,7 @@ namespace API.Models
         public string? ProfilePic { get; set; }
 
         public string? CoverPic { get; set; }
+
+        public string? Role { get; set; }
     }
 }

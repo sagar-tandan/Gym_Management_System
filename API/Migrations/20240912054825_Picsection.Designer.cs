@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using api.Data;
@@ -11,9 +12,11 @@ using api.Data;
 namespace API.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240912054825_Picsection")]
+    partial class Picsection
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -68,9 +71,6 @@ namespace API.Migrations
                         .HasColumnType("boolean");
 
                     b.Property<string>("ProfilePic")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Role")
                         .HasColumnType("text");
 
                     b.Property<string>("SecurityStamp")
@@ -192,21 +192,15 @@ namespace API.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "f696bb10-8fc4-41e5-afd2-6e8100d441e6",
+                            Id = "9ec00401-6b20-4813-a29b-f6a1b59abf1c",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "f8cbd3ac-b459-471e-8892-bdfbfa7a48db",
+                            Id = "1f43d6df-9a9f-425f-a106-ed4f18d1f884",
                             Name = "User",
                             NormalizedName = "USER"
-                        },
-                        new
-                        {
-                            Id = "6a3fd76a-ef09-47c1-a4fa-a49ed93a9972",
-                            Name = "SuperAdmin",
-                            NormalizedName = "SUPERADMIN"
                         });
                 });
 

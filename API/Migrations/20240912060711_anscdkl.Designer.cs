@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using api.Data;
@@ -11,9 +12,11 @@ using api.Data;
 namespace API.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240912060711_anscdkl")]
+    partial class anscdkl
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -192,21 +195,15 @@ namespace API.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "f696bb10-8fc4-41e5-afd2-6e8100d441e6",
+                            Id = "1a1c5370-17b0-45c0-b2f6-6f24714e38ce",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "f8cbd3ac-b459-471e-8892-bdfbfa7a48db",
+                            Id = "9f8a0473-f854-4801-9a20-920026dd41e6",
                             Name = "User",
                             NormalizedName = "USER"
-                        },
-                        new
-                        {
-                            Id = "6a3fd76a-ef09-47c1-a4fa-a49ed93a9972",
-                            Name = "SuperAdmin",
-                            NormalizedName = "SUPERADMIN"
                         });
                 });
 

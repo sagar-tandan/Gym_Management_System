@@ -83,7 +83,7 @@ namespace API.Controllers
                     UserName = registerDTO.Username,
                     Email = registerDTO.Email,
                     ProfilePic = registerDTO.ProfilePic,
-                    CoverPic = registerDTO.CoverPic
+                    CoverPic = registerDTO.CoverPic,
 
                 };
                 var createdUser = await _userManager.CreateAsync(appUser, registerDTO.Password);
@@ -122,7 +122,7 @@ namespace API.Controllers
         [HttpGet("verify-token")]
         public async Task<IActionResult> VerifyToken()
         {
-            
+
 
             var allUser = await _userManager.Users.ToListAsync();
             if (allUser == null)
