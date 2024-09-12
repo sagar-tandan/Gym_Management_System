@@ -12,6 +12,6 @@ namespace API.DTOs.AuthDTO
         public string? Token { get; set; }
         public string? UserId { get; set; }
 
-        public IList<string> Roles { get; set; } // Add this line
+        public IList<string> Roles { get; set; } 
     }
 }
