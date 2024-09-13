@@ -43,9 +43,7 @@ namespace API.Controllers
             var result = await _signinManager.CheckPasswordSignInAsync(user, loginDTO.Password, false);
 
             if (!result.Succeeded) return Unauthorized("Email not found and/or password incorrect");
-            var roles = await _userManager.GetRolesAsync(user);
-
-
+            // var roles = await _userManager.GetRolesAsync(user);
 
             return Ok(
                 new NewUserDTO
@@ -54,7 +52,7 @@ namespace API.Controllers
                     Email = user.Email,
                     Token = _tokenService.CreateToken(user),
                     UserId = user.Id,
-                    Roles = roles
+                    Role = user.Role
                 }
             );
 
@@ -75,7 +73,6 @@ namespace API.Controllers
                 if (checkEmailDuplicate != null)
                 {
                     return StatusCode(500, "Email already exists!!");
-
                 }
 
                 var appUser = new AppUser
@@ -84,26 +81,27 @@ namespace API.Controllers
                     Email = registerDTO.Email,
                     ProfilePic = registerDTO.ProfilePic,
                     CoverPic = registerDTO.CoverPic,
+                    Role = registerDTO.Role,
                 };
                 var createdUser = await _userManager.CreateAsync(appUser, registerDTO.Password);
 
                 if (createdUser.Succeeded)
                 {
-                    var roleResult = await _userManager.AddToRoleAsync(appUser, registerDTO.Role);
-                    if (roleResult.Succeeded)
-                    {
-                        return Ok(
-                            new NewUserDTO
-                            {
-                                Username = appUser.UserName,
-                                Email = appUser.Email,
-                            }
-                        );
-                    }
-                    else
-                    {
-                        return StatusCode(500, roleResult.Errors);
-                    }
+                    // var roleResult = await _userManager.AddToRoleAsync(appUser, registerDTO.Role);
+                    // if (roleResult.Succeeded)
+                    // {
+                    return Ok(
+                        new NewUserDTO
+                        {
+                            Username = appUser.UserName,
+                            Email = appUser.Email,
+                        }
+                    );
+                    // }
+                    // else
+                    // {
+                    //     return StatusCode(500, roleResult.Errors);
+                    // }
                 }
                 else
                 {
@@ -117,29 +115,35 @@ namespace API.Controllers
             }
         }
 
-        [HttpGet("verify-token")]
-        public async Task<IActionResult> VerifyToken()
+        [HttpGet("getAllAdmins")]
+        public async Task<IActionResult> GetAllAdmins()
         {
             var allUsers = await _userManager.Users.ToListAsync();
-            var userDtos = new List<GetAdminDto>();
-
-            foreach (var user in allUsers)
+            var userDtos = allUsers.Select(u => new GetAdminDto
             {
-                var roles = await _userManager.GetRolesAsync(user);
+                Username = u.UserName,
+                Email = u.Email,
+                Role = u.Role
+            });
+            // var userDtos = new List<GetAdminDto>();
 
-                userDtos.Add(new GetAdminDto
-                {
-                    Username = user.UserName,
-                    Email = user.Email,
-                    Roles = roles
-                });
-            }
+            // foreach (var user in allUsers)
+            // {
+            //     var roles = await _userManager.GetRolesAsync(user);
+
+            //     userDtos.Add(new GetAdminDto
+            //     {
+            //         Username = user.UserName,
+            //         Email = user.Email,
+            //         Roles = roles
+            //     });
+            // }
 
             return Ok(userDtos);
         }
 
 
-        [HttpGet("{Id}")]
+        [HttpGet("get-profile/{Id}")]
         public async Task<IActionResult> GetUserInfroFromUid([FromRoute] string Id)
         {
             try
@@ -150,7 +154,7 @@ namespace API.Controllers
                     return NotFound();
                 }
 
-                var allInfo = new AdminImageDto
+                var allInfo = new AdminInfoDto
                 {
                     CoverPic = getUser.CoverPic,
                     ProfilePic = getUser.ProfilePic,
@@ -165,10 +169,10 @@ namespace API.Controllers
             }
 
         }
-        
+
         // Update Admin Info
         [HttpPut("update-info/{id}")]
-        public async Task<IActionResult> UpdateAdminInfo(string id, [FromBody] UpdateAdmin update)
+        public async Task<IActionResult> UpdateAdminInfo(string id, [FromBody] AdminInfoDto adminInfoDto)
         {
             var findAdminProfile = await _userManager.FindByIdAsync(id);
             if (findAdminProfile == null)
@@ -176,16 +180,16 @@ namespace API.Controllers
                 return NotFound();
             }
 
-            findAdminProfile.UserName = update.Username;
-            findAdminProfile.Email = update.Email;
-            findAdminProfile.ProfilePic = update.ProfilePic;
-            findAdminProfile.CoverPic = update.CoverPic;
+            findAdminProfile.UserName = adminInfoDto.Username;
+            findAdminProfile.Email = adminInfoDto.Email;
+            findAdminProfile.ProfilePic = adminInfoDto.ProfilePic;
+            findAdminProfile.CoverPic = adminInfoDto.CoverPic;
 
             var result = await _userManager.UpdateAsync(findAdminProfile);
 
             if (result.Succeeded)
             {
-                var updatedInfo = new GetAdminDto
+                var updatedInfo = new AdminInfoDto
                 {
                     Username = findAdminProfile.UserName,
                     Email = findAdminProfile.Email,

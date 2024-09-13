@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { LiaEditSolid } from "react-icons/lia";
 import { MdDeleteOutline } from "react-icons/md";
-import { GiTireIronCross } from "react-icons/gi";
+import { RxCross2 } from "react-icons/rx";
 import axios from "axios";
 
 const Inventory = () => {
@@ -149,20 +149,19 @@ const Inventory = () => {
   };
 
   return (
-    <div className="w-full flex flex-col gap-2 h-screen mt-1">
-      <div className="w-full flex justify-end px-5">
+    <div className="w-full flex flex-col gap-2 h-screen mt-5">
+      <div className="w-full flex justify-end px-3">
         <button
           onClick={(e) => MountModel(e)}
-          className="px-3 py-[6px] bg-blue-500 text-white rounded-sm hover:bg-blue-600 active:bg-blue-900 transition-all duration-300 ease-in-out font-medium "
+          className="px-3 py-[6px] bg-purple-700 text-white rounded-sm hover:bg-purple-900 active:bg-purple-900 transition-all duration-300 ease-in-out font-medium "
         >
           Add Equipment
         </button>
       </div>
-      <hr className="w-full mt-1 border-[1px]" />
       <section className="w-full py-1 px-3">
         <table className="w-full">
           <thead>
-            <tr className="w-full border-[1px] border-blue-100 bg-blue-50 rounded-sm">
+            <tr className="w-full border-[1px] border-purple-200 bg-purple-100 rounded-sm">
               <th className="font-medium text-left pl-4 py-2 text-[#636363]">
                 S.No.
               </th>
@@ -187,7 +186,7 @@ const Inventory = () => {
           <tbody>
             {allData &&
               allData.map((equip, index) => (
-                <tr key={index} className="border-[1px] border-blue-100">
+                <tr key={index} className="border-[1px] border-purple-200">
                   <td className="py-3 px-5 font-medium text-black">{index}</td>
                   <td className="py-3 px-5 font-normal text-[#636363]">
                     {equip.itemName}
@@ -241,12 +240,12 @@ const Inventory = () => {
         <div className="w-full top-0 left-0 right-0 bottom-0 backdrop-blur-sm flex justify-center items-center fixed overflow-y-auto">
           <div className="w-[450px] bg-white border-[1px] p-8 rounded-lg shadow-sm">
             <div className="w-full flex justify-between mb-4 items-center">
-              <h1 className="font-medium text-lg text-blue-600">
+              <h1 className="font-medium text-lg text-purple-800">
                 {editable ? "Edit Inventory" : "Add Inventory"}
               </h1>
-              <GiTireIronCross
+              <RxCross2
                 onClick={() => UnMountModel()}
-                className="w-5 h-5 text-red-600 cursor-pointer active:scale-[0.95]"
+                className="w-7 h-7 cursor-pointer active:scale-[0.95]"
               />
             </div>
             <form className="w-full flex flex-col" onSubmit={(e) => addItem(e)}>
@@ -273,7 +272,7 @@ const Inventory = () => {
                 type="text"
                 id="itemName"
                 name="itemName"
-                className="p-2 w-full rounded-sm bg-blue-50"
+                className="p-2 w-full rounded-sm bg-purple-100"
                 placeholder="Name of Equipment"
                 value={equipments.itemName}
                 onChange={handleChange}
@@ -289,7 +288,7 @@ const Inventory = () => {
                     type="number"
                     id="quantity"
                     name="quantity"
-                    className="p-2 w-full rounded-sm bg-blue-50"
+                    className="p-2 w-full rounded-sm bg-purple-100"
                     placeholder="Total Equipments"
                     value={equipments.quantity}
                     onChange={handleChange}
@@ -304,7 +303,7 @@ const Inventory = () => {
                     type="number"
                     id="defect"
                     name="defect"
-                    className="p-2 w-full rounded-sm bg-blue-50"
+                    className="p-2 w-full rounded-sm bg-purple-100"
                     placeholder="No. of defective Equipments"
                     value={equipments.defect}
                     onChange={handleChange}
@@ -320,7 +319,7 @@ const Inventory = () => {
                 type="number"
                 id="price"
                 name="price"
-                className="p-2 w-full rounded-sm bg-blue-50"
+                className="p-2 w-full rounded-sm bg-purple-100"
                 placeholder="Total price"
                 value={equipments.price}
                 onChange={handleChange}
@@ -330,7 +329,7 @@ const Inventory = () => {
               <div className="w-full flex justify-end mt-5 px-[2px]">
                 <button
                   type="submit"
-                  className="bg-blue-500 text-[16px] px-6 py-[6px] text-white rounded-sm font-medium hover:bg-blue-700 transition-all duration-300 ease-in-out active:bg-blue-900"
+                  className="bg-purple-700 text-[16px] px-6 py-[6px] text-white rounded-sm font-medium hover:bg-purple-900 transition-all duration-300 ease-in-out active:bg-purple-900"
                 >
                   {loading
                     ? "updating.."

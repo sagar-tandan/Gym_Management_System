@@ -47,10 +47,10 @@ const AdminiLoginPage = () => {
     localStorage.setItem("AdminEmail", data.email);
     localStorage.setItem("token", data.token);
     localStorage.setItem("uid", data.userId);
-    localStorage.setItem("role", data.roles[0]);
+    localStorage.setItem("role", data.role);
     localStorage.setItem("expiryTime", expiryTime);
     setToken(data.token);
-    setRole(data.roles[0]);
+    setRole(data.role);
     navigate("/adminDashboard");
   }
 

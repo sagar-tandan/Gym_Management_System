@@ -12,5 +12,7 @@ namespace API.Models
 
         public string? CoverPic { get; set; }
 
+        public string? Role { get; set; }
+
     }
 }
