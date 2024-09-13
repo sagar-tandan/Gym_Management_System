@@ -51,7 +51,7 @@ const AdminPage = () => {
               onClick={(e) => handleClick(e, "dashboard")}
               className={`${
                 active === "dashboard"
-                  ? "text-[#FBB03B] font-normal bg-gradient-to-r from-[#FBB03B] from-1% via-transparent via-25% to-transparent to-90%"
+                  ? "text-[#fbb03b] font-normal bg-gradient-to-r from-[#FBB03B] from-1% via-transparent via-30% to-transparent to-90%"
                   : ""
               } w-full text-white flex gap-2 cursor-pointer hover:text-[#FBB03B] py-[6px] px-8 transition-all duration-500 ease-in-out group`}
             >
@@ -63,7 +63,7 @@ const AdminPage = () => {
               onClick={(e) => handleClick(e, "admin")}
               className={`${
                 active === "admin"
-                  ? "text-[#FBB03B] font-normal bg-gradient-to-r from-[#FBB03B] from-1% via-transparent via-25% to-transparent to-90%"
+                  ? "text-[#fbb03b] font-normal bg-gradient-to-r from-[#FBB03B] from-1% via-transparent via-30% to-transparent to-90%"
                   : ""
               } w-full text-white flex gap-2 cursor-pointer hover:text-[#FBB03B] py-[6px] px-8 transition-all duration-300 ease-in-out group`}
             >
@@ -75,7 +75,7 @@ const AdminPage = () => {
               onClick={(e) => handleClick(e, "register")}
               className={`${
                 active === "register"
-                  ? "text-[#FBB03B] font-normal bg-gradient-to-r from-[#FBB03B] from-1% via-transparent via-25% to-transparent to-90%"
+                  ? "text-[#fbb03b] font-normal bg-gradient-to-r from-[#FBB03B] from-1% via-transparent via-25% to-transparent to-90%"
                   : ""
               } w-full text-white flex gap-2 cursor-pointer hover:text-[#FBB03B] py-[6px] px-8 transition-all duration-300 ease-in-out group`}
             >
@@ -87,7 +87,7 @@ const AdminPage = () => {
               onClick={(e) => handleClick(e, "plan")}
               className={`${
                 active === "plan"
-                  ? "text-[#FBB03B] font-normal bg-gradient-to-r from-[#FBB03B] from-1% via-transparent via-25% to-transparent to-90%"
+                  ? "text-[#fbb03b] font-normal bg-gradient-to-r from-[#FBB03B] from-1% via-transparent via-25% to-transparent to-90%"
                   : ""
               } w-full text-white flex gap-2 cursor-pointer hover:text-[#FBB03B] py-[6px] px-8 transition-all duration-300 ease-in-out group`}
             >
@@ -99,7 +99,7 @@ const AdminPage = () => {
               onClick={(e) => handleClick(e, "inventory")}
               className={`${
                 active === "inventory"
-                  ? "text-[#FBB03B] font-normal bg-gradient-to-r from-[#FBB03B] from-1% via-transparent via-25% to-transparent to-90%"
+                  ? "text-[#fbb03b] font-normal bg-gradient-to-r from-[#FBB03B] from-1% via-transparent via-25% to-transparent to-90%"
                   : ""
               } w-full text-white flex gap-2 cursor-pointer hover:text-[#FBB03B] py-[6px] px-8 transition-all duration-300 ease-in-out group`}
             >
@@ -111,7 +111,7 @@ const AdminPage = () => {
               onClick={(e) => handleClick(e, "report")}
               className={`${
                 active === "report"
-                  ? "text-[#FBB03B] font-normal bg-gradient-to-r from-[#FBB03B] from-1% via-transparent via-25% to-transparent to-90%"
+                  ? "text-[#fbb03b] font-normal bg-gradient-to-r from-[#FBB03B] from-1% via-transparent via-25% to-transparent to-90%"
                   : ""
               } w-full text-white flex gap-2 cursor-pointer hover:text-[#FBB03B] py-[6px] px-8 transition-all duration-300 ease-in-out group`}
             >
