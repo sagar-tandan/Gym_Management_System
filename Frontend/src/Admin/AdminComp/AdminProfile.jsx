@@ -9,6 +9,9 @@ const AdminProfile = () => {
   const [allUser, setAllUser] = useState([]);
   const [editable, setEditable] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [deleteModel, setDeleteModel] = useState(false);
+  const [partAdminId, setPartAdminId] = useState(null);
+  const [addAdmin, setAddAdmin] = useState(false);
 
   const [adminInfo, setAdminInfo] = useState({
     username: localStorage.getItem("username"),
@@ -16,6 +19,17 @@ const AdminProfile = () => {
     coverPic: "",
     role: localStorage.getItem("role"),
     email: localStorage.getItem("AdminEmail"),
+  });
+
+  const [register, setRegister] = useState({
+    username: "",
+    email: "",
+    password: "12345",
+    role: "Admin",
+    profilePic:
+      "https://res.cloudinary.com/djpnst0u5/image/upload/v1726241924/amozhwvblhtctwjuosrl.webp",
+    coverPic:
+      "https://th.bing.com/th/id/OIP.cHpeU17GITn3ofCu_7fDagHaE8?rs=1&pid=ImgDetMain",
   });
 
   const fetchAdminDetail = async () => {
@@ -140,8 +154,48 @@ const AdminProfile = () => {
     }
   };
 
+  const deactivateAccount = async (e, id) => {
+    e.preventDefault();
+    try {
+      const response = await axios.delete(
+        `http://localhost:5002/api/auth/deactivate/${id}`
+      );
+      setTimeout(() => {
+        setDeleteModel(false);
+      }, 100);
+      fetchAllAdminDetails();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const AddNewAdmin = async (e) => {
+    e.preventDefault();
+    try {
+      setLoading(true);
+      await axios.post("http://localhost:5002/api/auth/register", register);
+      fetchAllAdminDetails();
+      setRegister((prev) => ({
+        ...prev,
+        username: "",
+        email: "",
+      }));
+      setLoading(false);
+      setAddAdmin(false);
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+      setAddAdmin(false);
+    }
+  };
+
+  const newHandleChange = (e) => {
+    const { name, value } = e.target;
+    setRegister((prev) => ({ ...prev, [name]: value }));
+  };
+
   return (
-    <div className="w-full flex flex-col gap-2 h-screen mt-1">
+    <div className="w-full flex flex-col gap-2 h-screen mt-1 overflow-x-hidden">
       <div className="w-full flex flex-col gap-2 relative px-3 mb-20">
         <img
           className="w-full h-[200px] object-cover rounded-md"
@@ -176,7 +230,13 @@ const AdminProfile = () => {
           >
             Edit profile
           </button>
-          <button className="px-1 py-[5px] bg-purple-700 w-[150px] rounded-sm hover:bg-purple-900 transition-all duration-500 text-white font-nunito text-[15px]">
+          <button
+            onClick={(e) => {
+              e.preventDefault();
+              setAddAdmin(true);
+            }}
+            className="px-1 py-[5px] bg-purple-700 w-[150px] rounded-sm hover:bg-purple-900 transition-all duration-500 text-white font-nunito text-[15px]"
+          >
             Add new Admin
           </button>
         </div>
@@ -191,7 +251,7 @@ const AdminProfile = () => {
             Add new Admin
           </button>
         </div> */}
-        <section className="w-full py-1 px-3">
+        <section className="w-full py-1 px-3 relative">
           <table className="w-full">
             <thead>
               <tr className="w-full border-[1px] border-purple-200 bg-purple-100 rounded-sm ">
@@ -214,7 +274,7 @@ const AdminProfile = () => {
               </tr>
             </thead>
             <tbody>
-              {allUser &&
+              {allUser.length > 0 ? (
                 allUser.map((user, index) => (
                   <tr key={index} className="border-[1px] border-purple-200">
                     <td className="py-3 px-5 font-medium text-black">
@@ -233,15 +293,20 @@ const AdminProfile = () => {
 
                     <td className="py-3 px-5">
                       <MdDeleteOutline
-                        // onClick={() => {
-                        //   setItemID(equip.id);
-                        //   setDeleteModel(true);
-                        // }}
+                        onClick={() => {
+                          setPartAdminId(user.adminId);
+                          setDeleteModel(true);
+                        }}
                         className="w-6 h-6 text-[#636363] hover:text-red-500 cursor-pointer ml-4"
                       />
                     </td>
                   </tr>
-                ))}
+                ))
+              ) : (
+                <p className="absolute w-full text-center mt-3">
+                  No data till now!!
+                </p>
+              )}
             </tbody>
           </table>
         </section>
@@ -335,6 +400,109 @@ const AdminProfile = () => {
                   </button>
                 </div>
               </form>
+            </div>
+          </div>
+        )}
+
+        {addAdmin && (
+          <div className="w-full top-0 left-0 right-0 bottom-0 backdrop-blur-sm flex justify-center items-center fixed overflow-y-auto">
+            <div className="w-[450px] bg-white border-[1px] p-8 rounded-lg shadow-sm">
+              <div className="w-full flex justify-between mb-4 items-center">
+                <h1 className="font-medium text-lg text-purple-800">
+                  Add New Admin
+                </h1>
+                <RxCross2
+                  onClick={() => {
+                    setTimeout(() => {
+                      setAddAdmin(false);
+                    }, 300);
+                  }}
+                  className="w-7 h-7 cursor-pointer active:scale-[0.95]"
+                />
+              </div>
+              <form
+                className="w-full flex flex-col"
+                onSubmit={(e) => AddNewAdmin(e)}
+              >
+                <label class="block mb-2 font-medium mt-4 " for="username">
+                  Username
+                </label>
+                <input
+                  type="text"
+                  id="username"
+                  name="username"
+                  className="p-2 w-full rounded-sm bg-purple-100"
+                  placeholder="Username"
+                  value={register.username}
+                  onChange={newHandleChange}
+                  required
+                />
+
+                <label class="block mb-2 font-medium mt-4 " for="email">
+                  Email
+                </label>
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
+                  className="p-2 w-full rounded-sm bg-purple-100"
+                  placeholder="Email"
+                  value={register.email}
+                  onChange={newHandleChange}
+                  required
+                />
+                <p className="mt-2">
+                  Default password is{" "}
+                  <span className="font-semibold">12345</span>
+                </p>
+
+                <div className="w-full flex justify-end mt-5 px-[2px]">
+                  <button
+                    type="submit"
+                    className="bg-purple-700 text-[16px] px-6 py-[6px] text-white rounded-sm font-medium hover:bg-purple-900 transition-all duration-300 ease-in-out active:bg-purple-900"
+                  >
+                    {loading ? "Adding.." : "Add Admin"}
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        )}
+
+        {deleteModel && (
+          <div className="w-full top-0 left-0 right-0 bottom-0 backdrop-blur-[6px] flex justify-center items-center fixed overflow-y-auto">
+            <div className="w-[450px] bg-white p-6 rounded-lg border-[1px]">
+              <div className="w-full flex justify-between mb-1 items-center">
+                <h1 className="font-medium text-2xl text-black">
+                  Deactivate Admin
+                </h1>
+              </div>
+              <p className="text-lg text-[#636363] mb-5">
+                Are you sure you want to deactivate this email?{" "}
+              </p>
+
+              <div className="w-full flex justify-end">
+                <div className="flex gap-5">
+                  <button
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setPartAdminId("");
+                      setTimeout(() => {
+                        setDeleteModel(false);
+                      }, 200);
+                    }}
+                    className="font-medium text-[16px]"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={(e) => deactivateAccount(e, partAdminId)}
+                    className="font-medium text-red-500 text-[16px]"
+                  >
+                    Delete
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
         )}

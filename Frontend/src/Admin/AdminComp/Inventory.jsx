@@ -133,6 +133,7 @@ const Inventory = () => {
   //Function for deleting Data
 
   const deleteItem = async (e, id) => {
+    e.preventDefault();
     try {
       // Send a DELETE request to the backend
       const response = await axios.delete(
