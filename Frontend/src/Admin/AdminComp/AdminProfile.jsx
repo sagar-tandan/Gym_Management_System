@@ -11,6 +11,7 @@ const AdminProfile = () => {
   const [loading, setLoading] = useState(false);
   const [deleteModel, setDeleteModel] = useState(false);
   const [partAdminId, setPartAdminId] = useState(null);
+  const [addAdmin, setAddAdmin] = useState(false);
 
   const [adminInfo, setAdminInfo] = useState({
     username: localStorage.getItem("username"),
@@ -18,6 +19,17 @@ const AdminProfile = () => {
     coverPic: "",
     role: localStorage.getItem("role"),
     email: localStorage.getItem("AdminEmail"),
+  });
+
+  const [register, setRegister] = useState({
+    username: "",
+    email: "",
+    password: "12345",
+    role: "Admin",
+    profilePic:
+      "https://res.cloudinary.com/djpnst0u5/image/upload/v1726241924/amozhwvblhtctwjuosrl.webp",
+    coverPic:
+      "https://th.bing.com/th/id/OIP.cHpeU17GITn3ofCu_7fDagHaE8?rs=1&pid=ImgDetMain",
   });
 
   const fetchAdminDetail = async () => {
@@ -157,6 +169,31 @@ const AdminProfile = () => {
     }
   };
 
+  const AddNewAdmin = async (e) => {
+    e.preventDefault();
+    try {
+      setLoading(true);
+      await axios.post("http://localhost:5002/api/auth/register", register);
+      fetchAllAdminDetails();
+      setRegister((prev) => ({
+        ...prev,
+        username: "",
+        email: "",
+      }));
+      setLoading(false);
+      setAddAdmin(false);
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+      setAddAdmin(false);
+    }
+  };
+
+  const newHandleChange = (e) => {
+    const { name, value } = e.target;
+    setRegister((prev) => ({ ...prev, [name]: value }));
+  };
+
   return (
     <div className="w-full flex flex-col gap-2 h-screen mt-1 overflow-x-hidden">
       <div className="w-full flex flex-col gap-2 relative px-3 mb-20">
@@ -193,7 +230,13 @@ const AdminProfile = () => {
           >
             Edit profile
           </button>
-          <button className="px-1 py-[5px] bg-purple-700 w-[150px] rounded-sm hover:bg-purple-900 transition-all duration-500 text-white font-nunito text-[15px]">
+          <button
+            onClick={(e) => {
+              e.preventDefault();
+              setAddAdmin(true);
+            }}
+            className="px-1 py-[5px] bg-purple-700 w-[150px] rounded-sm hover:bg-purple-900 transition-all duration-500 text-white font-nunito text-[15px]"
+          >
             Add new Admin
           </button>
         </div>
@@ -354,6 +397,71 @@ const AdminProfile = () => {
                     className="bg-purple-700 text-[16px] px-6 py-[6px] text-white rounded-sm font-medium hover:bg-purple-900 transition-all duration-300 ease-in-out active:bg-purple-900"
                   >
                     {loading ? "updating.." : "Update"}
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        )}
+
+        {addAdmin && (
+          <div className="w-full top-0 left-0 right-0 bottom-0 backdrop-blur-sm flex justify-center items-center fixed overflow-y-auto">
+            <div className="w-[450px] bg-white border-[1px] p-8 rounded-lg shadow-sm">
+              <div className="w-full flex justify-between mb-4 items-center">
+                <h1 className="font-medium text-lg text-purple-800">
+                  Add New Admin
+                </h1>
+                <RxCross2
+                  onClick={() => {
+                    setTimeout(() => {
+                      setAddAdmin(false);
+                    }, 300);
+                  }}
+                  className="w-7 h-7 cursor-pointer active:scale-[0.95]"
+                />
+              </div>
+              <form
+                className="w-full flex flex-col"
+                onSubmit={(e) => AddNewAdmin(e)}
+              >
+                <label class="block mb-2 font-medium mt-4 " for="username">
+                  Username
+                </label>
+                <input
+                  type="text"
+                  id="username"
+                  name="username"
+                  className="p-2 w-full rounded-sm bg-purple-100"
+                  placeholder="Username"
+                  value={register.username}
+                  onChange={newHandleChange}
+                  required
+                />
+
+                <label class="block mb-2 font-medium mt-4 " for="email">
+                  Email
+                </label>
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
+                  className="p-2 w-full rounded-sm bg-purple-100"
+                  placeholder="Email"
+                  value={register.email}
+                  onChange={newHandleChange}
+                  required
+                />
+                <p className="mt-2">
+                  Default password is{" "}
+                  <span className="font-semibold">12345</span>
+                </p>
+
+                <div className="w-full flex justify-end mt-5 px-[2px]">
+                  <button
+                    type="submit"
+                    className="bg-purple-700 text-[16px] px-6 py-[6px] text-white rounded-sm font-medium hover:bg-purple-900 transition-all duration-300 ease-in-out active:bg-purple-900"
+                  >
+                    {loading ? "Adding.." : "Add Admin"}
                   </button>
                 </div>
               </form>
