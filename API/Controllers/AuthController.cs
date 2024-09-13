@@ -201,5 +201,28 @@ namespace API.Controllers
 
             return StatusCode(500, result.Errors);
         }
+
+        [HttpDelete("deactivate/{id}")]
+        public async Task<IActionResult> DeactivateAdminAccount([FromRoute] string id)
+        {
+            try
+            {
+                var getDesiredAdmin = await _userManager.FindByIdAsync(id);
+                if (getDesiredAdmin == null)
+                {
+                    return NotFound();
+                }
+
+                await _userManager.DeleteAsync(getDesiredAdmin);
+
+                return StatusCode(200, "Desired Account Deleted!");
+
+            }
+            catch (Exception error)
+            {
+
+                return StatusCode(500, error);
+            }
+        }
     }
 }
