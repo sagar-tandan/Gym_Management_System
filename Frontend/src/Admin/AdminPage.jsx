@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { LuLayoutDashboard } from "react-icons/lu";
 import { MdOutlineSportsGymnastics } from "react-icons/md";
 import { MdOutlineGroupAdd } from "react-icons/md";
@@ -16,7 +16,7 @@ import AdminReport from "./AdminComp/AdminReport";
 import { useNavigate } from "react-router-dom";
 import { AllContext } from "../Context/Context";
 
-import logo from "../assets/lloggoo.png";
+import logo from "../assets/dfc.png";
 
 const AdminPage = () => {
   const [active, setActive] = useState("dashboard");
@@ -24,9 +24,17 @@ const AdminPage = () => {
 
   const handleClick = (e, act) => {
     setActive(act);
+    localStorage.setItem("active", act);
   };
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const activenow = localStorage.getItem("active");
+    if (activenow != null) {
+      setActive(activenow);
+    }
+  }, []);
 
   return (
     <div className="w-full max-w-screen-2xl mx-auto flex relative h-screen">
@@ -35,17 +43,17 @@ const AdminPage = () => {
         {/* LOGO Section */}
         <div className="w-full py-6 flex gap-3 justify-center items-center px-3 ">
           <img
-            className="w-[55px] h-[55px] object-cover rounded-full"
+            className="w-[120px] h-[120px] object-cover"
             src={logo}
             alt="img"
           />
-          <span className=" text-start font-semibold mt-4 text-[26px] text-white font-nunito">
+          {/* <span className=" text-start font-semibold mt-4 text-[26px] text-white font-nunito">
             DFC
-          </span>
+          </span> */}
           {/* <hr className="w-full mt-[16px] border-[1px]" /> */}
         </div>
 
-        <nav className="w-full flex flex-col justify-between h-full pb-5 mt-8">
+        <nav className="w-full flex flex-col justify-between h-full pb-5 mt-4">
           <div className="w-full flex flex-col gap-4">
             <div
               onClick={(e) => handleClick(e, "dashboard")}
