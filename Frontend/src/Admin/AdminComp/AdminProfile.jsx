@@ -9,6 +9,8 @@ const AdminProfile = () => {
   const [allUser, setAllUser] = useState([]);
   const [editable, setEditable] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [deleteModel, setDeleteModel] = useState(false);
+  const [partAdminId, setPartAdminId] = useState(null);
 
   const [adminInfo, setAdminInfo] = useState({
     username: localStorage.getItem("username"),
@@ -140,8 +142,23 @@ const AdminProfile = () => {
     }
   };
 
+  const deactivateAccount = async (e, id) => {
+    e.preventDefault();
+    try {
+      const response = await axios.delete(
+        `http://localhost:5002/api/auth/deactivate/${id}`
+      );
+      setTimeout(() => {
+        setDeleteModel(false);
+      }, 100);
+      fetchAllAdminDetails();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
-    <div className="w-full flex flex-col gap-2 h-screen mt-1">
+    <div className="w-full flex flex-col gap-2 h-screen mt-1 overflow-x-hidden">
       <div className="w-full flex flex-col gap-2 relative px-3 mb-20">
         <img
           className="w-full h-[200px] object-cover rounded-md"
@@ -191,7 +208,7 @@ const AdminProfile = () => {
             Add new Admin
           </button>
         </div> */}
-        <section className="w-full py-1 px-3">
+        <section className="w-full py-1 px-3 relative">
           <table className="w-full">
             <thead>
               <tr className="w-full border-[1px] border-purple-200 bg-purple-100 rounded-sm ">
@@ -214,7 +231,7 @@ const AdminProfile = () => {
               </tr>
             </thead>
             <tbody>
-              {allUser &&
+              {allUser.length > 0 ? (
                 allUser.map((user, index) => (
                   <tr key={index} className="border-[1px] border-purple-200">
                     <td className="py-3 px-5 font-medium text-black">
@@ -233,15 +250,20 @@ const AdminProfile = () => {
 
                     <td className="py-3 px-5">
                       <MdDeleteOutline
-                        // onClick={() => {
-                        //   setItemID(equip.id);
-                        //   setDeleteModel(true);
-                        // }}
+                        onClick={() => {
+                          setPartAdminId(user.adminId);
+                          setDeleteModel(true);
+                        }}
                         className="w-6 h-6 text-[#636363] hover:text-red-500 cursor-pointer ml-4"
                       />
                     </td>
                   </tr>
-                ))}
+                ))
+              ) : (
+                <p className="absolute w-full text-center mt-3">
+                  No data till now!!
+                </p>
+              )}
             </tbody>
           </table>
         </section>
@@ -335,6 +357,44 @@ const AdminProfile = () => {
                   </button>
                 </div>
               </form>
+            </div>
+          </div>
+        )}
+
+        {deleteModel && (
+          <div className="w-full top-0 left-0 right-0 bottom-0 backdrop-blur-[6px] flex justify-center items-center fixed overflow-y-auto">
+            <div className="w-[450px] bg-white p-6 rounded-lg border-[1px]">
+              <div className="w-full flex justify-between mb-1 items-center">
+                <h1 className="font-medium text-2xl text-black">
+                  Deactivate Admin
+                </h1>
+              </div>
+              <p className="text-lg text-[#636363] mb-5">
+                Are you sure you want to deactivate this email?{" "}
+              </p>
+
+              <div className="w-full flex justify-end">
+                <div className="flex gap-5">
+                  <button
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setPartAdminId("");
+                      setTimeout(() => {
+                        setDeleteModel(false);
+                      }, 200);
+                    }}
+                    className="font-medium text-[16px]"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={(e) => deactivateAccount(e, partAdminId)}
+                    className="font-medium text-red-500 text-[16px]"
+                  >
+                    Delete
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
         )}

@@ -121,6 +121,7 @@ namespace API.Controllers
             var allUsers = await _userManager.Users.ToListAsync();
             var userDtos = allUsers.Select(u => new GetAdminDto
             {
+                AdminId = u.Id,
                 Username = u.UserName,
                 Email = u.Email,
                 Role = u.Role
