@@ -16,6 +16,8 @@ import AdminReport from "./AdminComp/AdminReport";
 import { useNavigate } from "react-router-dom";
 import { AllContext } from "../Context/Context";
 
+import logo from "../assets/lloggoo.png";
+
 const AdminPage = () => {
   const [active, setActive] = useState("dashboard");
   const { token, setToken } = useContext(AllContext);
@@ -29,29 +31,29 @@ const AdminPage = () => {
   return (
     <div className="w-full max-w-screen-2xl mx-auto flex relative h-screen">
       {/* ADMIN MENU */}
-      <aside className="w-[250px] px-2 h-screen fixed bg-white flex flex-col gap-4 overflow-auto">
+      <aside className="w-[230px] h-screen fixed bg-[#490057] flex flex-col gap-4 overflow-auto">
         {/* LOGO Section */}
-        <div className="w-full py-2 flex flex-col items-center">
+        <div className="w-full py-6 flex gap-3 justify-center items-center px-3 ">
           <img
-            className="w-[90px] object-cover"
-            src="https://cdn3.f-cdn.com/contestentries/1981694/57156482/6119296dad926_thumb900.jpg"
+            className="w-[55px] h-[55px] object-cover rounded-full"
+            src={logo}
             alt="img"
           />
-          <h1 className="w-full text-center font-semibold mt-1 text-xl">
-            Dharan Fitness Club
-          </h1>
+          <span className=" text-start font-semibold mt-4 text-[26px] text-white font-nunito">
+            DFC
+          </span>
           {/* <hr className="w-full mt-[16px] border-[1px]" /> */}
         </div>
 
-        <nav className="w-full flex flex-col justify-between h-full pb-5">
+        <nav className="w-full flex flex-col justify-between h-full pb-5 mt-8">
           <div className="w-full flex flex-col gap-4">
             <div
               onClick={(e) => handleClick(e, "dashboard")}
               className={`${
                 active === "dashboard"
-                  ? "bg-blue-200 text-blue-600 font-normal"
+                  ? "text-[#FBB03B] font-normal bg-gradient-to-r from-[#FBB03B] from-1% via-transparent via-25% to-transparent to-90%"
                   : ""
-              } w-full flex gap-2 cursor-pointer hover:bg-blue-200 hover:text-blue-600 py-[6px] px-3 rounded-sm transition-all duration-300 ease-in-out group`}
+              } w-full text-white flex gap-2 cursor-pointer hover:text-[#FBB03B] py-[6px] px-8 transition-all duration-500 ease-in-out group`}
             >
               <LuLayoutDashboard className="w-6 h-6" />
               <h1>Dashboard</h1>
@@ -61,9 +63,9 @@ const AdminPage = () => {
               onClick={(e) => handleClick(e, "admin")}
               className={`${
                 active === "admin"
-                  ? "bg-blue-200 text-blue-600 font-normal"
+                  ? "text-[#FBB03B] font-normal bg-gradient-to-r from-[#FBB03B] from-1% via-transparent via-25% to-transparent to-90%"
                   : ""
-              } w-full flex gap-2 cursor-pointer hover:bg-blue-200 hover:text-blue-600 py-[6px] px-3 rounded-sm transition-all duration-300 ease-in-out group`}
+              } w-full text-white flex gap-2 cursor-pointer hover:text-[#FBB03B] py-[6px] px-8 transition-all duration-300 ease-in-out group`}
             >
               <MdOutlineAdminPanelSettings className="w-6 h-6" />
               <h1>Admin Profile</h1>
@@ -73,9 +75,9 @@ const AdminPage = () => {
               onClick={(e) => handleClick(e, "register")}
               className={`${
                 active === "register"
-                  ? "bg-blue-200 text-blue-600 font-normal"
+                  ? "text-[#FBB03B] font-normal bg-gradient-to-r from-[#FBB03B] from-1% via-transparent via-25% to-transparent to-90%"
                   : ""
-              } w-full flex gap-2 cursor-pointer hover:bg-blue-200 hover:text-blue-600 py-[6px] px-3 rounded-sm transition-all duration-300 ease-in-out group`}
+              } w-full text-white flex gap-2 cursor-pointer hover:text-[#FBB03B] py-[6px] px-8 transition-all duration-300 ease-in-out group`}
             >
               <MdOutlineGroupAdd className="w-6 h-6" />
               <h1>Members</h1>
@@ -84,8 +86,10 @@ const AdminPage = () => {
             <div
               onClick={(e) => handleClick(e, "plan")}
               className={`${
-                active === "plan" ? "bg-blue-200 text-blue-600 font-normal" : ""
-              } w-full flex gap-2 cursor-pointer hover:bg-blue-200 hover:text-blue-600 py-[6px] px-3 rounded-sm transition-all duration-300 ease-in-out group`}
+                active === "plan"
+                  ? "text-[#FBB03B] font-normal bg-gradient-to-r from-[#FBB03B] from-1% via-transparent via-25% to-transparent to-90%"
+                  : ""
+              } w-full text-white flex gap-2 cursor-pointer hover:text-[#FBB03B] py-[6px] px-8 transition-all duration-300 ease-in-out group`}
             >
               <RiTodoLine className="w-6 h-6" />
               <h1>Plan</h1>
@@ -95,9 +99,9 @@ const AdminPage = () => {
               onClick={(e) => handleClick(e, "inventory")}
               className={`${
                 active === "inventory"
-                  ? "bg-blue-200 text-blue-600 font-normal"
+                  ? "text-[#FBB03B] font-normal bg-gradient-to-r from-[#FBB03B] from-1% via-transparent via-25% to-transparent to-90%"
                   : ""
-              } w-full flex gap-2 cursor-pointer hover:bg-blue-200 hover:text-blue-600 py-[6px] px-3 rounded-sm transition-all duration-300 ease-in-out group`}
+              } w-full text-white flex gap-2 cursor-pointer hover:text-[#FBB03B] py-[6px] px-8 transition-all duration-300 ease-in-out group`}
             >
               <CgGym className="w-6 h-6" />
               <h1>Inventory</h1>
@@ -107,9 +111,9 @@ const AdminPage = () => {
               onClick={(e) => handleClick(e, "report")}
               className={`${
                 active === "report"
-                  ? "bg-blue-200 text-blue-600 font-normal"
+                  ? "text-[#FBB03B] font-normal bg-gradient-to-r from-[#FBB03B] from-1% via-transparent via-25% to-transparent to-90%"
                   : ""
-              } w-full flex gap-2 cursor-pointer hover:bg-blue-200 hover:text-blue-600 py-[6px] px-3 rounded-sm transition-all duration-300 ease-in-out group`}
+              } w-full text-white flex gap-2 cursor-pointer hover:text-[#FBB03B] py-[6px] px-8 transition-all duration-300 ease-in-out group`}
             >
               <TbMessageReport className="w-6 h-6" />
               <h1>Report</h1>
@@ -122,7 +126,7 @@ const AdminPage = () => {
               navigate("/adminlogin");
               localStorage.clear();
             }}
-            className={`w-full flex gap-2 cursor-pointer hover:text-blue-600 py-[6px] px-3 rounded-sm transition-all duration-300 ease-in-out group`}
+            className={`w-full text-white flex gap-2 cursor-pointer hover:text-[#FBB03B] py-[6px] px-8 rounded-sm transition-all duration-300 ease-in-out group`}
           >
             <IoMdLogOut className="w-6 h-6" />
             <h1>Log out</h1>
@@ -130,7 +134,7 @@ const AdminPage = () => {
         </nav>
       </aside>
 
-      <section className="w-full h-screen ml-[250px] flex flex-col gap-3 overflow-y-auto">
+      <section className="w-full h-screen ml-[230px] flex flex-col gap-3 overflow-y-auto">
         <div className="w-full py-2 flex flex-col items-center">
           <img className="w-[100px] h-[24px] object-cover" src="" alt="" />
           <h1 className="w-full text-center font-semibold text-xl mt-1">

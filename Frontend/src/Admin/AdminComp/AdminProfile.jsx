@@ -4,10 +4,17 @@ import React, { useEffect, useState } from "react";
 const AdminProfile = () => {
   const [uid, setUid] = useState(null);
   const [allUser, setAllUser] = useState([]);
-  const [profile, setProfile] = useState();
-  const [cover, setCover] = useState();
-  const [username, setUsername] = useState(localStorage.getItem("username"));
-  const [role, setRole] = useState(localStorage.getItem("role"));
+  // const [profile, setProfile] = useState();
+  // const [cover, setCover] = useState();
+  // const [username, setUsername] = useState(localStorage.getItem("username"));
+  // const [role, setRole] = useState(localStorage.getItem("role"));
+
+  const [adminInfo, setAdminInfo] = useState({
+    username: localStorage.getItem("username"),
+    profile: "",
+    cover: "",
+    role: localStorage.getItem("role"),
+  });
 
   const getUidFromLocalStorage = () => {
     const id = localStorage.getItem("uid");
@@ -18,13 +25,22 @@ const AdminProfile = () => {
 
   const fetchAdminDetail = async () => {
     try {
-      const response = await axios.get(`http://localhost:5002/api/auth/${uid}`);
+      const response = await axios.get(
+        `http://localhost:5002/api/auth/get-profile/${uid}`
+      );
       // console.log(response);
-      setProfile(response.data.profilePic);
-      setCover(response.data.coverPic);
-      setUsername(response.data.username);
+      // setProfile(response.data.profilePic);
+      // setCover(response.data.coverPic);
+      // setUsername(response.data.username);
       localStorage.setItem("AdminEmail", response.data.email);
       localStorage.setItem("username", response.data.username);
+
+      setAdminInfo((prev) => ({
+        ...prev,
+        username: response.data.username,
+        profile: response.data.profilePic,
+        cover: response.data.coverPic,
+      }));
     } catch (error) {
       console.log(error);
     }
@@ -51,20 +67,22 @@ const AdminProfile = () => {
       <div className="w-full flex flex-col gap-2 relative px-3 mb-20">
         <img
           className="w-full h-[200px] object-cover rounded-md"
-          src={cover}
+          src={adminInfo.cover}
           alt="coverphoto"
         />
 
         <div className="absolute bottom-[-85px] left-[50px] flex flex-col">
           <img
             className="w-[130px] h-[130px] object-cover rounded-full"
-            src={profile}
-            alt=""
+            src={adminInfo.profile}
+            alt="profile"
           />
           <div className="flex flex-col -translate-y-6 ml-[120px] font-nunito">
-            <p className="font-bold text-[24px] text-[#b32fb1]">{username}</p>
+            <p className="font-bold text-[24px] text-[#b32fb1]">
+              {adminInfo.username}
+            </p>
             <p className="font-extralight text-[16px] text-[#b32fb1] -translate-y-1">
-              {role}
+              {adminInfo.role}
             </p>
           </div>
         </div>

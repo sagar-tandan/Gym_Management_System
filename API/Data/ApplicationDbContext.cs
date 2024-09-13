@@ -23,27 +23,27 @@ namespace api.Data
         public DbSet<Inventory> Inventories { get; set; }
         public DbSet<Payment> Payments { get; set; }
 
-        protected override void OnModelCreating(ModelBuilder builder)
-        {
-            base.OnModelCreating(builder);
+        // protected override void OnModelCreating(ModelBuilder builder)
+        // {
+        //     base.OnModelCreating(builder);
 
-            List<IdentityRole> role = new List<IdentityRole> {
-                new IdentityRole{
-                    Name = "Admin",
-                    NormalizedName = "ADMIN"
-                },
-                new IdentityRole{
-                    Name = "User",
-                    NormalizedName = "USER"
-                },
-                new IdentityRole{
-                    Name = "SuperAdmin",
-                    NormalizedName = "SUPERADMIN"
-                }
-            };
+        //     List<IdentityRole> role = new List<IdentityRole> {
+        //         new IdentityRole{
+        //             Name = "Admin",
+        //             NormalizedName = "ADMIN"
+        //         },
+        //         new IdentityRole{
+        //             Name = "User",
+        //             NormalizedName = "USER"
+        //         },
+        //         new IdentityRole{
+        //             Name = "SuperAdmin",
+        //             NormalizedName = "SUPERADMIN"
+        //         }
+        //     };
 
-            builder.Entity<IdentityRole>().HasData(role);
-        }
+        //     builder.Entity<IdentityRole>().HasData(role);
+        // }
 
     }
 

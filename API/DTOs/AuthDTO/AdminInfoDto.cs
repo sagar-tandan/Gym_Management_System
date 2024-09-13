@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace API.DTOs.AuthDTO
 {
-    public class AdminImageDto
+    public class AdminInfoDto
     {
         public string? CoverPic { get; set; }
         public string? Username { get; set; }

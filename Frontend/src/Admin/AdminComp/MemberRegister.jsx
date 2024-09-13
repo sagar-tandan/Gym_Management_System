@@ -1,11 +1,11 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import ResponsivePagination from "react-responsive-pagination";
-import "react-responsive-pagination/themes/classic.css";
+import "../../Pagination.css";
 import { LiaUserAstronautSolid } from "react-icons/lia";
 import { LiaEditSolid } from "react-icons/lia";
 import { MdDeleteOutline } from "react-icons/md";
-import { GiTireIronCross } from "react-icons/gi";
+import { RxCross2 } from "react-icons/rx";
 import { GiTakeMyMoney } from "react-icons/gi";
 
 const MemberRegister = () => {
@@ -316,12 +316,12 @@ const MemberRegister = () => {
 
   return (
     <div className="w-full flex flex-col gap-2 h-screen overflow-x-hidden">
-      <div className="w-full flex justify-between px-5 items-center mt-[3px]">
+      <div className="w-full flex justify-between px-3 items-center mt-5">
         <div className="flex gap-3">
           <span
             onClick={() => setSelected("allMember")}
-            className={`w-[150px] text-center py-1 border-[1px] rounded-full cursor-pointer hover:bg-blue-500 hover:text-white transition-all duration-500 ease-in-out ${
-              selected === "allMember" ? "bg-blue-500 text-white" : ""
+            className={`w-[150px] text-center py-1 border-[1px] rounded-full cursor-pointer hover:bg-purple-700 hover:text-white transition-all duration-500 ease-in-out ${
+              selected === "allMember" ? "bg-purple-700 text-white" : ""
             }`}
           >
             All Members
@@ -345,16 +345,15 @@ const MemberRegister = () => {
         </div>
         <button
           onClick={(e) => MountModel(e)}
-          className="px-3 py-[6px] bg-blue-500 text-white rounded-sm hover:bg-blue-600 active:bg-blue-900 transition-all duration-300 ease-in-out font-medium "
+          className="px-3 py-[6px] bg-purple-700 text-white rounded-sm hover:bg-purple-900 active:bg-purple-900 transition-all duration-300 ease-in-out font-medium "
         >
           Register Member
         </button>
       </div>
-      <hr className="w-full mt-1 border-[1px]" />
       <section className="w-full py-1 px-3 relative">
         <table className="w-full ">
           <thead>
-            <tr className="w-full border-[1px] border-blue-100 bg-blue-50 rounded-sm">
+            <tr className="w-full border-[1px] border-purple-200 bg-purple-100 rounded-sm">
               <th className="font-medium text-left pl-4 py-2 text-[#636363]">
                 Card No.
               </th>
@@ -381,7 +380,7 @@ const MemberRegister = () => {
                 {allMemberData.map((member, index) => (
                   <tr
                     key={index}
-                    className={`border-[1px] border-blue-100 ${
+                    className={`border-[1px] border-purple-200 ${
                       new Date(member.expiryDate) <= new Date(todayDate)
                         ? calculateExpiredDay(todayDate, member.expiryDate) <= 5
                           ? "bg-red-50"
@@ -442,7 +441,7 @@ const MemberRegister = () => {
             paginatedPaidMembers && paginatedPaidMembers.length > 0 ? (
               <tbody>
                 {paginatedPaidMembers.map((member, index) => (
-                  <tr key={index} className="border-[1px] border-blue-100">
+                  <tr key={index} className="border-[1px] border-purple-200">
                     <td className="py-3 px-5 font-medium text-black">
                       {member.cardNo}
                     </td>
@@ -492,7 +491,7 @@ const MemberRegister = () => {
           ) : paginatedUnpaidMembers && paginatedUnpaidMembers.length > 0 ? (
             <tbody>
               {paginatedUnpaidMembers.map((member, index) => (
-                <tr key={index} className="border-[1px] border-blue-100">
+                <tr key={index} className="border-[1px] border-purple-200">
                   <td className="py-3 px-5 font-medium text-black">
                     {member.cardNo}
                   </td>
@@ -547,6 +546,7 @@ const MemberRegister = () => {
           current={currentPage}
           total={totalPages}
           onPageChange={setCurrentPage}
+          className="pagination"
         />
       ) : selected === "paid" ? (
         <ResponsivePagination
@@ -568,12 +568,12 @@ const MemberRegister = () => {
         <div className="w-full top-0 left-0 right-0 bottom-0 backdrop-blur-sm flex justify-center items-center fixed overflow-y-auto z-30">
           <div className="w-[550px] bg-white border-[1px] p-8 rounded-lg shadow-sm">
             <div className="w-full flex justify-between mb-4 items-center">
-              <h1 className="font-medium text-lg text-blue-600">
+              <h1 className="font-medium text-lg text-purple-800">
                 {editable ? "Edit Member" : "Register Member"}
               </h1>
-              <GiTireIronCross
+              <RxCross2
                 onClick={() => UnMountModel()}
-                className="w-5 h-5 text-red-600 cursor-pointer active:scale-[0.95]"
+                className="w-7 h-7 cursor-pointer active:scale-[0.95]"
               />
             </div>
             <form className="w-full flex flex-col" onSubmit={(e) => addItem(e)}>
@@ -587,7 +587,7 @@ const MemberRegister = () => {
                       type="number"
                       id="cardNo"
                       name="cardNo"
-                      className="p-2 w-full rounded-sm bg-blue-50"
+                      className="p-2 w-full rounded-sm bg-purple-100"
                       placeholder="Member card Number"
                       value={registerMember.cardNo}
                       onChange={handleChange}
@@ -602,7 +602,7 @@ const MemberRegister = () => {
                       type="text"
                       id="memberName"
                       name="memberName"
-                      className="p-2 w-full rounded-sm bg-blue-50"
+                      className="p-2 w-full rounded-sm bg-purple-100"
                       placeholder="Full Name"
                       value={registerMember.memberName}
                       onChange={handleChange}
@@ -620,7 +620,7 @@ const MemberRegister = () => {
                     type="number"
                     id="cardNo"
                     name="cardNo"
-                    className="p-2 w-full rounded-sm bg-blue-50"
+                    className="p-2 w-full rounded-sm bg-purple-100"
                     placeholder="Member card Number"
                     value={registerMember.cardNo}
                     onChange={handleChange}
@@ -640,7 +640,7 @@ const MemberRegister = () => {
                       type="text"
                       id="memberName"
                       name="memberName"
-                      className="p-2 w-full rounded-sm bg-blue-50"
+                      className="p-2 w-full rounded-sm bg-purple-100"
                       placeholder="Full Name"
                       value={registerMember.memberName}
                       onChange={handleChange}
@@ -659,7 +659,7 @@ const MemberRegister = () => {
                       type="date"
                       id="enrolledDate"
                       name="enrolledDate"
-                      className="p-2 w-full rounded-sm bg-blue-50"
+                      className="p-2 w-full rounded-sm bg-purple-100"
                       placeholder="Date"
                       value={registerMember.enrolledDate}
                       onChange={handleChange}
@@ -683,7 +683,7 @@ const MemberRegister = () => {
                         type="date"
                         id="enrolledDate"
                         name="enrolledDate"
-                        className="p-2 w-full rounded-sm bg-blue-50"
+                        className="p-2 w-full rounded-sm bg-purple-100"
                         placeholder="Date"
                         value={registerMember.enrolledDate}
                         onChange={handleChange}
@@ -702,7 +702,7 @@ const MemberRegister = () => {
                       type="date"
                       id="expiryDate"
                       name="expiryDate"
-                      className="p-2 w-full rounded-sm bg-blue-50"
+                      className="p-2 w-full rounded-sm bg-purple-100"
                       placeholder="Date"
                       value={registerMember.expiryDate}
                       onChange={handleChange}
@@ -721,7 +721,7 @@ const MemberRegister = () => {
                     type="email"
                     id="email"
                     name="email"
-                    className="p-2 w-full rounded-sm bg-blue-50"
+                    className="p-2 w-full rounded-sm bg-purple-100"
                     placeholder="Email address"
                     value={registerMember.email}
                     onChange={handleChange}
@@ -735,7 +735,7 @@ const MemberRegister = () => {
                     type="number"
                     id="contact"
                     name="contact"
-                    className="p-2 w-full rounded-sm bg-blue-50"
+                    className="p-2 w-full rounded-sm bg-purple-100"
                     placeholder="Contact number"
                     value={registerMember.contact}
                     onChange={handleChange}
@@ -750,7 +750,7 @@ const MemberRegister = () => {
                       Plan
                     </label>
                     <select
-                      className="outline-none p-2 w-full rounded-sm bg-blue-50"
+                      className="outline-none p-2 w-full rounded-sm bg-purple-100"
                       name="planId"
                       id="planId"
                       required
@@ -771,7 +771,7 @@ const MemberRegister = () => {
                       type="number"
                       id="price"
                       name="price"
-                      className="p-2 w-full rounded-sm bg-blue-50"
+                      className="p-2 w-full rounded-sm bg-purple-100"
                       placeholder="Total amount"
                       value={registerMember.price}
                       onChange={handleChange}
@@ -784,7 +784,7 @@ const MemberRegister = () => {
               <div className="w-full flex justify-end mt-6 px-[2px]">
                 <button
                   type="submit"
-                  className="bg-blue-500 text-[16px] px-6 py-[6px] text-white rounded-sm font-medium hover:bg-blue-700 transition-all duration-300 ease-in-out active:bg-blue-900"
+                  className="bg-purple-700 text-[16px] px-6 py-[6px] text-white rounded-sm font-medium hover:bg-purple-900 transition-all duration-300 ease-in-out active:bg-purple-900"
                 >
                   {loading
                     ? "updating.."
@@ -800,12 +800,12 @@ const MemberRegister = () => {
         <div className="w-full top-0 left-0 right-0 bottom-0 backdrop-blur-sm flex justify-center items-center fixed overflow-y-auto z-30">
           <div className="w-[550px] bg-white border-[1px] p-8 rounded-lg shadow-sm">
             <div className="w-full flex justify-between mb-4 items-center">
-              <h1 className="font-medium text-lg text-blue-600">
+              <h1 className="font-medium text-lg text-purple-800">
                 Renew Member Plan
               </h1>
-              <GiTireIronCross
+              <RxCross2
                 onClick={() => setRenew(false)}
-                className="w-5 h-5 text-red-600 cursor-pointer active:scale-[0.95]"
+                className="w-7 h-7 cursor-pointer active:scale-[0.95]"
               />
             </div>
             <form
@@ -820,7 +820,7 @@ const MemberRegister = () => {
                   type="text"
                   id="memberName"
                   name="memberName"
-                  className="p-2 w-full rounded-sm bg-blue-50"
+                  className="p-2 w-full rounded-sm bg-purple-100"
                   placeholder="Full Name"
                   value={registerMember.memberName}
                   onChange={handleChange}
@@ -834,8 +834,8 @@ const MemberRegister = () => {
                     Plan
                   </label>
                   <select
-                    className="outline-none p-2 w-full rounded-sm bg-blue-50"
-                    name="planId"
+                  className="p-2 w-full rounded-sm bg-purple-100"
+                  name="planId"
                     id="planId"
                     required
                     onChange={handleChange}
@@ -863,7 +863,7 @@ const MemberRegister = () => {
                     type="number"
                     id="price"
                     name="price"
-                    className="p-2 w-full rounded-sm bg-blue-50"
+                    className="p-2 w-full rounded-sm bg-purple-100"
                     placeholder="Total amount"
                     value={registerMember.price}
                     onChange={handleChange}
@@ -875,7 +875,7 @@ const MemberRegister = () => {
               <div className="w-full flex justify-end mt-6 px-[2px]">
                 <button
                   type="submit"
-                  className="bg-blue-500 text-[16px] px-6 py-[6px] text-white rounded-sm font-medium hover:bg-blue-700 transition-all duration-300 ease-in-out active:bg-blue-900"
+                  className="bg-purple-700 text-[16px] px-6 py-[6px] text-white rounded-sm font-medium hover:bg-purple-900 transition-all duration-300 ease-in-out active:bg-purple-900"
                 >
                   {loading ? "Renewing.." : `Renew`}
                 </button>
