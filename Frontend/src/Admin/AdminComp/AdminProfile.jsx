@@ -20,6 +20,8 @@ const AdminProfile = () => {
   const newPass = useRef(null);
   const cPass = useRef(null);
 
+  const [isDisabled, setDisabled] = useState(false);
+
   const [adminInfo, setAdminInfo] = useState({
     username: localStorage.getItem("username"),
     profilePic: "",
@@ -86,6 +88,12 @@ const AdminProfile = () => {
   useEffect(() => {
     fetchAdminDetail();
   }, [uid]);
+
+  useEffect(() => {
+    if (adminInfo.role === "Admin") {
+      setDisabled(true);
+    }
+  }, [adminInfo.role]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -299,11 +307,14 @@ const AdminProfile = () => {
           </button>
 
           <button
+            disabled={isDisabled}
             onClick={(e) => {
               e.preventDefault();
               setAddAdmin(true);
             }}
-            className="px-1 py-[5px] bg-purple-700 w-[150px] rounded-sm hover:bg-purple-900 transition-all duration-500 text-white font-nunito text-[15px]"
+            className={`px-1 py-[5px] bg-purple-700 w-[150px] rounded-sm hover:bg-purple-900 transition-all duration-500 text-white font-nunito text-[15px] ${
+              isDisabled ? "opacity-50 cursor-not-allowed" : ""
+            }`}
           >
             Add new Admin
           </button>
@@ -311,14 +322,6 @@ const AdminProfile = () => {
       </div>
 
       <div className="w-full flex flex-col gap-2 h-screen">
-        {/* <div className="w-full flex justify-start px-3">
-          <button
-            onClick={(e) => MountModel(e)}
-            className="px-3 py-[6px] bg-purple-700 text-white rounded-sm hover:bg-purple-900 active:bg-purple-900 transition-all duration-300 ease-in-out font-medium "
-          >
-            Add new Admin
-          </button>
-        </div> */}
         <section className="w-full py-1 px-3 relative">
           <table className="w-full">
             <thead>
@@ -360,13 +363,22 @@ const AdminProfile = () => {
                     </td>
 
                     <td className="py-3 px-5">
-                      <MdDeleteOutline
+                      <div
                         onClick={() => {
-                          setPartAdminId(user.adminId);
-                          setDeleteModel(true);
+                          if (!isDisabled) {
+                            // Only execute if not disabled
+                            setPartAdminId(user.adminId);
+                            setDeleteModel(true);
+                          }
                         }}
-                        className="w-6 h-6 text-[#636363] hover:text-red-500 cursor-pointer ml-4"
-                      />
+                        className={`flex items-center w-6 h-6 ml-4 ${
+                          isDisabled
+                            ? "opacity-50 cursor-not-allowed"
+                            : "hover:text-red-500 cursor-pointer"
+                        }`}
+                      >
+                        <MdDeleteOutline className="w-6 h-6 text-[#636363] hover:text-red-500" />
+                      </div>
                     </td>
                   </tr>
                 ))
