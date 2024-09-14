@@ -63,8 +63,18 @@ const AdminPage = () => {
                   : ""
               } w-full text-white flex gap-2 cursor-pointer hover:text-[#FBB03B] py-[6px] px-8 transition-all duration-500 ease-in-out group `}
             >
-              <LuLayoutDashboard className="w-6 h-6" />
-              <h1>Dashboard</h1>
+              <LuLayoutDashboard
+                className={`w-6 h-6 ${
+                  active === "dashboard" ? "text-orange-400" : ""
+                }`}
+              />
+              <h1
+                className={` ${
+                  active === "dashboard" ? "text-orange-400" : ""
+                }`}
+              >
+                Dashboard
+              </h1>
             </div>
 
             <div
@@ -75,8 +85,14 @@ const AdminPage = () => {
                   : ""
               } w-full text-white flex gap-2 cursor-pointer hover:text-[#FBB03B] py-[6px] px-8 transition-all duration-300 ease-in-out group`}
             >
-              <MdOutlineAdminPanelSettings className="w-6 h-6" />
-              <h1>Admin Profile</h1>
+              <MdOutlineAdminPanelSettings
+                className={`w-6 h-6 ${
+                  active === "admin" ? "text-orange-400" : ""
+                }`}
+              />
+              <h1 className={` ${active === "admin" ? "text-orange-400" : ""}`}>
+                Admin Profile
+              </h1>
             </div>
 
             <div
@@ -87,8 +103,16 @@ const AdminPage = () => {
                   : ""
               } w-full text-white flex gap-2 cursor-pointer hover:text-[#FBB03B] py-[6px] px-8 transition-all duration-300 ease-in-out group`}
             >
-              <MdOutlineGroupAdd className="w-6 h-6" />
-              <h1>Members</h1>
+              <MdOutlineGroupAdd
+                className={`w-6 h-6 ${
+                  active === "register" ? "text-orange-400" : ""
+                }`}
+              />
+              <h1
+                className={` ${active === "register" ? "text-orange-400" : ""}`}
+              >
+                Members
+              </h1>
             </div>
 
             <div
@@ -99,20 +123,34 @@ const AdminPage = () => {
                   : ""
               } w-full text-white flex gap-2 cursor-pointer hover:text-[#FBB03B] py-[6px] px-8 transition-all duration-300 ease-in-out group`}
             >
-              <RiTodoLine className="w-6 h-6" />
-              <h1>Plan</h1>
+              <RiTodoLine
+                className={`w-6 h-6 ${
+                  active === "plan" ? "text-orange-400" : ""
+                }`}
+              />
+              <h1 className={` ${active === "plan" ? "text-orange-400" : ""}`}>
+                Plan
+              </h1>
             </div>
 
             <div
               onClick={(e) => handleClick(e, "inventory")}
-              className={`${
+              className={`w-full text-white flex gap-2 cursor-pointer py-[6px] px-8 transition-colors duration-300 ease-in-out ${
                 active === "inventory"
-                  ? "text-orange-400 font-normal bg-gradient-to-r from-[#FBB03B] from-1% via-transparent via-25% to-transparent to-90%"
-                  : ""
-              } w-full text-white flex gap-2 cursor-pointer hover:text-[#FBB03B] py-[6px] px-8 transition-all duration-300 ease-in-out group`}
+                  ? "text-orange-400 bg-gradient-to-r from-[#FBB03B] from-1% via-transparent via-25% to-transparent to-90% font-normal"
+                  : "hover:text-[#FBB03B]"
+              }`}
             >
-              <CgGym className="w-6 h-6" />
-              <h1>Inventory</h1>
+              <CgGym
+                className={`w-6 h-6 ${
+                  active === "inventory" ? "text-orange-400" : ""
+                }`}
+              />
+              <h1
+                className={`${active === "inventory" ? "text-orange-400" : ""}`}
+              >
+                Inventory
+              </h1>
             </div>
 
             <div
@@ -123,8 +161,14 @@ const AdminPage = () => {
                   : ""
               } w-full text-white flex gap-2 cursor-pointer hover:text-[#FBB03B] py-[6px] px-8 transition-all duration-300 ease-in-out group`}
             >
-              <TbMessageReport className="w-6 h-6" />
-              <h1>Report</h1>
+              <TbMessageReport
+                className={`w-6 h-6 ${
+                  active === "report" ? "text-orange-400" : ""
+                }`}
+              />
+              <h1 className={`${active === "report" ? "text-orange-400" : ""}`}>
+                Report
+              </h1>
             </div>
           </div>
 

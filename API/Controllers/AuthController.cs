@@ -126,19 +126,7 @@ namespace API.Controllers
                 Email = u.Email,
                 Role = u.Role
             });
-            // var userDtos = new List<GetAdminDto>();
 
-            // foreach (var user in allUsers)
-            // {
-            //     var roles = await _userManager.GetRolesAsync(user);
-
-            //     userDtos.Add(new GetAdminDto
-            //     {
-            //         Username = user.UserName,
-            //         Email = user.Email,
-            //         Roles = roles
-            //     });
-            // }
 
             return Ok(userDtos);
         }
@@ -224,6 +212,30 @@ namespace API.Controllers
 
                 return StatusCode(500, error);
             }
+        }
+
+        [HttpPut("changePassword/{id}")]
+        public async Task<IActionResult> changePassword(string id, [FromBody] ChangePasswordDto changePasswordDto)
+        {
+
+            var getDesiredAccount = await _userManager.FindByIdAsync(id);
+
+            if (getDesiredAccount == null)
+            {
+                return NotFound();
+            }
+            var result = await _signinManager.CheckPasswordSignInAsync(getDesiredAccount, changePasswordDto.oldPassword, false);
+            if (!result.Succeeded) return StatusCode(500, "Wrong Password!");
+
+            var passwordChangeResult = await _userManager.ChangePasswordAsync(getDesiredAccount, changePasswordDto.oldPassword, changePasswordDto.newPassword);
+
+            if (!passwordChangeResult.Succeeded)
+            {
+                return StatusCode(400, "Password change failed");
+            }
+
+            return Ok("Password changed successfully");
+
         }
     }
 }
