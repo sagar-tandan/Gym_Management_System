@@ -218,7 +218,8 @@ const AdminProfile = () => {
 
   const changePassword = async (e) => {
     e.preventDefault();
-
+    setPassNoMatch(false);
+    setOldPassWrong(false);
     //Now check if both pass are same
     if (passwordCollection.newPassword != passwordCollection.cPassword) {
       setPassNoMatch(true);
@@ -247,6 +248,8 @@ const AdminProfile = () => {
         console.log(response.data);
       } catch (error) {
         console.log(error);
+        setOldPassWrong(true);
+        oldPass.current.focus();
       }
     }
   };
@@ -385,9 +388,14 @@ const AdminProfile = () => {
                 </h1>
                 <RxCross2
                   onClick={() => {
-                    setTimeout(() => {
-                      setEditable(false);
-                    }, 300);
+                    setAdminInfo((prev) => ({
+                      ...prev,
+                      username: localStorage.getItem("username"),
+                      role: localStorage.getItem("role"),
+                      email: localStorage.getItem("AdminEmail"),
+                    }));
+
+                    setEditable(false);
                   }}
                   className="w-7 h-7 cursor-pointer active:scale-[0.95]"
                 />
@@ -451,7 +459,7 @@ const AdminProfile = () => {
                   name="email"
                   className="p-2 w-full rounded-sm bg-purple-100"
                   placeholder="Email"
-                  value={adminInfo.email}
+                  value={adminInfo.email.toLowerCase()}
                   onChange={handleChange}
                   required
                 />
