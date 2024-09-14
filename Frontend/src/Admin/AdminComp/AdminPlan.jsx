@@ -48,9 +48,7 @@ const AdminPlan = () => {
   const MountModel = (e) => {
     e.preventDefault();
     setPlan("");
-    setTimeout(() => {
-      setModel(true);
-    }, 200);
+    setModel(true);
   };
 
   const handleEditModel = (e, data) => {
@@ -232,7 +230,8 @@ const AdminPlan = () => {
                     type="number"
                     id="durationInMonths"
                     name="durationInMonths"
-                    className="p-2 w-full rounded-sm bg-purple-100"                    placeholder="Duration of plan"
+                    className="p-2 w-full rounded-sm bg-purple-100"
+                    placeholder="Duration of plan"
                     value={addPlan.durationInMonths}
                     onChange={handleChange}
                     required
@@ -246,7 +245,8 @@ const AdminPlan = () => {
                     type="number"
                     id="cost"
                     name="cost"
-                    className="p-2 w-full rounded-sm bg-purple-100"                    placeholder="Enter price"
+                    className="p-2 w-full rounded-sm bg-purple-100"
+                    placeholder="Enter price"
                     value={addPlan.cost}
                     onChange={handleChange}
                     required

@@ -36,9 +36,7 @@ const Inventory = () => {
   const MountModel = (e) => {
     e.preventDefault();
     setEquipment("");
-    setTimeout(() => {
-      setModel(true);
-    }, 200);
+    setModel(true);
   };
 
   const handleEditModel = (e, data) => {

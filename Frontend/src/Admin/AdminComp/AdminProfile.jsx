@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { LiaEditSolid } from "react-icons/lia";
 import { MdDeleteOutline } from "react-icons/md";
 import { RxCross2 } from "react-icons/rx";
@@ -12,6 +12,13 @@ const AdminProfile = () => {
   const [deleteModel, setDeleteModel] = useState(false);
   const [partAdminId, setPartAdminId] = useState(null);
   const [addAdmin, setAddAdmin] = useState(false);
+  const [changePass, setChangePass] = useState(false);
+  const [oldPassWrong, setOldPassWrong] = useState(false);
+  const [passNoMatch, setPassNoMatch] = useState(false);
+
+  const oldPass = useRef(null);
+  const newPass = useRef(null);
+  const cPass = useRef(null);
 
   const [adminInfo, setAdminInfo] = useState({
     username: localStorage.getItem("username"),
@@ -30,6 +37,12 @@ const AdminProfile = () => {
       "https://res.cloudinary.com/djpnst0u5/image/upload/v1726241924/amozhwvblhtctwjuosrl.webp",
     coverPic:
       "https://th.bing.com/th/id/OIP.cHpeU17GITn3ofCu_7fDagHaE8?rs=1&pid=ImgDetMain",
+  });
+
+  const [passwordCollection, setPasswordCollection] = useState({
+    oldPasswword: "",
+    newPassword: "",
+    cPassword: "",
   });
 
   const fetchAdminDetail = async () => {
@@ -194,6 +207,27 @@ const AdminProfile = () => {
     setRegister((prev) => ({ ...prev, [name]: value }));
   };
 
+  const handlePassword = (e) => {
+    const { name, value } = e.target;
+    setPasswordCollection((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+    console.log(passwordCollection);
+  };
+
+  const changePassword = (e) => {
+    e.preventDefault();
+
+    //check if old Pasword is right
+
+    //Now check if both pass are same
+    if (passwordCollection.newPassword != passwordCollection.cPassword) {
+      setPassNoMatch(true);
+      cPass.current.focus();
+    }
+  };
+
   return (
     <div className="w-full flex flex-col gap-2 h-screen mt-1 overflow-x-hidden">
       <div className="w-full flex flex-col gap-2 relative px-3 mb-20">
@@ -222,14 +256,22 @@ const AdminProfile = () => {
         <div className="absolute bottom-[-70px] right-[20px] flex gap-3">
           <button
             onClick={(e) => {
-              setTimeout(() => {
-                setEditable(true);
-              }, 300);
+              setEditable(true);
             }}
             className="px-1 py-[5px] border-[2px] border-[#b32fb1] w-[150px] rounded-sm text-[#b32fb1] font-nunito text-[15px]"
           >
             Edit profile
           </button>
+
+          <button
+            onClick={(e) => {
+              setChangePass(true);
+            }}
+            className="px-1 py-[5px] border-[2px] border-[#b32fb1] w-[150px] rounded-sm text-[#b32fb1] font-nunito text-[15px]"
+          >
+            Change Password
+          </button>
+
           <button
             onClick={(e) => {
               e.preventDefault();
@@ -462,6 +504,99 @@ const AdminProfile = () => {
                     className="bg-purple-700 text-[16px] px-6 py-[6px] text-white rounded-sm font-medium hover:bg-purple-900 transition-all duration-300 ease-in-out active:bg-purple-900"
                   >
                     {loading ? "Adding.." : "Add Admin"}
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        )}
+
+        {changePass && (
+          <div className="w-full top-0 left-0 right-0 bottom-0 backdrop-blur-sm flex justify-center items-center fixed overflow-y-auto">
+            <div className="w-[450px] bg-white border-[1px] p-8 rounded-lg shadow-sm">
+              <div className="w-full flex justify-between mb-4 items-center">
+                <h1 className="font-medium text-lg text-purple-800">
+                  Change your password
+                </h1>
+                <RxCross2
+                  onClick={() => {
+                    setPasswordCollection({
+                      oldPasswword: "",
+                      newPassword: "",
+                      cPassword: "",
+                    });
+                    setOldPassWrong(false);
+                    setPassNoMatch(false);
+                    setChangePass(false);
+                  }}
+                  className="w-7 h-7 cursor-pointer active:scale-[0.95]"
+                />
+              </div>
+              <form
+                className="w-full flex flex-col"
+                onSubmit={(e) => changePassword(e)}
+              >
+                <label class="block mb-2 font-medium mt-4 " for="oldPasswword">
+                  Old Password
+                </label>
+                <input
+                  type="password"
+                  id="oldPasswword"
+                  name="oldPasswword"
+                  className={`p-2 w-full rounded-sm bg-purple-100 ${
+                    oldPassWrong ? "outline-red-600" : ""
+                  }`}
+                  placeholder="Enter Old Password"
+                  value={passwordCollection.oldPasswword}
+                  onChange={handlePassword}
+                  ref={oldPass}
+                  required
+                />
+                {oldPassWrong && (
+                  <p className="text-red-600">Your old password is wrong.</p>
+                )}
+
+                <label class="block mb-2 font-medium mt-4 " for="newPassword">
+                  New Password
+                </label>
+                <input
+                  type="password"
+                  id="newPassword"
+                  name="newPassword"
+                  className={`p-2 w-full rounded-sm bg-purple-100 `}
+                  placeholder="Enter new password"
+                  value={passwordCollection.newPassword}
+                  onChange={handlePassword}
+                  ref={newPass}
+                  required
+                />
+
+                <label class="block mb-2 font-medium mt-4 " for="cPassword">
+                  Confirm New Password
+                </label>
+                <input
+                  type="password"
+                  id="cPassword"
+                  name="cPassword"
+                  className={`p-2 w-full rounded-sm bg-purple-100 ${
+                    passNoMatch ? "outline-red-600" : ""
+                  }`}
+                  placeholder="Confirm new password"
+                  value={passwordCollection.cPassword}
+                  onChange={handlePassword}
+                  ref={cPass}
+                  required
+                />
+                {passNoMatch && (
+                  <p className="text-red-600">Password didn't matched</p>
+                )}
+
+                <div className="w-full flex justify-end mt-5 px-[2px]">
+                  <button
+                    type="submit"
+                    className="bg-purple-700 text-[16px] px-6 py-[6px] text-white rounded-sm font-medium hover:bg-purple-900 transition-all duration-300 ease-in-out active:bg-purple-900"
+                  >
+                    {loading ? "Updating.." : "Change Password"}
                   </button>
                 </div>
               </form>

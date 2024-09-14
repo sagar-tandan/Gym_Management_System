@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { LuLayoutDashboard } from "react-icons/lu";
 import { MdOutlineSportsGymnastics } from "react-icons/md";
 import { MdOutlineGroupAdd } from "react-icons/md";
@@ -16,7 +16,7 @@ import AdminReport from "./AdminComp/AdminReport";
 import { useNavigate } from "react-router-dom";
 import { AllContext } from "../Context/Context";
 
-import logo from "../assets/lloggoo.png";
+import logo from "../assets/dfc.png";
 
 const AdminPage = () => {
   const [active, setActive] = useState("dashboard");
@@ -24,9 +24,17 @@ const AdminPage = () => {
 
   const handleClick = (e, act) => {
     setActive(act);
+    localStorage.setItem("active", act);
   };
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const activenow = localStorage.getItem("active");
+    if (activenow != null) {
+      setActive(activenow);
+    }
+  }, []);
 
   return (
     <div className="w-full max-w-screen-2xl mx-auto flex relative h-screen">
@@ -35,25 +43,25 @@ const AdminPage = () => {
         {/* LOGO Section */}
         <div className="w-full py-6 flex gap-3 justify-center items-center px-3 ">
           <img
-            className="w-[55px] h-[55px] object-cover rounded-full"
+            className="w-[120px] h-[120px] object-cover"
             src={logo}
             alt="img"
           />
-          <span className=" text-start font-semibold mt-4 text-[26px] text-white font-nunito">
+          {/* <span className=" text-start font-semibold mt-4 text-[26px] text-white font-nunito">
             DFC
-          </span>
+          </span> */}
           {/* <hr className="w-full mt-[16px] border-[1px]" /> */}
         </div>
 
-        <nav className="w-full flex flex-col justify-between h-full pb-5 mt-8">
+        <nav className="w-full flex flex-col justify-between h-full pb-5 mt-4">
           <div className="w-full flex flex-col gap-4">
             <div
               onClick={(e) => handleClick(e, "dashboard")}
               className={`${
                 active === "dashboard"
-                  ? "text-[#fbb03b] font-normal bg-gradient-to-r from-[#FBB03B] from-1% via-transparent via-30% to-transparent to-90%"
+                  ? "text-orange-400 font-normal bg-gradient-to-r from-[#FBB03B] from-1% via-transparent via-30% to-transparent to-90%"
                   : ""
-              } w-full text-white flex gap-2 cursor-pointer hover:text-[#FBB03B] py-[6px] px-8 transition-all duration-500 ease-in-out group`}
+              } w-full text-white flex gap-2 cursor-pointer hover:text-[#FBB03B] py-[6px] px-8 transition-all duration-500 ease-in-out group `}
             >
               <LuLayoutDashboard className="w-6 h-6" />
               <h1>Dashboard</h1>
@@ -63,7 +71,7 @@ const AdminPage = () => {
               onClick={(e) => handleClick(e, "admin")}
               className={`${
                 active === "admin"
-                  ? "text-[#fbb03b] font-normal bg-gradient-to-r from-[#FBB03B] from-1% via-transparent via-30% to-transparent to-90%"
+                  ? "text-orange-400 font-normal bg-gradient-to-r from-[#FBB03B] from-1% via-transparent via-30% to-transparent to-90%"
                   : ""
               } w-full text-white flex gap-2 cursor-pointer hover:text-[#FBB03B] py-[6px] px-8 transition-all duration-300 ease-in-out group`}
             >
@@ -75,7 +83,7 @@ const AdminPage = () => {
               onClick={(e) => handleClick(e, "register")}
               className={`${
                 active === "register"
-                  ? "text-[#fbb03b] font-normal bg-gradient-to-r from-[#FBB03B] from-1% via-transparent via-25% to-transparent to-90%"
+                  ? "text-orange-400 font-normal bg-gradient-to-r from-[#FBB03B] from-1% via-transparent via-25% to-transparent to-90%"
                   : ""
               } w-full text-white flex gap-2 cursor-pointer hover:text-[#FBB03B] py-[6px] px-8 transition-all duration-300 ease-in-out group`}
             >
@@ -87,7 +95,7 @@ const AdminPage = () => {
               onClick={(e) => handleClick(e, "plan")}
               className={`${
                 active === "plan"
-                  ? "text-[#fbb03b] font-normal bg-gradient-to-r from-[#FBB03B] from-1% via-transparent via-25% to-transparent to-90%"
+                  ? "text-orange-400 font-normal bg-gradient-to-r from-[#FBB03B] from-1% via-transparent via-25% to-transparent to-90%"
                   : ""
               } w-full text-white flex gap-2 cursor-pointer hover:text-[#FBB03B] py-[6px] px-8 transition-all duration-300 ease-in-out group`}
             >
@@ -99,7 +107,7 @@ const AdminPage = () => {
               onClick={(e) => handleClick(e, "inventory")}
               className={`${
                 active === "inventory"
-                  ? "text-[#fbb03b] font-normal bg-gradient-to-r from-[#FBB03B] from-1% via-transparent via-25% to-transparent to-90%"
+                  ? "text-orange-400 font-normal bg-gradient-to-r from-[#FBB03B] from-1% via-transparent via-25% to-transparent to-90%"
                   : ""
               } w-full text-white flex gap-2 cursor-pointer hover:text-[#FBB03B] py-[6px] px-8 transition-all duration-300 ease-in-out group`}
             >
@@ -111,7 +119,7 @@ const AdminPage = () => {
               onClick={(e) => handleClick(e, "report")}
               className={`${
                 active === "report"
-                  ? "text-[#fbb03b] font-normal bg-gradient-to-r from-[#FBB03B] from-1% via-transparent via-25% to-transparent to-90%"
+                  ? "text-orange-400 font-normal bg-gradient-to-r from-[#FBB03B] from-1% via-transparent via-25% to-transparent to-90%"
                   : ""
               } w-full text-white flex gap-2 cursor-pointer hover:text-[#FBB03B] py-[6px] px-8 transition-all duration-300 ease-in-out group`}
             >
