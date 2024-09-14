@@ -216,15 +216,38 @@ const AdminProfile = () => {
     console.log(passwordCollection);
   };
 
-  const changePassword = (e) => {
+  const changePassword = async (e) => {
     e.preventDefault();
-
-    //check if old Pasword is right
 
     //Now check if both pass are same
     if (passwordCollection.newPassword != passwordCollection.cPassword) {
       setPassNoMatch(true);
       cPass.current.focus();
+    } else {
+      try {
+        const response = await axios.put(
+          `http://localhost:5002/api/auth/changePassword/${uid}`,
+          {
+            oldPassword: passwordCollection.oldPasswword,
+            newPassword: passwordCollection.newPassword,
+          }
+        );
+        if (response.status == 500) {
+          oldPass.current.focus();
+          setOldPassWrong(true);
+        } else if (response.status == 400) {
+          console.log("Something went wrong!");
+        }
+        setChangePass(false);
+        setPasswordCollection({
+          oldPasswword: "",
+          newPassword: "",
+          cPassword: "",
+        });
+        console.log(response.data);
+      } catch (error) {
+        console.log(error);
+      }
     }
   };
 
