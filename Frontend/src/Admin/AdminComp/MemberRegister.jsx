@@ -199,9 +199,8 @@ const MemberRegister = () => {
       planName: "",
       planId: "",
     });
-    setTimeout(() => {
-      setModel(true);
-    }, 200);
+
+    setModel(true);
   };
 
   const UnMountModel = () => {
@@ -834,8 +833,8 @@ const MemberRegister = () => {
                     Plan
                   </label>
                   <select
-                  className="p-2 w-full rounded-sm bg-purple-100"
-                  name="planId"
+                    className="p-2 w-full rounded-sm bg-purple-100"
+                    name="planId"
                     id="planId"
                     required
                     onChange={handleChange}
