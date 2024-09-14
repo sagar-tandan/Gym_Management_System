@@ -36,6 +36,12 @@ const AdminPage = () => {
     }
   }, []);
 
+  const handleClickLogo = () => {
+    navigate("/adminDashboard");
+    setActive("dashboard");
+    localStorage.setItem("active", "dashboard");
+  };
+
   return (
     <div className="w-full max-w-screen-2xl mx-auto flex relative h-screen">
       {/* ADMIN MENU */}
@@ -43,7 +49,8 @@ const AdminPage = () => {
         {/* LOGO Section */}
         <div className="w-full py-6 flex gap-3 justify-center items-center px-3 ">
           <img
-            className="w-[120px] h-[120px] object-cover"
+            onClick={handleClickLogo}
+            className="w-[120px] h-[120px] object-cover cursor-pointer"
             src={logo}
             alt="img"
           />
