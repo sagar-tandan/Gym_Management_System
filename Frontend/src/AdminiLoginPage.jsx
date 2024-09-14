@@ -55,7 +55,7 @@ const AdminiLoginPage = () => {
   }
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-[#2148c0] relative overflow-x-hidden max-w-screen-2xl mx-auto">
+    <div className="flex items-center justify-center min-h-screen bg-[#490057] relative overflow-x-hidden max-w-screen-2xl mx-auto">
       <div className="absolute right-[-60px] top-0">
         <svg
           className="w-[700px] h-[500px]"
@@ -65,7 +65,7 @@ const AdminiLoginPage = () => {
         >
           <path
             d="M262.749 152.516C124.115 166.46 29.8191 56.6486 0 0L883.326 3.81289V786H784.667C479.184 744.603 530.609 579.559 594.507 502.212C631.823 447.924 699.3 317.123 670.673 228.229C634.891 117.11 436.04 135.085 262.749 152.516Z"
-            fill="#264ECA"
+            fill="#52115f"
           />
         </svg>
       </div>
@@ -82,7 +82,7 @@ const AdminiLoginPage = () => {
             cy="308.975"
             rx="293.096"
             ry="308.975"
-            fill="#244BC5"
+            fill="#4d115a"
           />
         </svg>
       </div>
@@ -94,7 +94,7 @@ const AdminiLoginPage = () => {
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
         >
-          <ellipse cx="255" cy="434" rx="393" ry="434" fill="#264ECA" />
+          <ellipse cx="255" cy="434" rx="393" ry="434" fill="#52115f" />
         </svg>
       </div>
 
@@ -115,14 +115,14 @@ const AdminiLoginPage = () => {
                 Email Address
               </label>
               <div className="relative">
-                <FaUser className="absolute left-3 top-1/2 transform -translate-y-1/2 text-blue-500" />
+                <FaUser className="absolute left-3 top-1/2 transform -translate-y-1/2 text-purple-700" />
                 <input
                   id="email"
                   type="email"
                   placeholder="Email address"
                   name="email"
                   value={loginForm.email}
-                  className="w-full pl-10 pr-4 py-2 border rounded-sm focus:outline-none focus:border-blue-500"
+                  className="w-full pl-10 pr-4 py-2 border rounded-sm focus:outline-none focus:border-purple-700"
                   onChange={(e) => handleChange(e)}
                   required
                 />
@@ -135,14 +135,14 @@ const AdminiLoginPage = () => {
                 Password
               </label>
               <div className="relative">
-                <FaLock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-blue-500" />
+                <FaLock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-purple-700" />
                 <input
                   id="password"
                   type="password"
                   placeholder="Password"
                   name="password"
                   value={loginForm.password}
-                  className="w-full pl-10 pr-4 py-2 border rounded-sm focus:outline-none focus:border-blue-500"
+                  className="w-full pl-10 pr-4 py-2 border rounded-sm focus:outline-none focus:border-purple-700"
                   onChange={(e) => handleChange(e)}
                   required
                 />
@@ -150,7 +150,7 @@ const AdminiLoginPage = () => {
             </div>
 
             <p className="text-right text-[#6f6f6f] ">
-              <span className="cursor-pointer hover:text-blue-600">
+              <span className="cursor-pointer hover:text-purple-700">
                 Forget Password?
               </span>
             </p>
@@ -159,7 +159,7 @@ const AdminiLoginPage = () => {
             <div>
               <button
                 type="submit"
-                className="w-full py-2 bg-blue-600 text-white font-bold rounded-sm hover:bg-blue-700 focus:outline-none"
+                className="w-full py-2 bg-purple-700 text-white font-bold rounded-sm hover:bg-purple-900 focus:outline-none"
               >
                 Login
               </button>
