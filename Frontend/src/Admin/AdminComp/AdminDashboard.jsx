@@ -1,14 +1,17 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 
 import { MdAdminPanelSettings } from "react-icons/md";
 import { MdOutlinePeopleAlt } from "react-icons/md";
 import { GiBlackBook } from "react-icons/gi";
 import { CgGym } from "react-icons/cg";
-
 import { formatDistanceToNow } from "date-fns";
+import { AllContext } from "../../Context/Context";
+// import { useNavigate } from "react-router-dom";
 
 const AdminDashboard = () => {
   const [lastLogin, setLastLogin] = useState("");
+  const { active, setActive } = useContext(AllContext);
+  // const navigate = useNavigate();
 
   useEffect(() => {
     // Retrieve login date from localStorage
@@ -27,7 +30,16 @@ const AdminDashboard = () => {
       {/* Summary Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 mb-8 font-nunito">
         {/* Admin Profile Summary */}
-        <div className="bg-purple-100 px-6 rounded-lg shadow-lg flex items-center justify-between py-4">
+
+        <div
+          onClick={() => {
+            setTimeout(() => {
+              setActive("admin");
+              localStorage.setItem("active", "admin");
+            }, 100);
+          }}
+          className="bg-purple-100 px-6 rounded-lg shadow-lg flex items-center justify-between py-4 hover:bg-purple-900 hover:text-white group transition-all duration-300 ease-in-out hover:-translate-y-2 cursor-pointer"
+        >
           <div>
             <h2 className="text-2xl font-semibold font-nunito">
               Admin Profile
@@ -36,56 +48,88 @@ const AdminDashboard = () => {
               {localStorage.getItem("username")}
             </p>
             <p>
-              Last Login: <span className="text-gray-500">{lastLogin}</span>
+              Last Login:{" "}
+              <span className="text-gray-500 group-hover:text-[#c1c1c1]">
+                {lastLogin}
+              </span>
             </p>
           </div>
-          <MdAdminPanelSettings className="text-purple-700 w-9 h-9" />
+          <MdAdminPanelSettings className="text-purple-700 w-9 h-9 group-hover:text-white" />
         </div>
 
-        <div className="bg-purple-100 px-6 rounded-lg shadow-lg flex items-center justify-between py-4">
+        <div
+          onClick={() => {
+            setTimeout(() => {
+              setActive("register");
+              localStorage.setItem("active", "register");
+            }, 100);
+          }}
+          className="bg-purple-100 px-6 rounded-lg shadow-lg flex items-center justify-between py-4 hover:bg-purple-900 hover:text-white group transition-all duration-300 ease-in-out hover:-translate-y-2 cursor-pointer"
+        >
           <div>
             <h2 className="text-2xl font-semibold font-nunito">Members</h2>
 
             <p>
-              Total Members: <span className="text-gray-500">{250}</span>
+              Total Members:{" "}
+              <span className="text-gray-500 group-hover:text-white">
+                {250}
+              </span>
             </p>
             <p>
-              New Today: <span className="text-gray-500">{10}</span>
+              New Today: <span className="text-green-500">{10}</span>
             </p>
           </div>
-          <MdOutlinePeopleAlt className="text-purple-700 w-9 h-9" />
+          <MdOutlinePeopleAlt className="text-purple-700 w-9 h-9 group-hover:text-white" />
         </div>
 
         {/* Plans Summary */}
 
-        <div className="bg-purple-100 px-6 rounded-lg shadow-lg flex items-center justify-between py-4">
+        <div
+          onClick={() => {
+            setTimeout(() => {
+              setActive("plan");
+              localStorage.setItem("active", "plan");
+            }, 100);
+          }}
+          className="bg-purple-100 px-6 rounded-lg shadow-lg flex items-center justify-between py-4 hover:bg-purple-900 hover:text-white group transition-all duration-300 ease-in-out hover:-translate-y-2 cursor-pointer"
+        >
           <div>
             <h2 className="text-2xl font-semibold font-nunito">Plan</h2>
 
             <p>
-              Total Plans: <span className="text-gray-500">{20}</span>
+              Total Plans:{" "}
+              <span className="text-gray-500 group-hover:text-white">{20}</span>
             </p>
             <p>
               Popular Plan: <span className="font-bold">ActivePro 3</span>
             </p>
           </div>
-          <GiBlackBook className="text-purple-700 w-9 h-9" />
+          <GiBlackBook className="text-purple-700 w-9 h-9 group-hover:text-white" />
         </div>
 
         {/* Inventory Summary */}
 
-        <div className="bg-purple-100 px-6 rounded-lg shadow-lg flex items-center justify-between py-4">
+        <div
+          onClick={() => {
+            setTimeout(() => {
+              setActive("inventory");
+              localStorage.setItem("active", "inventory");
+            }, 100);
+          }}
+          className="bg-purple-100 px-6 rounded-lg shadow-lg flex items-center justify-between py-4 hover:bg-purple-900 hover:text-white group transition-all duration-300 ease-in-out hover:-translate-y-2 cursor-pointer"
+        >
           <div>
             <h2 className="text-2xl font-semibold font-nunito">Inventory</h2>
 
             <p>
-              Total Items: <span className="text-gray-500">{20}</span>
+              Total Items:{" "}
+              <span className="text-gray-500 group-hover:text-white">{20}</span>
             </p>
             <p>
               Active items: <span className="font-bold text-green-500">5</span>
             </p>
           </div>
-          <CgGym className="text-purple-700 w-9 h-9" />
+          <CgGym className="text-purple-700 w-9 h-9 group-hover:text-white" />
         </div>
       </div>
 
