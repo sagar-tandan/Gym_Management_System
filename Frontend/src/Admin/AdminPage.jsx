@@ -19,7 +19,7 @@ import { AllContext } from "../Context/Context";
 import logo from "../assets/dfc.png";
 
 const AdminPage = () => {
-  const [active, setActive] = useState("dashboard");
+  const { active, setActive } = useContext(AllContext);
   const { token, setToken } = useContext(AllContext);
 
   const handleClick = (e, act) => {
