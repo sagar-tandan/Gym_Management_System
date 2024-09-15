@@ -4,6 +4,7 @@ import AdminiLoginPage from "./AdminiLoginPage";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import ProtectedRoute from "./ProtectedRoute";
 import { AllContext } from "./Context/Context";
+import AdminDashboard from "./Admin/AdminComp/AdminDashboard";
 
 function App() {
   const { token, setToken } = useContext(AllContext);
@@ -31,6 +32,7 @@ function App() {
     <>
       <BrowserRouter>
         <Routes>
+          <Route path="/" element={<AdminDashboard />} />
           <Route
             path="/adminlogin"
             element={
