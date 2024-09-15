@@ -6,11 +6,13 @@ import { GiBlackBook } from "react-icons/gi";
 import { CgGym } from "react-icons/cg";
 import { formatDistanceToNow } from "date-fns";
 import { AllContext } from "../../Context/Context";
+import axios from "axios";
 // import { useNavigate } from "react-router-dom";
 
 const AdminDashboard = () => {
   const [lastLogin, setLastLogin] = useState("");
   const { active, setActive } = useContext(AllContext);
+  const { dashboardDetail, setDashboardDetail } = useContext(AllContext);
   // const navigate = useNavigate();
 
   useEffect(() => {
@@ -23,7 +25,18 @@ const AdminDashboard = () => {
     } else {
       setLastLogin("No login data available");
     }
+    fetchDetails();
   }, []);
+
+  const fetchDetails = async () => {
+    try {
+      const response = await axios.get("http://localhost:5002/api/dashboard");
+      console.table(response.data);
+      setDashboardDetail(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <div className="min-h-screen text-gray-900 px-3 mt-5">
@@ -50,7 +63,7 @@ const AdminDashboard = () => {
             <p>
               Last Login:{" "}
               <span className="text-gray-500 group-hover:text-[#c1c1c1]">
-                {lastLogin}
+                {lastLogin.split("").slice(5).join("")}
               </span>
             </p>
           </div>
@@ -71,12 +84,15 @@ const AdminDashboard = () => {
 
             <p>
               Total Members:{" "}
-              <span className="text-gray-500 group-hover:text-white">
-                {250}
+              <span className="text-gray-500 group-hover:text-white font-bold">
+                {dashboardDetail && dashboardDetail.totalMember}
               </span>
             </p>
             <p>
-              New Today: <span className="text-green-500">{10}</span>
+              New Today:{" "}
+              <span className="text-green-500 font-bold">
+                {dashboardDetail && dashboardDetail.todayRegistered}
+              </span>
             </p>
           </div>
           <MdOutlinePeopleAlt className="text-purple-700 w-9 h-9 group-hover:text-white" />
@@ -98,10 +114,15 @@ const AdminDashboard = () => {
 
             <p>
               Total Plans:{" "}
-              <span className="text-gray-500 group-hover:text-white">{20}</span>
+              <span className="text-gray-500 group-hover:text-white font-bold">
+                {dashboardDetail && dashboardDetail.totalPlan}
+              </span>
             </p>
             <p>
-              Popular: <span className="font-bold">ActivePro 3</span>
+              Popular:{" "}
+              <span className="font-bold text-green-500">
+                {dashboardDetail && dashboardDetail.planWithHighestCount}
+              </span>
             </p>
           </div>
           <GiBlackBook className="text-purple-700 w-9 h-9 group-hover:text-white" />
@@ -123,10 +144,15 @@ const AdminDashboard = () => {
 
             <p>
               Total Items:{" "}
-              <span className="text-gray-500 group-hover:text-white">{20}</span>
+              <span className="text-gray-500 group-hover:text-white font-bold">
+                {dashboardDetail && dashboardDetail.totalEquip}
+              </span>
             </p>
             <p>
-              Active items: <span className="font-bold text-green-500">5</span>
+              Defect items:{" "}
+              <span className="font-bold text-red-500">
+                {dashboardDetail && dashboardDetail.defectEquip}
+              </span>
             </p>
           </div>
           <CgGym className="text-purple-700 w-9 h-9 group-hover:text-white" />
