@@ -101,7 +101,7 @@ const AdminDashboard = () => {
               <span className="text-gray-500 group-hover:text-white">{20}</span>
             </p>
             <p>
-              Popular Plan: <span className="font-bold">ActivePro 3</span>
+              Popular: <span className="font-bold">ActivePro 3</span>
             </p>
           </div>
           <GiBlackBook className="text-purple-700 w-9 h-9 group-hover:text-white" />
