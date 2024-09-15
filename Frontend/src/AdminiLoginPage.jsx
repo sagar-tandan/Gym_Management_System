@@ -49,6 +49,7 @@ const AdminiLoginPage = () => {
     localStorage.setItem("uid", data.userId);
     localStorage.setItem("role", data.role);
     localStorage.setItem("expiryTime", expiryTime);
+    localStorage.setItem("loginDate", new Date());
     setToken(data.token);
     setRole(data.role);
     navigate("/adminDashboard");
