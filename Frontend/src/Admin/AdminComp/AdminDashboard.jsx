@@ -27,6 +27,7 @@ import { CgGym } from "react-icons/cg";
 import { formatDistanceToNow } from "date-fns";
 import { AllContext } from "../../Context/Context";
 import axios from "axios";
+import Calendar from "./Calander";
 // import { useNavigate } from "react-router-dom";
 
 const AdminDashboard = () => {
@@ -34,10 +35,21 @@ const AdminDashboard = () => {
   const { active, setActive } = useContext(AllContext);
   const { dashboardDetail, setDashboardDetail } = useContext(AllContext);
   const [recentMembers, setRecentMembers] = useState([]);
-  // const navigate = useNavigate();
+  const [topPlans, setTopPlans] = useState([]);
+  const [topPlanData, setTopPlanData] = useState({
+    labels: [],
+    datasets: [
+      {
+        label: "Top Plans",
+        data: [],
+        backgroundColor: "rgba(99, 102, 241, 0.5)",
+        borderColor: "rgba(99, 102, 241, 1)",
+        borderWidth: 1,
+      },
+    ],
+  });
 
   useEffect(() => {
-    // Retrieve login date from localStorage
     const storedLoginDate = localStorage.getItem("loginDate");
     if (storedLoginDate) {
       const loginDate = new Date(storedLoginDate);
@@ -48,20 +60,8 @@ const AdminDashboard = () => {
     }
     fetchDetails();
     fetchNewMembers();
+    fetchTopPlans();
   }, []);
-
-  // const memberGrowthData = {
-  //   labels: ["January", "February", "March", "April", "May"],
-  //   datasets: [
-  //     {
-  //       label: "New Members",
-  //       data: [10, 20, 30, 40, 50],
-  //       backgroundColor: "rgba(99, 102, 241, 0.5)",
-  //       borderColor: "rgba(99, 102, 241, 1)",
-  //       borderWidth: 1,
-  //     },
-  //   ],
-  // };
 
   const fetchDetails = async () => {
     try {
@@ -84,6 +84,39 @@ const AdminDashboard = () => {
     }
   };
 
+  const fetchTopPlans = async () => {
+    const response = await axios.get(
+      "http://localhost:5002/api/dashboard/top5Plans"
+    );
+    console.table(response.data);
+    setTopPlans(response.data);
+  };
+
+  useEffect(() => {
+    if (topPlans && topPlans.length > 0) {
+      let labels = [];
+      let data = [];
+      topPlans.forEach((plan) => {
+        labels.push(plan.plan.name);
+        data.push(plan.memberRegistrationCount);
+      });
+
+      // Update the chart data
+      setTopPlanData({
+        labels,
+        datasets: [
+          {
+            label: "Total Members",
+            data,
+            backgroundColor: "rgba(153,102,204, 0.5)",
+            borderColor: "rgba(120,81,169, 1)",
+            borderWidth: 1,
+          },
+        ],
+      });
+    }
+  }, [topPlans]);
+
   return (
     <div className="min-h-screen text-gray-900 px-3 mt-5">
       {/* Summary Cards */}
@@ -100,9 +133,7 @@ const AdminDashboard = () => {
           className="bg-purple-100 px-6 rounded-lg shadow-lg flex items-center justify-between py-4 hover:bg-purple-900 hover:text-white group transition-all duration-300 ease-in-out hover:-translate-y-2 cursor-pointer"
         >
           <div>
-            <h2 className="text-xl font-bold font-nunito">
-              Admin Profile
-            </h2>
+            <h2 className="text-xl font-bold font-nunito">Admin Profile</h2>
             <p className="text-lg font-nunito">
               {localStorage.getItem("username")}
             </p>
@@ -221,12 +252,6 @@ const AdminDashboard = () => {
           </div>
         </div> */}
 
-      {/* Simple Bar Chart */}
-      {/* <div className="bg-white p-6 rounded-lg shadow-lg mb-8">
-          <h2 className="text-xl font-semibold mb-4">Member Growth</h2>
-          <Bar data={memberGrowthData} />
-        </div> */}
-
       {/* Section Availability Summary */}
       {/* <div className="bg-white p-6 rounded-lg shadow-lg">
           <h2 className="text-2xl font-semibold mb-4">Gym Sections</h2>
@@ -253,7 +278,7 @@ const AdminDashboard = () => {
           </p>
         </div> */}
 
-      <section className="w-full py-1 px-3 relative">
+      <section className="w-full py-1 px-1 relative">
         <h1 className="font-bold font-nunito mb-3 text-xl">
           Newly Registered Members
         </h1>
@@ -304,6 +329,19 @@ const AdminDashboard = () => {
           </tbody>
         </table>
       </section>
+
+      {/* Simple Bar Chart */}
+
+      <div className="w-full flex gap-3 ">
+        <div className="bg-white p-6 rounded-lg mb-8 w-full bg-yellow-400">
+          <h2 className="text-xl font-bold font-nunito mb-4">Top 5 Plans</h2>
+          <Bar data={topPlanData} className="bg-blue-400"/>
+        </div>
+        <div className="bg-white p-6 rounded-lg w-full bg-red-400">
+          <h2 className="text-xl font-semibold mb-4">Calender</h2>
+          <Calendar />
+        </div>
+      </div>
     </div>
   );
 };

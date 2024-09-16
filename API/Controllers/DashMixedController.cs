@@ -54,5 +54,28 @@ namespace API.Controllers
             };
             return StatusCode(200, result);
         }
+
+        [HttpGet("newRegistered")]
+        public async Task<IActionResult> GetNewMembers()
+        {
+            var allMembers = await _context.MemberRegistrations
+                .OrderByDescending(m => m.EnrolledDate).Take(3)
+                .ToListAsync();
+            return StatusCode(200, allMembers);
+        }
+
+        [HttpGet("top5Plans")]
+        public async Task<IActionResult> getTopPlan()
+        {
+            var planWithHighestCount = await _context.Plans.Select(p => new
+            {
+                Plan = p,
+                MemberRegistrationCount = p.MemberRegistrations.Count()
+            }).OrderByDescending(p => p.MemberRegistrationCount).Take(5).ToListAsync();
+
+            return StatusCode(200, planWithHighestCount);
+
+
+        }
     }
 }
