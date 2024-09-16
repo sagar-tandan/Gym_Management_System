@@ -1,5 +1,25 @@
 import React, { useContext, useEffect, useState } from "react";
+import { Bar } from 'react-chartjs-2';
 
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+} from "chart.js";
+
+// Register the necessary components (scales, elements, and plugins)
+ChartJS.register(
+  CategoryScale, // For x-axis scale
+  LinearScale, // For y-axis scale
+  BarElement, // For bar chart
+  Title,
+  Tooltip,
+  Legend
+);
 import { MdAdminPanelSettings } from "react-icons/md";
 import { MdOutlinePeopleAlt } from "react-icons/md";
 import { GiBlackBook } from "react-icons/gi";
@@ -13,6 +33,7 @@ const AdminDashboard = () => {
   const [lastLogin, setLastLogin] = useState("");
   const { active, setActive } = useContext(AllContext);
   const { dashboardDetail, setDashboardDetail } = useContext(AllContext);
+  const [recentMembers, setRecentMembers] = useState([]);
   // const navigate = useNavigate();
 
   useEffect(() => {
@@ -27,6 +48,19 @@ const AdminDashboard = () => {
     }
     fetchDetails();
   }, []);
+
+  // const memberGrowthData = {
+  //   labels: ["January", "February", "March", "April", "May"],
+  //   datasets: [
+  //     {
+  //       label: "New Members",
+  //       data: [10, 20, 30, 40, 50],
+  //       backgroundColor: "rgba(99, 102, 241, 0.5)",
+  //       borderColor: "rgba(99, 102, 241, 1)",
+  //       borderWidth: 1,
+  //     },
+  //   ],
+  // };
 
   const fetchDetails = async () => {
     try {
@@ -63,7 +97,7 @@ const AdminDashboard = () => {
             <p>
               Last Login:{" "}
               <span className="text-gray-500 group-hover:text-[#c1c1c1]">
-                {lastLogin.split("").slice(5).join("")}
+                {lastLogin}
               </span>
             </p>
           </div>
@@ -173,6 +207,12 @@ const AdminDashboard = () => {
               New members are joining at a steady rate this month.
             </p>
           </div>
+        </div> */}
+
+        {/* Simple Bar Chart */}
+        {/* <div className="bg-white p-6 rounded-lg shadow-lg mb-8">
+          <h2 className="text-xl font-semibold mb-4">Member Growth</h2>
+          <Bar data={memberGrowthData} />
         </div> */}
 
         {/* Section Availability Summary */}
