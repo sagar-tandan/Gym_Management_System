@@ -263,7 +263,7 @@ const AdminProfile = () => {
   };
 
   return (
-    <div className="w-full flex flex-col gap-2 h-screen mt-1 overflow-x-hidden">
+    <div className="w-full flex flex-col gap-2 mt-5 ">
       <div className="w-full flex flex-col gap-2 relative px-3 mb-20">
         <img
           className="w-full h-[200px] object-cover rounded-md"
@@ -321,7 +321,7 @@ const AdminProfile = () => {
         </div>
       </div>
 
-      <div className="w-full flex flex-col gap-2 h-screen">
+      <div className="w-full flex flex-col gap-2 ">
         <section className="w-full py-1 px-3 relative">
           <table className="w-full">
             <thead>

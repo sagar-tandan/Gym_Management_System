@@ -78,7 +78,7 @@
   }
   .pagination .page-link:hover {
     z-index: 2;
-    color: var(--pagination-hover-color, #7e22ce);
+    color: var(--pagination-hover-color, #fff);
     background-color: var(--pagination-hover-bg, #7e22ce);
     border-color: var(
       --pagination-hover-border-color,

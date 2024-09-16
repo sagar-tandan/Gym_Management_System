@@ -193,7 +193,7 @@ const AdminPage = () => {
         </nav>
       </aside>
 
-      <section className="w-full h-screen ml-[230px] flex flex-col gap-3 overflow-y-auto">
+      <section className="w-full min-h-screen ml-[230px] flex flex-col gap-3 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-white">
         <div className="w-full py-2 flex flex-col items-center">
           <img className="w-[100px] h-[24px] object-cover" src="" alt="" />
           <h1 className="w-full text-center font-semibold text-xl mt-1">
