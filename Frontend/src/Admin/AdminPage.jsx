@@ -195,10 +195,29 @@ const AdminPage = () => {
 
       <section className="w-full min-h-screen ml-[230px] flex flex-col gap-3 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-white">
         <div className="w-full py-2 flex flex-col items-center">
-          <img className="w-[100px] h-[24px] object-cover" src="" alt="" />
+          {/* <img className="w-[100px] h-[24px] object-cover" src="" alt="" />
           <h1 className="w-full text-center font-semibold text-xl mt-1">
             Dharan Fitness Club
-          </h1>
+          </h1> */}
+          <div className="flex items-center">
+            <select
+              // value={selectedSection}
+              // onChange={(e) => setSelectedSection(e.target.value)}
+              className="border rounded-md px-3 py-1"
+            >
+              <option value="all">All Sections</option>
+              <option value="members">Members</option>
+              <option value="inventory">Inventory</option>
+              <option value="plans">Plans</option>
+            </select>
+            <input
+              type="text"
+              placeholder="Search members, inventory, or plans..."
+              // value={searchQuery}
+              // onChange={(e) => handleSearch(e.target.value)}
+              className="border rounded-md px-3 py-1 ml-2"
+            />
+          </div>
         </div>
 
         {active === "dashboard" ? (
