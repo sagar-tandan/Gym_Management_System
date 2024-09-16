@@ -118,9 +118,9 @@ const AdminDashboard = () => {
   }, [topPlans]);
 
   return (
-    <div className="min-h-screen text-gray-900 px-3 mt-5">
+    <div className="w-full flex flex-col text-gray-900 px-3 gap-2 mt-5">
       {/* Summary Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 mb-8 font-nunito">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 mb-4 font-nunito ">
         {/* Admin Profile Summary */}
 
         <div
@@ -236,49 +236,20 @@ const AdminDashboard = () => {
         </div>
       </div>
 
-      {/* Section Summaries */}
-      {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-6"> */}
-      {/* Member Growth Summary */}
-      {/* <div className="bg-white p-6 rounded-lg shadow-lg">
-          <h2 className="text-2xl font-semibold mb-4">Member Growth</h2>
-          <div className="flex justify-between items-center">
-            <p>Growth Rate:</p>
-            <p className="text-3xl font-bold text-green-500">8%</p>
-          </div>
-          <div className="mt-4">
-            <p className="text-gray-600">
-              New members are joining at a steady rate this month.
-            </p>
-          </div>
-        </div> */}
+      {/* Simple Bar Chart */}
 
-      {/* Section Availability Summary */}
-      {/* <div className="bg-white p-6 rounded-lg shadow-lg">
-          <h2 className="text-2xl font-semibold mb-4">Gym Sections</h2>
-          <div className="flex justify-between items-center">
-            <p>Classes Available:</p>
-            <p className="text-3xl font-bold text-blue-500">12</p>
-          </div>
-          <div className="mt-4">
-            <p className="text-gray-600">Most popular section: Yoga Classes</p>
-          </div>
-        </div> */}
+      <div className="w-full flex gap-3">
+        <div className="bg-white p-3 rounded-lg mb-2 w-full ">
+          <h2 className="text-xl font-bold font-nunito mb-4">Top 5 Plans</h2>
+          <Bar data={topPlanData} />
+        </div>
+        <div className="bg-white p-3 py-6 rounded-lg w-full ">
+          {/* <h2 className="text-xl font-semibold mb-3"></h2> */}
+          <Calendar />
+        </div>
+      </div>
 
-      {/* Expiring Subscriptions */}
-      {/* <div className="bg-white p-6 rounded-lg shadow-lg">
-          <h2 className="text-2xl font-semibold mb-4">
-            Expiring Subscriptions
-          </h2>
-          <div className="flex justify-between items-center">
-            <p>Expiring Soon:</p>
-            <p className="text-3xl font-bold text-red-500">5</p>
-          </div>
-          <p className="text-gray-600 mt-2">
-            Send reminders to renew subscriptions for these members.
-          </p>
-        </div> */}
-
-      <section className="w-full py-1 px-1 relative">
+      <section className="w-full py-1 px-1 relative pb-10">
         <h1 className="font-bold font-nunito mb-3 text-xl">
           Newly Registered Members
         </h1>
@@ -329,19 +300,6 @@ const AdminDashboard = () => {
           </tbody>
         </table>
       </section>
-
-      {/* Simple Bar Chart */}
-
-      <div className="w-full flex gap-3 ">
-        <div className="bg-white p-6 rounded-lg mb-8 w-full bg-yellow-400">
-          <h2 className="text-xl font-bold font-nunito mb-4">Top 5 Plans</h2>
-          <Bar data={topPlanData} className="bg-blue-400"/>
-        </div>
-        <div className="bg-white p-6 rounded-lg w-full bg-red-400">
-          <h2 className="text-xl font-semibold mb-4">Calender</h2>
-          <Calendar />
-        </div>
-      </div>
     </div>
   );
 };

@@ -18,7 +18,7 @@ const Calendar = () => {
 
   const renderHeader = () => {
     return (
-      <div className="flex justify-between mb-6 items-center font-nunito">
+      <div className="flex justify-between mb-2 px-3 mt-2 items-center font-nunito">
         <button
           className="text-purple-400 hover:text-purple-600 transition-all duration-300 ease-in-out"
           onClick={() => setCurrentMonth(subMonths(currentMonth, 1))}
@@ -43,7 +43,7 @@ const Calendar = () => {
     return (
       <div className="grid grid-cols-7 text-purple-400 text-center">
         {daysOfWeek.map((day) => (
-          <div key={day} className="py-2">
+          <div key={day} className="py-1">
             {day}
           </div>
         ))}
@@ -69,7 +69,7 @@ const Calendar = () => {
         days.push(
           <div
             key={day}
-            className={`py-2 border border-purple-200 hover:bg-purple-100 cursor-pointer text-center ${
+            className={`py-[6px] border border-purple-200 hover:bg-purple-100 cursor-pointer text-center ${
               !isSameMonth(day, monthStart)
                 ? "text-gray-400"
                 : isSameDay(day, selectedDate)
@@ -94,7 +94,7 @@ const Calendar = () => {
   };
 
   return (
-    <div className="max-w-md mx-auto mt-10 p-4 bg-white shadow-lg rounded-lg">
+    <div className="w-full px-3 py-2 pb-4 mt-6 bg-white  rounded-lg">
       {renderHeader()}
       {renderDays()}
       {renderCells()}

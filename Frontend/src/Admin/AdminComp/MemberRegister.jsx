@@ -18,8 +18,8 @@ const MemberRegister = () => {
 
   //Paid and Unpaid pagination
   const [allPaidandUnpaidMember, setallPaidandUnpaidMember] = useState([]);
-  const [allPaidMember, setAllPaidMember] = useState();
-  const [allUnPaidMember, setAllUnPaidMember] = useState();
+  const [allPaidMember, setAllPaidMember] = useState([]);
+  const [allUnPaidMember, setAllUnPaidMember] = useState([]);
   const [currentPagePaid, setCurrentPagePaid] = useState(1);
   const [currentPageUnpaid, setCurrentUnPagePaid] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(8); // Adjust as needed
@@ -314,7 +314,7 @@ const MemberRegister = () => {
   };
 
   return (
-    <div className="w-full flex flex-col gap-2 h-screen overflow-x-hidden">
+    <div className="w-full flex flex-col gap-2 ">
       <div className="w-full flex justify-between px-3 items-center mt-5">
         <div className="flex gap-3">
           <span
@@ -533,32 +533,36 @@ const MemberRegister = () => {
               ))}
             </tbody>
           ) : (
-            <div className="w-full py-2 text-center mt-10 absolute">
+            <div className="w-[90%] py-2 text-center mt-10 absolute">
               No data found !
             </div>
           )}
         </table>
       </section>
 
-      {selected === "allMember" ? (
+      {allPaidandUnpaidMember.length > 7 && selected === "allMember" ? (
         <ResponsivePagination
           current={currentPage}
           total={totalPages}
           onPageChange={setCurrentPage}
           className="pagination"
         />
-      ) : selected === "paid" ? (
+      ) : allPaidMember.length > 7 && selected === "paid" ? (
         <ResponsivePagination
           current={currentPagePaid}
           total={totalPaidPage}
           onPageChange={setCurrentPagePaid}
+          className="pagination"
         />
       ) : (
-        <ResponsivePagination
-          current={currentPageUnpaid}
-          total={totalUnPaidPage}
-          onPageChange={setCurrentUnPagePaid}
-        />
+        allUnPaidMember.length > 7 && (
+          <ResponsivePagination
+            current={currentPageUnpaid}
+            total={totalUnPaidPage}
+            onPageChange={setCurrentUnPagePaid}
+            className="pagination"
+          />
+        )
       )}
 
       {/* MODEL */}
