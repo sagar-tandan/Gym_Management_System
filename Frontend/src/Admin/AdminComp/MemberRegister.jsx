@@ -737,6 +737,7 @@ const MemberRegister = () => {
                     className="p-2 w-full rounded-sm bg-purple-100"
                     placeholder="Contact number"
                     value={registerMember.contact}
+                    max="9999999999"
                     onChange={handleChange}
                     required
                   />
