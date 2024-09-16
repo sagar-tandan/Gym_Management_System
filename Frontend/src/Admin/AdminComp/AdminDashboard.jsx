@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Bar } from 'react-chartjs-2';
+import { Bar } from "react-chartjs-2";
 
 import {
   Chart as ChartJS,
@@ -47,6 +47,7 @@ const AdminDashboard = () => {
       setLastLogin("No login data available");
     }
     fetchDetails();
+    fetchNewMembers();
   }, []);
 
   // const memberGrowthData = {
@@ -71,6 +72,17 @@ const AdminDashboard = () => {
       console.log(error);
     }
   };
+  const fetchNewMembers = async () => {
+    try {
+      const response = await axios.get(
+        "http://localhost:5002/api/dashboard/newRegistered"
+      );
+      console.table(response.data);
+      setRecentMembers(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <div className="min-h-screen text-gray-900 px-3 mt-5">
@@ -88,7 +100,7 @@ const AdminDashboard = () => {
           className="bg-purple-100 px-6 rounded-lg shadow-lg flex items-center justify-between py-4 hover:bg-purple-900 hover:text-white group transition-all duration-300 ease-in-out hover:-translate-y-2 cursor-pointer"
         >
           <div>
-            <h2 className="text-2xl font-semibold font-nunito">
+            <h2 className="text-xl font-bold font-nunito">
               Admin Profile
             </h2>
             <p className="text-lg font-nunito">
@@ -114,7 +126,7 @@ const AdminDashboard = () => {
           className="bg-purple-100 px-6 rounded-lg shadow-lg flex items-center justify-between py-4 hover:bg-purple-900 hover:text-white group transition-all duration-300 ease-in-out hover:-translate-y-2 cursor-pointer"
         >
           <div>
-            <h2 className="text-2xl font-semibold font-nunito">Members</h2>
+            <h2 className="text-xl font-bold font-nunito">Members</h2>
 
             <p>
               Total Members:{" "}
@@ -144,7 +156,7 @@ const AdminDashboard = () => {
           className="bg-purple-100 px-6 rounded-lg shadow-lg flex items-center justify-between py-4 hover:bg-purple-900 hover:text-white group transition-all duration-300 ease-in-out hover:-translate-y-2 cursor-pointer"
         >
           <div>
-            <h2 className="text-2xl font-semibold font-nunito">Plan</h2>
+            <h2 className="text-xl font-bold font-nunito">Plan</h2>
 
             <p>
               Total Plans:{" "}
@@ -174,7 +186,7 @@ const AdminDashboard = () => {
           className="bg-purple-100 px-6 rounded-lg shadow-lg flex items-center justify-between py-4 hover:bg-purple-900 hover:text-white group transition-all duration-300 ease-in-out hover:-translate-y-2 cursor-pointer"
         >
           <div>
-            <h2 className="text-2xl font-semibold font-nunito">Inventory</h2>
+            <h2 className="text-xl font-bold font-nunito">Inventory</h2>
 
             <p>
               Total Items:{" "}
@@ -194,9 +206,9 @@ const AdminDashboard = () => {
       </div>
 
       {/* Section Summaries */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {/* Member Growth Summary */}
-        {/* <div className="bg-white p-6 rounded-lg shadow-lg">
+      {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-6"> */}
+      {/* Member Growth Summary */}
+      {/* <div className="bg-white p-6 rounded-lg shadow-lg">
           <h2 className="text-2xl font-semibold mb-4">Member Growth</h2>
           <div className="flex justify-between items-center">
             <p>Growth Rate:</p>
@@ -209,14 +221,14 @@ const AdminDashboard = () => {
           </div>
         </div> */}
 
-        {/* Simple Bar Chart */}
-        {/* <div className="bg-white p-6 rounded-lg shadow-lg mb-8">
+      {/* Simple Bar Chart */}
+      {/* <div className="bg-white p-6 rounded-lg shadow-lg mb-8">
           <h2 className="text-xl font-semibold mb-4">Member Growth</h2>
           <Bar data={memberGrowthData} />
         </div> */}
 
-        {/* Section Availability Summary */}
-        {/* <div className="bg-white p-6 rounded-lg shadow-lg">
+      {/* Section Availability Summary */}
+      {/* <div className="bg-white p-6 rounded-lg shadow-lg">
           <h2 className="text-2xl font-semibold mb-4">Gym Sections</h2>
           <div className="flex justify-between items-center">
             <p>Classes Available:</p>
@@ -227,8 +239,8 @@ const AdminDashboard = () => {
           </div>
         </div> */}
 
-        {/* Expiring Subscriptions */}
-        {/* <div className="bg-white p-6 rounded-lg shadow-lg">
+      {/* Expiring Subscriptions */}
+      {/* <div className="bg-white p-6 rounded-lg shadow-lg">
           <h2 className="text-2xl font-semibold mb-4">
             Expiring Subscriptions
           </h2>
@@ -240,7 +252,58 @@ const AdminDashboard = () => {
             Send reminders to renew subscriptions for these members.
           </p>
         </div> */}
-      </div>
+
+      <section className="w-full py-1 px-3 relative">
+        <h1 className="font-bold font-nunito mb-3 text-xl">
+          Newly Registered Members
+        </h1>
+        <table className="w-full">
+          <thead>
+            <tr className="w-full border-[1px] border-purple-200 bg-purple-100 rounded-sm">
+              <th className="font-medium text-left pl-4 py-2 text-[#636363]">
+                Card No.
+              </th>
+              <th className="font-medium text-left pl-4 py-2 text-[#636363]">
+                Member Name
+              </th>
+              <th className="font-medium text-left pl-4 py-2 text-[#636363]">
+                Contact
+              </th>
+              <th className="font-medium text-left pl-4 py-2 text-[#636363]">
+                Enrolled Date
+              </th>
+              <th className="font-medium text-left pl-4 py-2 text-[#636363]">
+                Expiration Date
+              </th>
+            </tr>
+          </thead>
+
+          <tbody>
+            {recentMembers.length > 0 &&
+              recentMembers.map((member, index) => (
+                <tr key={index} className={`border-[1px] border-purple-200`}>
+                  <td className="py-3 px-5 font-medium text-black">
+                    {member.cardNo}
+                  </td>
+                  <td className="py-3 px-5 font-normal text-[#636363]">
+                    {member.memberName}
+                  </td>
+                  <td className="py-3 px-5 font-normal text-[#636363]">
+                    {member.contact}
+                  </td>
+
+                  <td className="py-3 px-5 font-normal text-[#636363]">
+                    {member.enrolledDate}
+                  </td>
+
+                  <td className="py-3 px-5 font-normal text-[#636363]">
+                    {member.expiryDate}
+                  </td>
+                </tr>
+              ))}
+          </tbody>
+        </table>
+      </section>
     </div>
   );
 };
