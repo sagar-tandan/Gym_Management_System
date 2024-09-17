@@ -17,6 +17,7 @@ import { useNavigate } from "react-router-dom";
 import { AllContext } from "../Context/Context";
 
 import logo from "../assets/dfc.png";
+import SearchComp from "./AdminComp/SearchComp";
 
 const AdminPage = () => {
   const { active, setActive } = useContext(AllContext);
@@ -38,8 +39,8 @@ const AdminPage = () => {
 
   const handleClickLogo = () => {
     navigate("/adminDashboard");
-    setActive("dashboard");
-    localStorage.setItem("active", "dashboard");
+    setActive("Dashboard");
+    localStorage.setItem("active", "Dashboard");
   };
 
   return (
@@ -63,21 +64,21 @@ const AdminPage = () => {
         <nav className="w-full flex flex-col justify-between h-full pb-5 mt-4">
           <div className="w-full flex flex-col gap-4">
             <div
-              onClick={(e) => handleClick(e, "dashboard")}
+              onClick={(e) => handleClick(e, "Dashboard")}
               className={`${
-                active === "dashboard"
+                active === "Dashboard"
                   ? "text-orange-400 font-normal bg-gradient-to-r from-[#FBB03B] from-1% via-transparent via-30% to-transparent to-90%"
                   : ""
               } w-full text-white flex gap-2 cursor-pointer hover:text-[#FBB03B] py-[6px] px-8 transition-all duration-500 ease-in-out group `}
             >
               <LuLayoutDashboard
                 className={`w-6 h-6 ${
-                  active === "dashboard" ? "text-orange-400" : ""
+                  active === "Dashboard" ? "text-orange-400" : ""
                 }`}
               />
               <h1
                 className={` ${
-                  active === "dashboard" ? "text-orange-400" : ""
+                  active === "Dashboard" ? "text-orange-400" : ""
                 }`}
               >
                 Dashboard
@@ -85,95 +86,95 @@ const AdminPage = () => {
             </div>
 
             <div
-              onClick={(e) => handleClick(e, "admin")}
+              onClick={(e) => handleClick(e, "Admin")}
               className={`${
-                active === "admin"
+                active === "Admin"
                   ? "text-orange-400 font-normal bg-gradient-to-r from-[#FBB03B] from-1% via-transparent via-30% to-transparent to-90%"
                   : ""
               } w-full text-white flex gap-2 cursor-pointer hover:text-[#FBB03B] py-[6px] px-8 transition-all duration-300 ease-in-out group`}
             >
               <MdOutlineAdminPanelSettings
                 className={`w-6 h-6 ${
-                  active === "admin" ? "text-orange-400" : ""
+                  active === "Admin" ? "text-orange-400" : ""
                 }`}
               />
-              <h1 className={` ${active === "admin" ? "text-orange-400" : ""}`}>
+              <h1 className={` ${active === "Admin" ? "text-orange-400" : ""}`}>
                 Admin Profile
               </h1>
             </div>
 
             <div
-              onClick={(e) => handleClick(e, "register")}
+              onClick={(e) => handleClick(e, "Member")}
               className={`${
-                active === "register"
+                active === "Member"
                   ? "text-orange-400 font-normal bg-gradient-to-r from-[#FBB03B] from-1% via-transparent via-25% to-transparent to-90%"
                   : ""
               } w-full text-white flex gap-2 cursor-pointer hover:text-[#FBB03B] py-[6px] px-8 transition-all duration-300 ease-in-out group`}
             >
               <MdOutlineGroupAdd
                 className={`w-6 h-6 ${
-                  active === "register" ? "text-orange-400" : ""
+                  active === "Member" ? "text-orange-400" : ""
                 }`}
               />
               <h1
-                className={` ${active === "register" ? "text-orange-400" : ""}`}
+                className={` ${active === "Member" ? "text-orange-400" : ""}`}
               >
                 Members
               </h1>
             </div>
 
             <div
-              onClick={(e) => handleClick(e, "plan")}
+              onClick={(e) => handleClick(e, "Plan")}
               className={`${
-                active === "plan"
+                active === "Plan"
                   ? "text-orange-400 font-normal bg-gradient-to-r from-[#FBB03B] from-1% via-transparent via-25% to-transparent to-90%"
                   : ""
               } w-full text-white flex gap-2 cursor-pointer hover:text-[#FBB03B] py-[6px] px-8 transition-all duration-300 ease-in-out group`}
             >
               <RiTodoLine
                 className={`w-6 h-6 ${
-                  active === "plan" ? "text-orange-400" : ""
+                  active === "Plan" ? "text-orange-400" : ""
                 }`}
               />
-              <h1 className={` ${active === "plan" ? "text-orange-400" : ""}`}>
+              <h1 className={` ${active === "Plan" ? "text-orange-400" : ""}`}>
                 Plan
               </h1>
             </div>
 
             <div
-              onClick={(e) => handleClick(e, "inventory")}
+              onClick={(e) => handleClick(e, "Inventory")}
               className={`w-full text-white flex gap-2 cursor-pointer py-[6px] px-8 transition-colors duration-300 ease-in-out ${
-                active === "inventory"
+                active === "Inventory"
                   ? "text-orange-400 bg-gradient-to-r from-[#FBB03B] from-1% via-transparent via-25% to-transparent to-90% font-normal"
                   : "hover:text-[#FBB03B]"
               }`}
             >
               <CgGym
                 className={`w-6 h-6 ${
-                  active === "inventory" ? "text-orange-400" : ""
+                  active === "Inventory" ? "text-orange-400" : ""
                 }`}
               />
               <h1
-                className={`${active === "inventory" ? "text-orange-400" : ""}`}
+                className={`${active === "Inventory" ? "text-orange-400" : ""}`}
               >
                 Inventory
               </h1>
             </div>
 
             <div
-              onClick={(e) => handleClick(e, "report")}
+              onClick={(e) => handleClick(e, "Report")}
               className={`${
-                active === "report"
+                active === "Report"
                   ? "text-orange-400 font-normal bg-gradient-to-r from-[#FBB03B] from-1% via-transparent via-25% to-transparent to-90%"
                   : ""
               } w-full text-white flex gap-2 cursor-pointer hover:text-[#FBB03B] py-[6px] px-8 transition-all duration-300 ease-in-out group`}
             >
               <TbMessageReport
                 className={`w-6 h-6 ${
-                  active === "report" ? "text-orange-400" : ""
+                  active === "Report" ? "text-orange-400" : ""
                 }`}
               />
-              <h1 className={`${active === "report" ? "text-orange-400" : ""}`}>
+              <h1 className={`${active === "Report" ? "text-orange-400" : ""}`}>
                 Report
               </h1>
             </div>
@@ -194,41 +195,23 @@ const AdminPage = () => {
       </aside>
 
       <section className="w-full min-h-screen ml-[230px] flex flex-col gap-3 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-white">
-        <div className="w-full py-2 flex flex-col items-center">
+        <div className="w-full py-2 flex items-center">
           {/* <img className="w-[100px] h-[24px] object-cover" src="" alt="" />
           <h1 className="w-full text-center font-semibold text-xl mt-1">
             Dharan Fitness Club
           </h1> */}
-          <div className="flex items-center">
-            <select
-              // value={selectedSection}
-              // onChange={(e) => setSelectedSection(e.target.value)}
-              className="border rounded-md px-3 py-1"
-            >
-              <option value="all">All Sections</option>
-              <option value="members">Members</option>
-              <option value="inventory">Inventory</option>
-              <option value="plans">Plans</option>
-            </select>
-            <input
-              type="text"
-              placeholder="Search members, inventory, or plans..."
-              // value={searchQuery}
-              // onChange={(e) => handleSearch(e.target.value)}
-              className="border rounded-md px-3 py-1 ml-2"
-            />
-          </div>
+          <SearchComp />
         </div>
 
-        {active === "dashboard" ? (
+        {active === "Dashboard" ? (
           <AdminDashboard />
-        ) : active === "admin" ? (
+        ) : active === "Admin" ? (
           <AdminProfile />
-        ) : active === "register" ? (
+        ) : active === "Member" ? (
           <MemberRegister />
-        ) : active === "plan" ? (
+        ) : active === "Plan" ? (
           <AdminPlan />
-        ) : active === "inventory" ? (
+        ) : active === "Inventory" ? (
           <Inventory />
         ) : (
           <AdminReport />
