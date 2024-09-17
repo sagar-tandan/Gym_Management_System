@@ -7,6 +7,7 @@ const ContextProvider = ({ children }) => {
   const [token, setToken] = useState();
   const [active, setActive] = useState("dashboard");
   const [dashboardDetail, setDashboardDetail] = useState();
+  const [query, setQuery] = useState("");
 
   return (
     <AllContext.Provider
@@ -19,6 +20,8 @@ const ContextProvider = ({ children }) => {
         setActive,
         dashboardDetail,
         setDashboardDetail,
+        query,
+        setQuery,
       }}
     >
       {children}

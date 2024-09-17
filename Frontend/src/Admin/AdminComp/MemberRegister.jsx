@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import ResponsivePagination from "react-responsive-pagination";
 import "../../Pagination.css";
 import { LiaUserAstronautSolid } from "react-icons/lia";
@@ -7,6 +7,7 @@ import { LiaEditSolid } from "react-icons/lia";
 import { MdDeleteOutline } from "react-icons/md";
 import { RxCross2 } from "react-icons/rx";
 import { GiTakeMyMoney } from "react-icons/gi";
+import { AllContext } from "../../Context/Context";
 
 const MemberRegister = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -53,9 +54,27 @@ const MemberRegister = () => {
   const [itemID, setItemID] = useState();
   const [loading, setLoading] = useState(false);
 
+  // Query Member
+  const { query, setQuery } = useContext(AllContext);
+  const [queriedMember, setQueriedMember] = useState([]);
+
   useEffect(() => {
     fetchMemberData();
   }, [currentPage]);
+
+  useEffect(() => {
+    const activee = localStorage.getItem("active");
+    if (activee === "Member") {
+      const fetchFilteredMember = async () => {
+        const response = await axios.get(
+          `http://localhost:5002/api/dashboard/searchMember?searchQuery=${query}&pageNumber=1&pageSize=8`
+        );
+        console.log(response.data);
+        setQueriedMember(response.data.members);
+      };
+      fetchFilteredMember();
+    }
+  }, [query]);
 
   // Pagination logic for paid and unpaid
   const paginate = (members, page, itemsPerPage) => {
@@ -315,68 +334,263 @@ const MemberRegister = () => {
 
   return (
     <div className="w-full flex flex-col gap-2 ">
-      <div className="w-full flex justify-between px-3 items-center mt-5">
-        <div className="flex gap-3">
-          <span
-            onClick={() => setSelected("allMember")}
-            className={`w-[150px] text-center py-1 border-[1px] rounded-full cursor-pointer hover:bg-purple-700 hover:text-white transition-all duration-500 ease-in-out ${
-              selected === "allMember" ? "bg-purple-700 text-white" : ""
-            }`}
+      {query.trim() === "" && (
+        <div className="w-full flex justify-between px-3 items-center mt-5">
+          <div className="flex gap-3">
+            <span
+              onClick={() => setSelected("allMember")}
+              className={`w-[150px] text-center py-1 border-[1px] rounded-full cursor-pointer hover:bg-purple-700 hover:text-white transition-all duration-500 ease-in-out ${
+                selected === "allMember" ? "bg-purple-700 text-white" : ""
+              }`}
+            >
+              All Members
+            </span>
+            <span
+              onClick={() => setSelected("paid")}
+              className={`w-[150px] text-center py-1 border-[1px] rounded-full cursor-pointer hover:bg-green-500 hover:text-white transition-all duration-500 ease-in-out ${
+                selected === "paid" ? "bg-green-500 text-white" : ""
+              }`}
+            >
+              Paid
+            </span>
+            <span
+              onClick={() => setSelected("unpaid")}
+              className={`w-[150px] text-center py-1 border-[1px] rounded-full cursor-pointer hover:bg-red-500 hover:text-white transition-all duration-500 ease-in-out ${
+                selected === "unpaid" ? "bg-red-500 text-white" : ""
+              }`}
+            >
+              Unpaid
+            </span>
+          </div>
+          <button
+            onClick={(e) => MountModel(e)}
+            className="px-3 py-[6px] bg-purple-700 text-white rounded-sm hover:bg-purple-900 active:bg-purple-900 transition-all duration-300 ease-in-out font-medium "
           >
-            All Members
-          </span>
-          <span
-            onClick={() => setSelected("paid")}
-            className={`w-[150px] text-center py-1 border-[1px] rounded-full cursor-pointer hover:bg-green-500 hover:text-white transition-all duration-500 ease-in-out ${
-              selected === "paid" ? "bg-green-500 text-white" : ""
-            }`}
-          >
-            Paid
-          </span>
-          <span
-            onClick={() => setSelected("unpaid")}
-            className={`w-[150px] text-center py-1 border-[1px] rounded-full cursor-pointer hover:bg-red-500 hover:text-white transition-all duration-500 ease-in-out ${
-              selected === "unpaid" ? "bg-red-500 text-white" : ""
-            }`}
-          >
-            Unpaid
-          </span>
+            Register Member
+          </button>
         </div>
-        <button
-          onClick={(e) => MountModel(e)}
-          className="px-3 py-[6px] bg-purple-700 text-white rounded-sm hover:bg-purple-900 active:bg-purple-900 transition-all duration-300 ease-in-out font-medium "
-        >
-          Register Member
-        </button>
-      </div>
+      )}
+
       <section className="w-full py-1 px-3 relative">
-        <table className="w-full ">
-          <thead>
-            <tr className="w-full border-[1px] border-purple-200 bg-purple-100 rounded-sm">
-              <th className="font-medium text-left pl-4 py-2 text-[#636363]">
-                Card No.
-              </th>
-              <th className="font-medium text-left pl-4 py-2 text-[#636363]">
-                Member Name
-              </th>
-              <th className="font-medium text-left pl-4 py-2 text-[#636363]">
-                Contact
-              </th>
-              <th className="font-medium text-left pl-4 py-2 text-[#636363]">
-                Enrolled Date
-              </th>
-              <th className="font-medium text-left pl-4 py-2 text-[#636363]">
-                Expiration Date
-              </th>
-              <th className="font-medium text-left pl-6 py-2 text-[#636363]">
-                Actions
-              </th>
-            </tr>
-          </thead>
-          {selected === "allMember" ? (
-            allMemberData && allMemberData.length > 0 ? (
+        {query.trim() === "" ? (
+          <table className="w-full">
+            <thead>
+              <tr className="w-full border-[1px] border-purple-200 bg-purple-100 rounded-sm">
+                <th className="font-medium text-left pl-4 py-2 text-[#636363]">
+                  Card No.
+                </th>
+                <th className="font-medium text-left pl-4 py-2 text-[#636363]">
+                  Member Name
+                </th>
+                <th className="font-medium text-left pl-4 py-2 text-[#636363]">
+                  Contact
+                </th>
+                <th className="font-medium text-left pl-4 py-2 text-[#636363]">
+                  Enrolled Date
+                </th>
+                <th className="font-medium text-left pl-4 py-2 text-[#636363]">
+                  Expiration Date
+                </th>
+                <th className="font-medium text-left pl-6 py-2 text-[#636363]">
+                  Actions
+                </th>
+              </tr>
+            </thead>
+            {selected === "allMember" ? (
+              allMemberData && allMemberData.length > 0 ? (
+                <tbody>
+                  {allMemberData.map((member, index) => (
+                    <tr
+                      key={index}
+                      className={`border-[1px] border-purple-200 ${
+                        new Date(member.expiryDate) <= new Date(todayDate)
+                          ? calculateExpiredDay(todayDate, member.expiryDate) <=
+                            5
+                            ? "bg-red-50"
+                            : calculateExpiredDay(
+                                todayDate,
+                                member.expiryDate
+                              ) <= 10
+                            ? "bg-red-100"
+                            : "bg-red-200"
+                          : ""
+                      }`}
+                    >
+                      <td className="py-3 px-5 font-medium text-black">
+                        {member.cardNo}
+                      </td>
+                      <td className="py-3 px-5 font-normal text-[#636363]">
+                        {member.memberName}
+                      </td>
+                      <td className="py-3 px-5 font-normal text-[#636363]">
+                        {member.contact}
+                      </td>
+
+                      <td className="py-3 px-5 font-normal text-[#636363]">
+                        {member.enrolledDate}
+                      </td>
+
+                      <td className="py-3 px-5 font-normal text-[#636363]">
+                        {member.expiryDate}
+                      </td>
+
+                      <td className="py-3 px-5 w-[200px]">
+                        <div className="w-full flex gap-8">
+                          <LiaEditSolid
+                            onClick={(e) => handleEditModel(e, member)}
+                            className="w-6 h-6 text-[#636363] hover:text-green-500 cursor-pointer"
+                          />
+                          <GiTakeMyMoney
+                            onClick={(e) => handleRenewModel(e, member)}
+                            className="w-6 h-6 text-[#636363] hover:text-[#ee0979] cursor-pointer"
+                          />
+
+                          <MdDeleteOutline
+                            onClick={() => {
+                              setDeleteModel(true);
+                              setItemID(member.id);
+                            }}
+                            className="w-6 h-6 text-[#636363] hover:text-red-500 cursor-pointer"
+                          />
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              ) : (
+                <div className="w-full py-2 text-center mt-10 absolute">
+                  No data found !
+                </div>
+              )
+            ) : selected === "paid" ? (
+              paginatedPaidMembers && paginatedPaidMembers.length > 0 ? (
+                <tbody>
+                  {paginatedPaidMembers.map((member, index) => (
+                    <tr key={index} className="border-[1px] border-purple-200">
+                      <td className="py-3 px-5 font-medium text-black">
+                        {member.cardNo}
+                      </td>
+                      <td className="py-3 px-5 font-normal text-[#636363]">
+                        {member.memberName}
+                      </td>
+                      <td className="py-3 px-5 font-normal text-[#636363]">
+                        {member.contact}
+                      </td>
+
+                      <td className="py-3 px-5 font-normal text-[#636363]">
+                        {member.enrolledDate}
+                      </td>
+
+                      <td className="py-3 px-5 font-normal text-[#636363]">
+                        {member.expiryDate}
+                      </td>
+
+                      <td className="py-3 px-5 w-[200px]">
+                        <div className="w-full flex gap-8">
+                          <LiaEditSolid
+                            onClick={(e) => handleEditModel(e, member)}
+                            className="w-6 h-6 text-[#636363] hover:text-green-500 cursor-pointer"
+                          />
+                          <GiTakeMyMoney
+                            onClick={(e) => handleRenewModel(e, member)}
+                            className="w-6 h-6 text-[#636363] hover:text-[#ee0979] cursor-pointer"
+                          />
+
+                          <MdDeleteOutline
+                            onClick={() => {
+                              setItemID(member.id);
+                              setDeleteModel(true);
+                            }}
+                            className="w-6 h-6 text-[#636363] hover:text-red-500 cursor-pointer"
+                          />
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              ) : (
+                <div className="w-full py-2 text-center mt-10 absolute">
+                  No data found !
+                </div>
+              )
+            ) : paginatedUnpaidMembers && paginatedUnpaidMembers.length > 0 ? (
               <tbody>
-                {allMemberData.map((member, index) => (
+                {paginatedUnpaidMembers.map((member, index) => (
+                  <tr key={index} className="border-[1px] border-purple-200">
+                    <td className="py-3 px-5 font-medium text-black">
+                      {member.cardNo}
+                    </td>
+                    <td className="py-3 px-5 font-normal text-[#636363]">
+                      {member.memberName}
+                    </td>
+                    <td className="py-3 px-5 font-normal text-[#636363]">
+                      {member.contact}
+                    </td>
+
+                    <td className="py-3 px-5 font-normal text-[#636363]">
+                      {member.enrolledDate}
+                    </td>
+
+                    <td className="py-3 px-5 font-normal text-[#636363]">
+                      {member.expiryDate}
+                    </td>
+
+                    <td className="py-3 px-5 w-[200px]">
+                      <div className="w-full flex gap-8">
+                        <LiaEditSolid
+                          onClick={(e) => handleEditModel(e, member)}
+                          className="w-6 h-6 text-[#636363] hover:text-green-500 cursor-pointer"
+                        />
+                        <GiTakeMyMoney
+                          onClick={(e) => handleRenewModel(e, member)}
+                          className="w-6 h-6 text-[#636363] hover:text-[#ee0979] cursor-pointer"
+                        />
+
+                        <MdDeleteOutline
+                          onClick={() => {
+                            setItemID(member.id);
+                            setDeleteModel(true);
+                          }}
+                          className="w-6 h-6 text-[#636363] hover:text-red-500 cursor-pointer"
+                        />
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            ) : (
+              <div className="w-[90%] py-2 text-center mt-10 absolute">
+                No data found !
+              </div>
+            )}
+          </table>
+        ) : (
+          <table className="w-full">
+            <thead>
+              <tr className="w-full border-[1px] border-purple-200 bg-purple-100 rounded-sm">
+                <th className="font-medium text-left pl-4 py-2 text-[#636363]">
+                  Card No.
+                </th>
+                <th className="font-medium text-left pl-4 py-2 text-[#636363]">
+                  Member Name
+                </th>
+                <th className="font-medium text-left pl-4 py-2 text-[#636363]">
+                  Contact
+                </th>
+                <th className="font-medium text-left pl-4 py-2 text-[#636363]">
+                  Enrolled Date
+                </th>
+                <th className="font-medium text-left pl-4 py-2 text-[#636363]">
+                  Expiration Date
+                </th>
+                <th className="font-medium text-left pl-6 py-2 text-[#636363]">
+                  Actions
+                </th>
+              </tr>
+            </thead>
+            {queriedMember && queriedMember.length > 0 ? (
+              <tbody>
+                {queriedMember.map((member, index) => (
                   <tr
                     key={index}
                     className={`border-[1px] border-purple-200 ${
@@ -435,109 +649,9 @@ const MemberRegister = () => {
               <div className="w-full py-2 text-center mt-10 absolute">
                 No data found !
               </div>
-            )
-          ) : selected === "paid" ? (
-            paginatedPaidMembers && paginatedPaidMembers.length > 0 ? (
-              <tbody>
-                {paginatedPaidMembers.map((member, index) => (
-                  <tr key={index} className="border-[1px] border-purple-200">
-                    <td className="py-3 px-5 font-medium text-black">
-                      {member.cardNo}
-                    </td>
-                    <td className="py-3 px-5 font-normal text-[#636363]">
-                      {member.memberName}
-                    </td>
-                    <td className="py-3 px-5 font-normal text-[#636363]">
-                      {member.contact}
-                    </td>
-
-                    <td className="py-3 px-5 font-normal text-[#636363]">
-                      {member.enrolledDate}
-                    </td>
-
-                    <td className="py-3 px-5 font-normal text-[#636363]">
-                      {member.expiryDate}
-                    </td>
-
-                    <td className="py-3 px-5 w-[200px]">
-                      <div className="w-full flex gap-8">
-                        <LiaEditSolid
-                          onClick={(e) => handleEditModel(e, member)}
-                          className="w-6 h-6 text-[#636363] hover:text-green-500 cursor-pointer"
-                        />
-                        <GiTakeMyMoney
-                          onClick={(e) => handleRenewModel(e, member)}
-                          className="w-6 h-6 text-[#636363] hover:text-[#ee0979] cursor-pointer"
-                        />
-
-                        <MdDeleteOutline
-                          onClick={() => {
-                            setItemID(member.id);
-                            setDeleteModel(true);
-                          }}
-                          className="w-6 h-6 text-[#636363] hover:text-red-500 cursor-pointer"
-                        />
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            ) : (
-              <div className="w-full py-2 text-center mt-10 absolute">
-                No data found !
-              </div>
-            )
-          ) : paginatedUnpaidMembers && paginatedUnpaidMembers.length > 0 ? (
-            <tbody>
-              {paginatedUnpaidMembers.map((member, index) => (
-                <tr key={index} className="border-[1px] border-purple-200">
-                  <td className="py-3 px-5 font-medium text-black">
-                    {member.cardNo}
-                  </td>
-                  <td className="py-3 px-5 font-normal text-[#636363]">
-                    {member.memberName}
-                  </td>
-                  <td className="py-3 px-5 font-normal text-[#636363]">
-                    {member.contact}
-                  </td>
-
-                  <td className="py-3 px-5 font-normal text-[#636363]">
-                    {member.enrolledDate}
-                  </td>
-
-                  <td className="py-3 px-5 font-normal text-[#636363]">
-                    {member.expiryDate}
-                  </td>
-
-                  <td className="py-3 px-5 w-[200px]">
-                    <div className="w-full flex gap-8">
-                      <LiaEditSolid
-                        onClick={(e) => handleEditModel(e, member)}
-                        className="w-6 h-6 text-[#636363] hover:text-green-500 cursor-pointer"
-                      />
-                      <GiTakeMyMoney
-                        onClick={(e) => handleRenewModel(e, member)}
-                        className="w-6 h-6 text-[#636363] hover:text-[#ee0979] cursor-pointer"
-                      />
-
-                      <MdDeleteOutline
-                        onClick={() => {
-                          setItemID(member.id);
-                          setDeleteModel(true);
-                        }}
-                        className="w-6 h-6 text-[#636363] hover:text-red-500 cursor-pointer"
-                      />
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          ) : (
-            <div className="w-[90%] py-2 text-center mt-10 absolute">
-              No data found !
-            </div>
-          )}
-        </table>
+            )}
+          </table>
+        )}
       </section>
 
       {allPaidandUnpaidMember.length > 7 && selected === "allMember" ? (
