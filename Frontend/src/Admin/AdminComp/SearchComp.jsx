@@ -2,10 +2,9 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import { MdOutlineKeyboardArrowDown } from "react-icons/md";
 import { CiSearch } from "react-icons/ci";
 import { AllContext } from "../../Context/Context";
-import logo from "../../assets/dfc.png";
 
 const SearchComp = () => {
-  const [searchActive, setsearchActive] = useState("Member");
+  //   const [searchActive, setsearchActive] = useState("Member");
   const [isActive, setIsActive] = useState(false);
   const { active, setActive } = useContext(AllContext);
   const divRef = useRef(null);
@@ -16,7 +15,6 @@ const SearchComp = () => {
   const [isDisabled, setIsDisabled] = useState(false);
 
   const handleClick = (e, data) => {
-    setsearchActive(data);
     setActive(data);
     localStorage.setItem("active", data);
     setIsActive(false);

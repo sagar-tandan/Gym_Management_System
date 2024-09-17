@@ -195,12 +195,13 @@ const AdminPage = () => {
       </aside>
 
       <section className="w-full min-h-screen ml-[230px] flex flex-col gap-3 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-white">
-        <div className="w-full py-2 flex items-center">
-          {/* <img className="w-[100px] h-[24px] object-cover" src="" alt="" />
-          <h1 className="w-full text-center font-semibold text-xl mt-1">
-            Dharan Fitness Club
-          </h1> */}
+        <div className="w-full py-2 flex items-center justify-between pr-3">
           <SearchComp />
+          <img
+            className="w-12 h-12 bg-purple-600 rounded-full object-cover"
+            src={logo}
+            alt=""
+          />
         </div>
 
         {active === "Dashboard" ? (
