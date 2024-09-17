@@ -76,7 +76,7 @@ const MemberRegister = () => {
 
   useEffect(() => {
     const activee = localStorage.getItem("active");
-    if (activee === "Member") {
+    if (activee === "Member" && query.trim() != "") {
       fetchFilteredMember();
     }
   }, [query]);
@@ -1061,3 +1061,5 @@ const MemberRegister = () => {
 };
 
 export default MemberRegister;
+
+// SORRY THE CODE IS LITTLE MESSET HERE

@@ -34,8 +34,12 @@ const AdminPlan = () => {
   }, []);
 
   useEffect(() => {
+    getAllPlan();
+  }, [currentPage]);
+
+  useEffect(() => {
     const activee = localStorage.getItem("active");
-    if (activee === "Plan") {
+    if (activee === "Plan" && query.trim() != "") {
       fetchQueriedPlan();
     }
   }, [query]);
@@ -54,7 +58,7 @@ const AdminPlan = () => {
   const getAllPlan = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:5002/api/plan?pageNumber=${currentPage}&pageSize=8`
+        `http://localhost:5002/api/plan/paginated?pageNumber=${currentPage}&pageSize=8`
       );
       console.table(response.data);
       setPlanData(response.data.members);
@@ -265,7 +269,7 @@ const AdminPlan = () => {
         </table>
       </section>
 
-      {PlanData.length > 7 && query.trim() === "" && (
+      {query.trim() === "" && (
         <ResponsivePagination
           current={currentPage}
           total={totalPages}
