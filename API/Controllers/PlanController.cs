@@ -23,7 +23,7 @@ namespace API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> getAllPlan()
+        public async Task<IActionResult> getAllPlans()
         {
             // We use Include to eagerly load the MemberRegistrations related to each Plan
             var allData = await _context.Plans
@@ -37,6 +37,41 @@ namespace API.Controllers
             }
 
             return Ok(allData);
+        }
+
+        [HttpGet("paginated")]
+        public async Task<IActionResult> getAllPaginatedPlan(int pageNumber = 1, int pageSize = 8)
+        {
+            var totalRecords = await _context.Plans.CountAsync();
+
+            var allData = await _context.Plans
+                                        .OrderBy(p => p.Name)
+                                        // .Include(p => p.MemberRegistrations)
+                                        .Skip((pageNumber - 1) * pageSize)
+                                        .Take(pageSize)
+                                        .Select(plan => new
+                                        {
+                                            Name = plan.Name,
+                                            DurationInMonths = plan.DurationInMonths,
+                                            Cost = plan.Cost,
+                                            MemberRegistrationCount = plan.MemberRegistrations.Count
+                                        })
+                                        .ToListAsync();
+
+            if (allData == null)
+            {
+                return NotFound();
+            }
+
+            var paginationResult = new
+            {
+                TotalRecords = totalRecords,
+                PageNumber = pageNumber,
+                PageSize = pageSize,
+                Members = allData
+            };
+
+            return Ok(paginationResult);
         }
 
         [HttpPost]
