@@ -13,6 +13,7 @@ const SearchComp = () => {
     localStorage.getItem("active")
   );
   const [isDisabled, setIsDisabled] = useState(false);
+  const { query, setQuery } = useContext(AllContext);
 
   const handleClick = (e, data) => {
     setActive(data);
@@ -52,6 +53,10 @@ const SearchComp = () => {
     };
   }, [divRef]);
 
+  useEffect(() => {
+    console.log(query);
+  }, [query]);
+
   return (
     <div className="w-full flex justify-between gap-2">
       {/* SEARCH  */}
@@ -75,6 +80,9 @@ const SearchComp = () => {
             type="text"
             placeholder="Search members, plans, equipments..."
             ref={input}
+            name="query"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
           />
         </div>
         <div

@@ -114,7 +114,6 @@ namespace API.Controllers
 
             return Ok(paginationResult);
 
-            return Ok(searchedMembers);
         }
     }
 }

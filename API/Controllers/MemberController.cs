@@ -197,40 +197,5 @@ namespace API.Controllers
 
         }
 
-        // [HttpGet("paid")]
-        // public async Task<IActionResult> GetPaidMember(int pageNumber = 1, int pageSize = 8)
-        // {
-        //     var today = DateTime.Now;
-
-        //     // Fetch all members asynchronously first
-        //     var allMembers = await _context.MemberRegistrations.ToListAsync();
-
-        //     // Filter members whose expiry date is greater than today
-        //     var paidMembers = allMembers
-        //         .Where(m => DateTime.TryParse(m.ExpiryDate, out var expiryDate) && expiryDate > today)
-        //         .ToList();
-
-        //     // Apply pagination
-        //     var paginatedMembers = paidMembers
-        //         .Skip((pageNumber - 1) * pageSize)
-        //         .Take(pageSize)
-        //         .ToList();
-
-        //     // Return paginated results
-        //     return Ok(new
-        //     {
-        //         PageNumber = pageNumber,
-        //         PageSize = pageSize,
-        //         TotalRecords = paidMembers.Count,
-        //         Data = paginatedMembers
-        //     });
-        // }
-
-
-
-
-
-
-
     }
 }
