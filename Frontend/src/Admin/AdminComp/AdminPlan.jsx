@@ -1,11 +1,14 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { LiaEditSolid } from "react-icons/lia";
 import { MdDeleteOutline } from "react-icons/md";
 import { RxCross2 } from "react-icons/rx";
+import { AllContext } from "../../Context/Context";
+import "../../Pagination.css";
+import ResponsivePagination from "react-responsive-pagination";
 
 const AdminPlan = () => {
-  const [PlanData, setPlanData] = useState();
+  const [PlanData, setPlanData] = useState([]);
 
   const [addPlan, setPlan] = useState({
     name: "",
@@ -19,15 +22,43 @@ const AdminPlan = () => {
   const [itemID, setItemID] = useState();
   const [loading, setLoading] = useState(false);
 
+  // QUERY
+  const { query, setQuery } = useContext(AllContext);
+  const [queriedPlan, setQueriedPlan] = useState([]);
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPage] = useState();
+
   useEffect(() => {
     getAllPlan();
   }, []);
 
+  useEffect(() => {
+    const activee = localStorage.getItem("active");
+    if (activee === "Plan") {
+      fetchQueriedPlan();
+    }
+  }, [query]);
+
+  const fetchQueriedPlan = async () => {
+    try {
+      const response = await axios.get(
+        `http://localhost:5002/api/dashboard/searchPlan?searchQuery=${query}`
+      );
+      setQueriedPlan(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const getAllPlan = async () => {
     try {
-      const response = await axios.get("http://localhost:5002/api/plan");
-      setPlanData(response.data);
+      const response = await axios.get(
+        `http://localhost:5002/api/plan?pageNumber=${currentPage}&pageSize=8`
+      );
       console.table(response.data);
+      setPlanData(response.data.members);
+      setTotalPage(Math.ceil(response.data.totalRecords / 8));
     } catch (error) {
       console.log(error);
     }
@@ -122,7 +153,7 @@ const AdminPlan = () => {
           Add Plan
         </button>
       </div>
-      <section className="w-full py-1 px-3">
+      <section className="w-full py-1 px-3 relative">
         <table className="w-full">
           <thead>
             <tr className="w-full border-[1px] border-purple-200 bg-purple-100 rounded-sm">
@@ -146,50 +177,102 @@ const AdminPlan = () => {
               </th>
             </tr>
           </thead>
+          {query.trim() === "" ? (
+            <tbody>
+              {PlanData &&
+                PlanData.map((plan, index) => (
+                  <tr key={index} className="border-[1px] border-purple-200">
+                    <td className="py-3 px-5 font-medium text-black">
+                      {index}
+                    </td>
+                    <td className="py-3 px-5 font-medium text-black">
+                      {plan.name}
+                    </td>
+                    <td className="py-3 px-5 font-normal text-[#636363]">
+                      {plan.durationInMonths} months
+                    </td>
 
-          <tbody>
-            {PlanData &&
-              PlanData.map((plan, index) => (
-                <tr key={index} className="border-[1px] border-purple-200">
-                  <td className="py-3 px-5 font-medium text-black">{index}</td>
-                  <td className="py-3 px-5 font-medium text-black">
-                    {plan.name}
-                  </td>
-                  <td className="py-3 px-5 font-normal text-[#636363]">
-                    {plan.durationInMonths} months
-                  </td>
+                    <td className="py-3 px-5 font-normal text-[#636363]">
+                      Rs. {plan.cost}
+                    </td>
+                    <td className="py-3 px-5 font-medium text-black">
+                      {plan.memberRegistrationCount} members
+                    </td>
 
-                  <td className="py-3 px-5 font-normal text-[#636363]">
-                    Rs. {plan.cost}
-                  </td>
-                  <td className="py-3 px-5 font-medium text-black">
-                    {
-                      (plan.memberRegistrations && plan.memberRegistrations)
-                        .length
-                    }{" "}
-                    members
-                  </td>
+                    <td className="py-3 px-5 w-[200px]">
+                      <div className="w-full flex gap-8">
+                        <LiaEditSolid
+                          onClick={(e) => handleEditModel(e, plan)}
+                          className="w-6 h-6 text-[#636363] hover:text-green-500 cursor-pointer"
+                        />
+                        <MdDeleteOutline
+                          onClick={() => {
+                            setItemID(plan.planId);
+                            setDeleteModel(true);
+                          }}
+                          className="w-6 h-6 text-[#636363] hover:text-red-500 cursor-pointer"
+                        />
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+            </tbody>
+          ) : queriedPlan.length > 0 ? (
+            <tbody>
+              {queriedPlan &&
+                queriedPlan.map((plan, index) => (
+                  <tr key={index} className="border-[1px] border-purple-200">
+                    <td className="py-3 px-5 font-medium text-black">
+                      {index}
+                    </td>
+                    <td className="py-3 px-5 font-medium text-black">
+                      {plan.name}
+                    </td>
+                    <td className="py-3 px-5 font-normal text-[#636363]">
+                      {plan.durationInMonths} months
+                    </td>
 
-                  <td className="py-3 px-5 w-[200px]">
-                    <div className="w-full flex gap-8">
-                      <LiaEditSolid
-                        onClick={(e) => handleEditModel(e, plan)}
-                        className="w-6 h-6 text-[#636363] hover:text-green-500 cursor-pointer"
-                      />
-                      <MdDeleteOutline
-                        onClick={() => {
-                          setItemID(plan.planId);
-                          setDeleteModel(true);
-                        }}
-                        className="w-6 h-6 text-[#636363] hover:text-red-500 cursor-pointer"
-                      />
-                    </div>
-                  </td>
-                </tr>
-              ))}
-          </tbody>
+                    <td className="py-3 px-5 font-normal text-[#636363]">
+                      Rs. {plan.cost}
+                    </td>
+                    <td className="py-3 px-5 font-medium text-black">
+                      {plan.memberRegistrationCount} members
+                    </td>
+
+                    <td className="py-3 px-5 w-[200px]">
+                      <div className="w-full flex gap-8">
+                        <LiaEditSolid
+                          onClick={(e) => handleEditModel(e, plan)}
+                          className="w-6 h-6 text-[#636363] hover:text-green-500 cursor-pointer"
+                        />
+                        <MdDeleteOutline
+                          onClick={() => {
+                            setItemID(plan.planId);
+                            setDeleteModel(true);
+                          }}
+                          className="w-6 h-6 text-[#636363] hover:text-red-500 cursor-pointer"
+                        />
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+            </tbody>
+          ) : (
+            <div className="w-full py-2 text-center mt-5 absolute">
+              No data found !
+            </div>
+          )}
         </table>
       </section>
+
+      {PlanData.length > 7 && query.trim() === "" && (
+        <ResponsivePagination
+          current={currentPage}
+          total={totalPages}
+          onPageChange={setCurrentPage}
+          className="pagination"
+        />
+      )}
 
       {openModel && (
         <div className="w-full top-0 left-0 right-0 bottom-0 backdrop-blur-sm flex justify-center items-center fixed overflow-y-auto">
@@ -268,7 +351,6 @@ const AdminPlan = () => {
           </div>
         </div>
       )}
-
       {openDeleteModel && (
         <div className="w-full top-0 left-0 right-0 bottom-0 backdrop-blur-[6px] flex justify-center items-center fixed overflow-y-auto">
           <div className="w-[450px] bg-white p-6 rounded-lg border-[1px]">

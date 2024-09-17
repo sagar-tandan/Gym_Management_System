@@ -85,9 +85,26 @@ namespace API.Controllers
 
             var searchedMembers = await _context.MemberRegistrations.Where(member => member.MemberName.ToLower().Contains(searchQuery.ToLower()))
                                                                     .ToListAsync();
-
-
             return Ok(searchedMembers);
+
+        }
+
+        [HttpGet("searchPlan")]
+        public async Task<IActionResult> GetSearchedPlan(string searchQuery)
+        {
+
+            var searchedPlan = await _context.Plans
+    .Where(plan => plan.Name.ToLower().Contains(searchQuery.ToLower()))
+    .Select(plan => new
+    {
+        Name = plan.Name,
+        DurationInMonths = plan.DurationInMonths,
+        Cost = plan.Cost,
+        MemberRegistrationCount = plan.MemberRegistrations.Count
+    })
+    .ToListAsync();
+
+            return Ok(searchedPlan);
 
         }
     }

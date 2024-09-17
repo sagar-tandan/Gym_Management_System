@@ -63,11 +63,15 @@ const MemberRegister = () => {
   }, [currentPage]);
 
   const fetchFilteredMember = async () => {
-    const response = await axios.get(
-      `http://localhost:5002/api/dashboard/searchMember?searchQuery=${query}`
-    );
-    // console.log(response.data);
-    setQueriedMember(response.data);
+    try {
+      const response = await axios.get(
+        `http://localhost:5002/api/dashboard/searchMember?searchQuery=${query}`
+      );
+      // console.log(response.data);
+      setQueriedMember(response.data);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   useEffect(() => {
@@ -140,7 +144,7 @@ const MemberRegister = () => {
       const response = await axios.get(
         `http://localhost:5002/api/member?pageNumber=${currentPage}&pageSize=8`
       );
-      console.table(response.data);
+      // console.table(response.data);
       setAllMemberData(response.data.members);
       setMemberInfo(response.data);
       setTotalPage(Math.ceil(response.data.totalRecords / 8));
