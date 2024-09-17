@@ -62,16 +62,17 @@ const MemberRegister = () => {
     fetchMemberData();
   }, [currentPage]);
 
+  const fetchFilteredMember = async () => {
+    const response = await axios.get(
+      `http://localhost:5002/api/dashboard/searchMember?searchQuery=${query}`
+    );
+    // console.log(response.data);
+    setQueriedMember(response.data);
+  };
+
   useEffect(() => {
     const activee = localStorage.getItem("active");
     if (activee === "Member") {
-      const fetchFilteredMember = async () => {
-        const response = await axios.get(
-          `http://localhost:5002/api/dashboard/searchMember?searchQuery=${query}&pageNumber=1&pageSize=8`
-        );
-        console.log(response.data);
-        setQueriedMember(response.data.members);
-      };
       fetchFilteredMember();
     }
   }, [query]);
@@ -256,6 +257,9 @@ const MemberRegister = () => {
       console.log(response);
       fetchMemberData();
       fetchAllMemberData();
+      if (query.trim() != "") {
+        fetchFilteredMember();
+      }
     } catch (error) {
       console.log(error);
     }
@@ -303,6 +307,9 @@ const MemberRegister = () => {
       }
       fetchMemberData();
       fetchAllMemberData(); // Refresh data after adding/updating
+      if (query.trim() != "") {
+        fetchFilteredMember();
+      }
     } catch (error) {
       console.log(error);
     }
@@ -326,7 +333,11 @@ const MemberRegister = () => {
         setDeleteModel(false);
       }, 100);
       fetchMemberData();
-      fetchAllMemberData(0); // Refresh data after deleting
+      fetchAllMemberData(); // Refresh data after deleting
+
+      if (query.trim() != "") {
+        fetchFilteredMember();
+      }
     } catch (error) {
       console.log(error);
     }
@@ -654,30 +665,33 @@ const MemberRegister = () => {
         )}
       </section>
 
-      {allPaidandUnpaidMember.length > 7 && selected === "allMember" ? (
-        <ResponsivePagination
-          current={currentPage}
-          total={totalPages}
-          onPageChange={setCurrentPage}
-          className="pagination"
-        />
-      ) : allPaidMember.length > 7 && selected === "paid" ? (
-        <ResponsivePagination
-          current={currentPagePaid}
-          total={totalPaidPage}
-          onPageChange={setCurrentPagePaid}
-          className="pagination"
-        />
-      ) : (
-        allUnPaidMember.length > 7 && (
-          <ResponsivePagination
-            current={currentPageUnpaid}
-            total={totalUnPaidPage}
-            onPageChange={setCurrentUnPagePaid}
-            className="pagination"
-          />
-        )
-      )}
+      {allPaidandUnpaidMember.length > 7 && selected === "allMember"
+        ? query.trim() === "" && (
+            <ResponsivePagination
+              current={currentPage}
+              total={totalPages}
+              onPageChange={setCurrentPage}
+              className="pagination"
+            />
+          )
+        : allPaidMember.length > 7 && selected === "paid"
+        ? query.trim() === "" && (
+            <ResponsivePagination
+              current={currentPagePaid}
+              total={totalPaidPage}
+              onPageChange={setCurrentPagePaid}
+              className="pagination"
+            />
+          )
+        : allUnPaidMember.length > 7 &&
+          query.trim() === "" && (
+            <ResponsivePagination
+              current={currentPageUnpaid}
+              total={totalUnPaidPage}
+              onPageChange={setCurrentUnPagePaid}
+              className="pagination"
+            />
+          )}
 
       {/* MODEL */}
 

@@ -80,39 +80,14 @@ namespace API.Controllers
         }
 
         [HttpGet("searchMember")]
-        public async Task<IActionResult> GetSearchedMember(string searchQuery, int pageNumber = 1, int pageSize = 8)
+        public async Task<IActionResult> GetSearchedMember(string searchQuery)
         {
 
             var searchedMembers = await _context.MemberRegistrations.Where(member => member.MemberName.ToLower().Contains(searchQuery.ToLower()))
-                                                                    .Skip((pageNumber - 1) * pageSize)
-                                                                    .Take(pageSize).ToListAsync();
+                                                                    .ToListAsync();
 
-            var totalRecords = searchedMembers.Count();
-            var sendMember = searchedMembers.Select(member => new MRegisterDTO
-            {
 
-                Id = member.Id,
-                CardNo = member.CardNo,
-                MemberName = member.MemberName,
-                Contact = member.Contact,
-                EnrolledDate = member.EnrolledDate,
-                Price = member.Price,
-                ExpiryDate = member.ExpiryDate,
-                Email = member.Email,
-                PlanId = member.PlanId,
-                PlanName = member.PlanName
-            });
-
-            // Return the members along with pagination metadata
-            var paginationResult = new
-            {
-                TotalRecords = totalRecords,
-                PageNumber = pageNumber,
-                PageSize = pageSize,
-                Members = sendMember
-            };
-
-            return Ok(paginationResult);
+            return Ok(searchedMembers);
 
         }
     }
