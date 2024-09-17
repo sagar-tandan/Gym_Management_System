@@ -5,6 +5,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import ProtectedRoute from "./ProtectedRoute";
 import { AllContext } from "./Context/Context";
 import AdminDashboard from "./Admin/AdminComp/AdminDashboard";
+import SearchComp from "./Admin/AdminComp/SearchComp";
 
 function App() {
   const { token, setToken } = useContext(AllContext);
@@ -32,7 +33,7 @@ function App() {
     <>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<AdminDashboard />} />
+          <Route path="/" element={<SearchComp />} />
           <Route
             path="/adminlogin"
             element={
