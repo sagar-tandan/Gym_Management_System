@@ -23,9 +23,14 @@ namespace API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll(int pageNumber = 1, int pageSize = 8)
         {
-            var allData = await _context.Inventories.ToListAsync();
+            var totalRecords = await _context.Inventories.CountAsync();
+
+            var allData = await _context.Inventories
+                                        .Skip((pageNumber - 1) * pageSize)
+                                        .Take(pageSize)
+                                        .ToListAsync();
             if (allData == null)
             {
                 return NotFound();
@@ -41,7 +46,15 @@ namespace API.Controllers
                 Price = data.Price
             });
 
-            return Ok(allDataDto);
+            var paginationResult = new
+            {
+                TotalRecords = totalRecords,
+                PageNumber = pageNumber,
+                PageSize = pageSize,
+                inventory = allDataDto
+            };
+
+            return Ok(paginationResult);
         }
 
         [HttpGet("{id}")]

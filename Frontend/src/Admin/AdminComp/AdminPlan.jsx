@@ -142,6 +142,7 @@ const AdminPlan = () => {
         setDeleteModel(false);
       }, 100);
       getAllPlan(); // Refresh data after deleting
+      fetchQueriedPlan();
     } catch (error) {
       console.log(error);
     }

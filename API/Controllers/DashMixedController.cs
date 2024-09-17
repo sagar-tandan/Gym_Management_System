@@ -89,6 +89,17 @@ namespace API.Controllers
 
         }
 
+
+        [HttpGet("serachInventory")]
+        public async Task<IActionResult> GetSearchedEquip(string searchQuery)
+        {
+
+            var searchedEquip = await _context.Inventories.Where(equi => equi.ItemName.ToLower().Contains(searchQuery.ToLower()))
+                                                                .ToListAsync();
+            return Ok(searchedEquip);
+
+        }
+
         [HttpGet("searchPlan")]
         public async Task<IActionResult> GetSearchedPlan(string searchQuery)
         {

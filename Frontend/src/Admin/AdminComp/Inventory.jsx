@@ -1,8 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { LiaEditSolid } from "react-icons/lia";
 import { MdDeleteOutline } from "react-icons/md";
 import { RxCross2 } from "react-icons/rx";
 import axios from "axios";
+import { AllContext } from "../../Context/Context";
+
+import "../../Pagination.css";
+import ResponsivePagination from "react-responsive-pagination";
 
 const Inventory = () => {
   const [equipments, setEquipment] = useState({
@@ -19,6 +23,14 @@ const Inventory = () => {
   const [editable, setEditable] = useState(false);
   const [itemID, setItemID] = useState();
   const [loading, setLoading] = useState(false);
+
+  // QUERY
+
+  const { query, setQuery } = useContext(AllContext);
+  const [queriedInventory, setQueriedInventory] = useState([]);
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPage] = useState();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -118,11 +130,36 @@ const Inventory = () => {
     getAllData();
   }, []);
 
+  useEffect(() => {
+    getAllData();
+  }, [currentPage]);
+
+  useEffect(() => {
+    const activee = localStorage.getItem("active");
+    if (activee === "Inventory" && query.trim() != "") {
+      fetchQueriedEquip();
+    }
+  }, [query]);
+
+  const fetchQueriedEquip = async () => {
+    try {
+      const response = await axios.get(
+        `http://localhost:5002/api/dashboard/serachInventory?searchQuery=${query}`
+      );
+      setQueriedInventory(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   // GETTING ALL THE INVENTORY DATA
   const getAllData = async () => {
     try {
-      const response = await axios.get("http://localhost:5002/api/inventory");
-      setAllData(response.data);
+      const response = await axios.get(
+        `http://localhost:5002/api/inventory?pageNumber=${currentPage}&pageSize=8`
+      );
+      setAllData(response.data.inventory);
+      setTotalPage(Math.ceil(response.data.totalRecords / 8));
     } catch (error) {
       console.log(error);
     }
@@ -142,6 +179,7 @@ const Inventory = () => {
         setDeleteModel(false);
       }, 100);
       getAllData(); // Refresh data after deleting
+      fetchQueriedEquip();
     } catch (error) {
       console.log(error);
     }
@@ -157,7 +195,7 @@ const Inventory = () => {
           Add Equipment
         </button>
       </div>
-      <section className="w-full py-1 px-3">
+      <section className="w-full py-1 px-3 relative">
         <table className="w-full">
           <thead>
             <tr className="w-full border-[1px] border-purple-200 bg-purple-100 rounded-sm">
@@ -182,58 +220,130 @@ const Inventory = () => {
             </tr>
           </thead>
 
-          <tbody>
-            {allData &&
-              allData.map((equip, index) => (
-                <tr key={index} className="border-[1px] border-purple-200">
-                  <td className="py-3 px-5 font-medium text-black">{index}</td>
-                  <td className="py-3 px-5 font-normal text-[#636363]">
-                    {equip.itemName}
-                  </td>
-                  <td className="py-3 px-5 font-normal text-[#636363]">
-                    {equip.quantity}
-                  </td>
+          {query.trim() === "" ? (
+            <tbody>
+              {allData &&
+                allData.map((equip, index) => (
+                  <tr key={index} className="border-[1px] border-purple-200">
+                    <td className="py-3 px-5 font-medium text-black">
+                      {index}
+                    </td>
+                    <td className="py-3 px-5 font-normal text-[#636363]">
+                      {equip.itemName}
+                    </td>
+                    <td className="py-3 px-5 font-normal text-[#636363]">
+                      {equip.quantity}
+                    </td>
 
-                  <td className="py-3 px-5 font-normal text-[#636363]">
-                    {equip.price}
-                  </td>
+                    <td className="py-3 px-5 font-normal text-[#636363]">
+                      {equip.price}
+                    </td>
 
-                  <td
-                    className={`py-3 px-5 font-normal text-[#636363] flex justify-start`}
-                  >
-                    <span
-                      className={`${
-                        parseInt(equip.defect) / parseInt(equip.quantity) > 0.5
-                          ? "bg-red-200 text-red-500 px-2 py-[1px] rounded-xl"
-                          : "bg-green-200 text-green-500 px-3 py-[1px] rounded-xl"
-                      } flex items-center justify-center`}
+                    <td
+                      className={`py-3 px-5 font-normal text-[#636363] flex justify-start`}
                     >
-                      {parseInt(equip.defect) / parseInt(equip.quantity) > 0.5
-                        ? "Inactive"
-                        : "Active"}
-                    </span>
-                  </td>
+                      <span
+                        className={`${
+                          parseInt(equip.defect) / parseInt(equip.quantity) >
+                          0.5
+                            ? "bg-red-200 text-red-500 px-2 py-[1px] rounded-xl"
+                            : "bg-green-200 text-green-500 px-3 py-[1px] rounded-xl"
+                        } flex items-center justify-center`}
+                      >
+                        {parseInt(equip.defect) / parseInt(equip.quantity) > 0.5
+                          ? "Inactive"
+                          : "Active"}
+                      </span>
+                    </td>
 
-                  <td className="py-3 px-5 w-[200px]">
-                    <div className="w-full flex gap-8">
-                      <LiaEditSolid
-                        onClick={(e) => handleEditModel(e, equip)}
-                        className="w-6 h-6 text-[#636363] hover:text-green-500 cursor-pointer"
-                      />
-                      <MdDeleteOutline
-                        onClick={() => {
-                          setItemID(equip.id);
-                          setDeleteModel(true);
-                        }}
-                        className="w-6 h-6 text-[#636363] hover:text-red-500 cursor-pointer"
-                      />
-                    </div>
-                  </td>
-                </tr>
-              ))}
-          </tbody>
+                    <td className="py-3 px-5 w-[200px]">
+                      <div className="w-full flex gap-8">
+                        <LiaEditSolid
+                          onClick={(e) => handleEditModel(e, equip)}
+                          className="w-6 h-6 text-[#636363] hover:text-green-500 cursor-pointer"
+                        />
+                        <MdDeleteOutline
+                          onClick={() => {
+                            setItemID(equip.id);
+                            setDeleteModel(true);
+                          }}
+                          className="w-6 h-6 text-[#636363] hover:text-red-500 cursor-pointer"
+                        />
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+            </tbody>
+          ) : queriedInventory.length > 0 ? (
+            <tbody>
+              {queriedInventory &&
+                queriedInventory.map((equip, index) => (
+                  <tr key={index} className="border-[1px] border-purple-200">
+                    <td className="py-3 px-5 font-medium text-black">
+                      {index}
+                    </td>
+                    <td className="py-3 px-5 font-normal text-[#636363]">
+                      {equip.itemName}
+                    </td>
+                    <td className="py-3 px-5 font-normal text-[#636363]">
+                      {equip.quantity}
+                    </td>
+
+                    <td className="py-3 px-5 font-normal text-[#636363]">
+                      {equip.price}
+                    </td>
+
+                    <td
+                      className={`py-3 px-5 font-normal text-[#636363] flex justify-start`}
+                    >
+                      <span
+                        className={`${
+                          parseInt(equip.defect) / parseInt(equip.quantity) >
+                          0.5
+                            ? "bg-red-200 text-red-500 px-2 py-[1px] rounded-xl"
+                            : "bg-green-200 text-green-500 px-3 py-[1px] rounded-xl"
+                        } flex items-center justify-center`}
+                      >
+                        {parseInt(equip.defect) / parseInt(equip.quantity) > 0.5
+                          ? "Inactive"
+                          : "Active"}
+                      </span>
+                    </td>
+
+                    <td className="py-3 px-5 w-[200px]">
+                      <div className="w-full flex gap-8">
+                        <LiaEditSolid
+                          onClick={(e) => handleEditModel(e, equip)}
+                          className="w-6 h-6 text-[#636363] hover:text-green-500 cursor-pointer"
+                        />
+                        <MdDeleteOutline
+                          onClick={() => {
+                            setItemID(equip.id);
+                            setDeleteModel(true);
+                          }}
+                          className="w-6 h-6 text-[#636363] hover:text-red-500 cursor-pointer"
+                        />
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+            </tbody>
+          ) : (
+            <div className="w-full py-2 text-center mt-5 absolute">
+              No data found !
+            </div>
+          )}
         </table>
       </section>
+
+      {query.trim() === "" && (
+        <ResponsivePagination
+          current={currentPage}
+          total={totalPages}
+          onPageChange={setCurrentPage}
+          className="pagination"
+        />
+      )}
 
       {openModel && (
         <div className="w-full top-0 left-0 right-0 bottom-0 backdrop-blur-sm flex justify-center items-center fixed overflow-y-auto">
