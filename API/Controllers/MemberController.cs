@@ -6,6 +6,8 @@ using api.Data;
 using api.Models;
 using API.DTOs;
 using API.DTOs.Member;
+using API.Interface;
+using API.Service;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -18,10 +20,12 @@ namespace API.Controllers
     {
 
         private readonly ApplicationDbContext _context;
+        private readonly IEmailSender _emailSender;
 
-        public MemberController(ApplicationDbContext context)
+        public MemberController(ApplicationDbContext context, IEmailSender emailSender)
         {
             _context = context;
+            _emailSender = emailSender;
         }
 
         [HttpPost]
@@ -196,6 +200,25 @@ namespace API.Controllers
             return StatusCode(200, "Member deleted Successfully!");
 
         }
+
+        [HttpGet("email")]
+        public async Task<IActionResult> SendEmail()
+        {
+
+            var recipientEmail = "suraj.kabirath@iic.edu.np";
+            var subject = "Regarding Urget Meeting";
+            var messageBody = "<p>Dear Sir,</p>" +
+                       "<p>I hope this message finds you well. I need to pass on an important message to you. " +
+                       "Additionally, a meeting is scheduled to be held at the Rara Lab. " +
+                       "Please make sure to reach there as soon as possible. " +
+                       "Your prompt attention to this matter would be greatly appreciated.</p>" +
+                       "<p>Best regards.</p>" +
+                       "<p>USSKD</p>";
+
+            await _emailSender.SendEmailAsync(recipientEmail, subject, messageBody);
+            return Ok("Message Sent");
+        }
+
 
     }
 }

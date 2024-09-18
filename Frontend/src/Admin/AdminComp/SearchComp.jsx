@@ -58,9 +58,9 @@ const SearchComp = () => {
   }, [query]);
 
   return (
-    <div className="w-full flex justify-between gap-2">
+    <div className="w-[70%] flex justify-between gap-2">
       {/* SEARCH  */}
-      <div className="w-[70%] flex relative justify-between m-3 px-1 py-1 border-[1px] border-purple-300 rounded-3xl">
+      <div className="w-full flex relative justify-between m-3 px-1 py-1 border-[1px] border-purple-300 rounded-3xl">
         <div
           onClick={() => {
             setIsActive((prev) => !prev);

@@ -124,3 +124,6 @@ C:\Users\CSE\Desktop\Project-undefined\client\api\bin\Debug\net8.0\Microsoft.Ide
 C:\Users\CSE\Desktop\Project-undefined\client\api\bin\Debug\net8.0\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
 C:\Users\CSE\Desktop\Project-undefined\client\api\bin\Debug\net8.0\Microsoft.IdentityModel.Tokens.dll
 C:\Users\CSE\Desktop\Project-undefined\client\api\bin\Debug\net8.0\System.IdentityModel.Tokens.Jwt.dll
+C:\Users\CSE\Desktop\Project-undefined\client\api\bin\Debug\net8.0\BouncyCastle.Cryptography.dll
+C:\Users\CSE\Desktop\Project-undefined\client\api\bin\Debug\net8.0\MailKit.dll
+C:\Users\CSE\Desktop\Project-undefined\client\api\bin\Debug\net8.0\MimeKit.dll

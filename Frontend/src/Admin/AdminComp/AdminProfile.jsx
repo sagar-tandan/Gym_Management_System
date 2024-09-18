@@ -263,7 +263,7 @@ const AdminProfile = () => {
   };
 
   return (
-    <div className="w-full flex flex-col gap-2 mt-5 ">
+    <div className="w-full flex flex-col gap-2 mt-3">
       <div className="w-full flex flex-col gap-2 relative px-3 mb-20">
         <img
           className="w-full h-[200px] object-cover rounded-md"
