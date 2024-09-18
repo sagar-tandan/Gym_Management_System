@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using API.DTOs.AuthDTO;
+using API.Interface;
 using API.Models;
 using API.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -22,11 +23,14 @@ namespace API.Controllers
         private readonly TokenService _tokenService;
         private readonly SignInManager<AppUser> _signinManager;
 
-        public AuthController(UserManager<AppUser> userManager, TokenService tokenService, SignInManager<AppUser> signInManager)
+        private readonly IEmailSender _emailSender;
+
+        public AuthController(UserManager<AppUser> userManager, TokenService tokenService, SignInManager<AppUser> signInManager, IEmailSender emailSender)
         {
             _userManager = userManager;
             _tokenService = tokenService;
             _signinManager = signInManager;
+            _emailSender = emailSender;
 
         }
 
@@ -87,9 +91,20 @@ namespace API.Controllers
 
                 if (createdUser.Succeeded)
                 {
-                    // var roleResult = await _userManager.AddToRoleAsync(appUser, registerDTO.Role);
-                    // if (roleResult.Succeeded)
-                    // {
+
+                    var recipientEmail = registerDTO.Email;
+                    var subject = "Regarding Admin Registration";
+                    var messageBody = $"<p>Dear {registerDTO.Username} ,</p>" +
+                               "<p>Please find your login information for your New DFC System </p>" +
+                               $"<p>Email : {registerDTO.Email} </p>" +
+                               $"<p>Password: 12345 </p>" +
+                               "<p>Link for the System: http://localhost:5173/adminDashboard </p>" +
+                               "<p>You are recommended to change the password after login</p>" +
+                               "<p></p>" +
+                               "<p>...........................</p>" +
+                               "<p>System Generated Email</p>";
+                    await _emailSender.SendEmailAsync(recipientEmail, subject, messageBody);
+
                     return Ok(
                         new NewUserDTO
                         {
@@ -97,11 +112,7 @@ namespace API.Controllers
                             Email = appUser.Email,
                         }
                     );
-                    // }
-                    // else
-                    // {
-                    //     return StatusCode(500, roleResult.Errors);
-                    // }
+
                 }
                 else
                 {

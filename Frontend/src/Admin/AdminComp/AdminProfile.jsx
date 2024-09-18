@@ -532,7 +532,7 @@ const AdminProfile = () => {
                   name="email"
                   className="p-2 w-full rounded-sm bg-purple-100"
                   placeholder="Email"
-                  value={register.email}
+                  value={register.email.toLowerCase()}
                   onChange={newHandleChange}
                   required
                 />

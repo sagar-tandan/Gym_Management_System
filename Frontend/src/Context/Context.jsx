@@ -5,7 +5,7 @@ const AllContext = createContext();
 const ContextProvider = ({ children }) => {
   const [role, setRole] = useState();
   const [token, setToken] = useState();
-  const [active, setActive] = useState("dashboard");
+  const [active, setActive] = useState("Dashboard");
   const [dashboardDetail, setDashboardDetail] = useState();
   const [query, setQuery] = useState("");
 

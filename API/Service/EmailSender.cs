@@ -37,7 +37,7 @@ namespace API.Service
                 var enableSsl = bool.Parse(smtpSettings["EnableSsl"]);
 
                 var emailMessage = new MimeMessage();
-                emailMessage.From.Add(new MailboxAddress("US KKD", username));
+                emailMessage.From.Add(new MailboxAddress("Dharan Fitness Club", username));
                 emailMessage.To.Add(new MailboxAddress("", email));
                 emailMessage.Subject = subject;
 
@@ -46,7 +46,6 @@ namespace API.Service
 
                 using var client = new SmtpClient();
 
-                // Connect to Gmail's SMTP server
                 await client.ConnectAsync(host, port, enableSsl ? MailKit.Security.SecureSocketOptions.StartTls : MailKit.Security.SecureSocketOptions.None);
 
                 // Authenticate with your Gmail account
