@@ -1,6 +1,8 @@
 using System.Text;
 using api.Data;
+using API.Interface;
 using API.Models;
+using API.Service;
 using API.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -109,6 +111,7 @@ builder.Services.AddAuthentication(options =>
 });
 
 builder.Services.AddScoped<TokenService>();
+builder.Services.AddTransient<IEmailSender, EmailSender>();
 
 
 

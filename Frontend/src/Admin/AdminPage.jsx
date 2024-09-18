@@ -195,10 +195,10 @@ const AdminPage = () => {
       </aside>
 
       <section className="w-full min-h-screen ml-[230px] flex flex-col gap-3 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-white">
-        <div className="w-full py-2 flex items-center justify-between pr-3">
+        <div className="w-full py-2 flex items-center justify-between px-3">
           <SearchComp />
           <img
-            className="w-12 h-12 bg-purple-600 rounded-full object-cover"
+            className="w-10 h-10 bg-purple-600 rounded-full object-cover"
             src={logo}
             alt=""
           />

@@ -118,7 +118,7 @@ const AdminDashboard = () => {
   }, [topPlans]);
 
   return (
-    <div className="w-full flex flex-col text-gray-900 px-3 gap-2 mt-5">
+    <div className="w-full flex flex-col text-gray-900 px-3 gap-2 mt-2">
       {/* Summary Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 mb-4 font-nunito ">
         {/* Admin Profile Summary */}

@@ -348,9 +348,9 @@ const MemberRegister = () => {
   };
 
   return (
-    <div className="w-full flex flex-col gap-2 ">
+    <div className="w-full flex flex-col gap-2 mt-3">
       {query.trim() === "" && (
-        <div className="w-full flex justify-between px-3 items-center mt-5">
+        <div className="w-full flex justify-between px-3 items-center">
           <div className="flex gap-3">
             <span
               onClick={() => setSelected("allMember")}
