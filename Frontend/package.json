@@ -10,8 +10,13 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@radix-ui/react-checkbox": "^1.1.1",
+    "@radix-ui/react-slot": "^1.1.0",
+    "@tanstack/react-table": "^8.20.5",
     "axios": "^1.7.7",
     "chart.js": "^4.4.4",
+    "class-variance-authority": "^0.7.0",
+    "clsx": "^2.1.1",
     "date-fns": "^3.6.0",
     "react": "^18.3.1",
     "react-chartjs-2": "^5.2.0",
@@ -19,6 +24,7 @@
     "react-icons": "^5.3.0",
     "react-responsive-pagination": "^2.7.0",
     "react-router-dom": "^6.26.2",
+    "tailwind-merge": "^2.5.2",
     "tailwind-scrollbar": "^3.1.0"
   },
   "devDependencies": {
