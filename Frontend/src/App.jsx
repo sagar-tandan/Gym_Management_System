@@ -33,7 +33,7 @@ function App() {
     <>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<SearchComp />} />
+          {/* <Route path="/" element={<GymAttendanceSystem />} /> */}
           <Route
             path="/adminlogin"
             element={
