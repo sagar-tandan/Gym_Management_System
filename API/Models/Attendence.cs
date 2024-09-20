@@ -15,7 +15,7 @@ namespace API.Models
 
         public int CardNo { get; set; } // Card number of the member (not a foreign key, just for reference)
 
-        public DateTime Date { get; set; } // Date of attendance
+        public string?  Date { get; set; } // Date of attendance
         public string? Status { get; set; }
     }
 }
