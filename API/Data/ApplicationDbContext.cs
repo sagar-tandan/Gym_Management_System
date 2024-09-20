@@ -22,7 +22,7 @@ namespace api.Data
         public DbSet<Plan> Plans { get; set; }
         public DbSet<Inventory> Inventories { get; set; }
         public DbSet<Payment> Payments { get; set; }
-        public DbSet<Attendence> Attendences { get; set; }
+        // public DbSet<Attendence> Attendences { get; set; }
 
         // protected override void OnModelCreating(ModelBuilder builder)
         // {

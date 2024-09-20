@@ -7,6 +7,8 @@ import { RiTodoLine } from "react-icons/ri";
 import { MdOutlineAdminPanelSettings } from "react-icons/md";
 import { IoMdLogOut } from "react-icons/io";
 import { TbMessageReport } from "react-icons/tb";
+import { IoCheckmarkCircleOutline } from "react-icons/io5";
+
 import AdminDashboard from "./AdminComp/AdminDashboard";
 import AdminProfile from "./AdminComp/AdminProfile";
 import MemberRegister from "./AdminComp/MemberRegister";
@@ -18,6 +20,7 @@ import { AllContext } from "../Context/Context";
 
 import logo from "../assets/dfc.png";
 import SearchComp from "./AdminComp/SearchComp";
+import AdminAttendence from "./AdminComp/AdminAttendence";
 
 const AdminPage = () => {
   const { active, setActive } = useContext(AllContext);
@@ -161,7 +164,29 @@ const AdminPage = () => {
               </h1>
             </div>
 
-            <div
+            {/* <div
+              onClick={(e) => handleClick(e, "Attendence")}
+              className={`${
+                active === "Attendence"
+                  ? "text-orange-400 font-normal bg-gradient-to-r from-[#FBB03B] from-1% via-transparent via-25% to-transparent to-90%"
+                  : ""
+              } w-full text-white flex gap-2 cursor-pointer hover:text-[#FBB03B] py-[6px] px-8 transition-all duration-300 ease-in-out group`}
+            >
+              <IoCheckmarkCircleOutline
+                className={`w-6 h-6 ${
+                  active === "Attendence" ? "text-orange-400" : ""
+                }`}
+              />
+              <h1
+                className={`${
+                  active === "Attendence" ? "text-orange-400" : ""
+                }`}
+              >
+                Attendence
+              </h1>
+            </div> */}
+
+            {/* <div
               onClick={(e) => handleClick(e, "Report")}
               className={`${
                 active === "Report"
@@ -177,7 +202,7 @@ const AdminPage = () => {
               <h1 className={`${active === "Report" ? "text-orange-400" : ""}`}>
                 Report
               </h1>
-            </div>
+            </div> */}
           </div>
 
           <div
@@ -214,6 +239,8 @@ const AdminPage = () => {
           <AdminPlan />
         ) : active === "Inventory" ? (
           <Inventory />
+        ) : active === "Attendence" ? (
+          <AdminAttendence />
         ) : (
           <AdminReport />
         )}
