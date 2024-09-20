@@ -6,6 +6,7 @@ import ProtectedRoute from "./ProtectedRoute";
 import { AllContext } from "./Context/Context";
 import AdminDashboard from "./Admin/AdminComp/AdminDashboard";
 import SearchComp from "./Admin/AdminComp/SearchComp";
+import UserPage from "./User/UserPage";
 
 function App() {
   const { token, setToken } = useContext(AllContext);
@@ -33,7 +34,7 @@ function App() {
     <>
       <BrowserRouter>
         <Routes>
-          {/* <Route path="/" element={<GymAttendanceSystem />} /> */}
+          <Route path="/" element={<UserPage />} />
           <Route
             path="/adminlogin"
             element={
