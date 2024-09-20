@@ -164,7 +164,7 @@ const AdminPage = () => {
               </h1>
             </div>
 
-            <div
+            {/* <div
               onClick={(e) => handleClick(e, "Attendence")}
               className={`${
                 active === "Attendence"
@@ -184,9 +184,9 @@ const AdminPage = () => {
               >
                 Attendence
               </h1>
-            </div>
+            </div> */}
 
-            <div
+            {/* <div
               onClick={(e) => handleClick(e, "Report")}
               className={`${
                 active === "Report"
@@ -202,7 +202,7 @@ const AdminPage = () => {
               <h1 className={`${active === "Report" ? "text-orange-400" : ""}`}>
                 Report
               </h1>
-            </div>
+            </div> */}
           </div>
 
           <div

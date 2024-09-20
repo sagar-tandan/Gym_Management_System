@@ -26,7 +26,7 @@ namespace api.Models
         public Plan Plan { get; set; } // Navigation property
 
         // Navigation Property
-        public ICollection<Attendence> Attendences { get; set; }
+        // public ICollection<Attendence> Attendences { get; set; }
 
 
     }

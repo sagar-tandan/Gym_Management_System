@@ -22,10 +22,10 @@ namespace API.Controllers
             _context = context;
         }
 
-        [HttpPost]
-        public async Task<IActionResult> PostAttendence([FromBody] AttendenceDto attendenceDto)
-        {
-            return Ok(attendenceDto);
-        }
+        // [HttpPost]
+        // public async Task<IActionResult> PostAttendence([FromBody] AttendenceDto attendenceDto)
+        // {
+        //     return Ok(attendenceDto);
+        // }
     }
 }
