@@ -4,15 +4,15 @@ import { IoPlayCircleOutline } from "react-icons/io5";
 
 const HeroSection = () => {
   return (
-    <div className="w-full flex flex-col text-white font-nunito">
+    <div className="w-full flex flex-col text-white font-inter">
       <div className="w-full flex gap-3">
         <div className="w-[60%] flex flex-col gap-5">
-          <div className="w-full font-semibold text-5xl uppercase p-14 py-32 gap-3 flex flex-col">
-            <h1>
+          <div className="w-full font-semibold text-5xl px-20 py-32 gap-3 flex flex-col">
+            <h1 className="font-light uppercase">
               take your <span className="text-purple-700">fitness</span>
             </h1>
-            <h1>to the next level</h1>
-            <p className="w-[60%] font-nunito text-sm font-light">
+            <h1 className="font-light uppercase">to the next level</h1>
+            <p className="w-[60%] font-nunito text-sm font-light mt-6">
               Lorem ipsum dolor sit amet consectetur, adipisicing elit.
               Recusandae delectus omnis, minima mollitia perferendis harum
               accusantium debitis praesentium, non, reprehenderit pariatur
@@ -37,7 +37,8 @@ const HeroSection = () => {
           </div>
         </div>
         {/* FOR PICTURE */}
-        <div></div>
+        <div className="w-[40%] bg-red-500">
+        </div>
       </div>
     </div>
   );
