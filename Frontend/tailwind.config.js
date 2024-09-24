@@ -6,7 +6,9 @@ export default {
       fontFamily: {
         nunito: ["Nunito", "sans-serif"],
         inter: ["Inter", "sans-serif"],
+        // outline: ["Londrina Outline", "sans-serif"],
       },
+     
     },
   },
   plugins: [require("tailwind-scrollbar")],

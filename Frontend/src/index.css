@@ -1,4 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Londrina+Outline&display=swap");
 
 @tailwind base;
 @tailwind components;
@@ -7,4 +8,16 @@
 /* Hide scrollbar in WebKit browsers (Chrome, Safari, Edge) */
 ::-webkit-scrollbar {
   display: none;
+}
+
+@layer base {
+  .font-outline-2 {
+    -webkit-text-stroke: 2px purple;
+  }
+  .font-outline-4 {
+    -webkit-text-fill-color: transparent;
+    -webkit-text-stroke-width: 2px;
+    color: #600864;
+    /* font-family: sans-serif; */
+  }
 }
