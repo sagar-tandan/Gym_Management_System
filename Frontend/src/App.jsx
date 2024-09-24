@@ -7,6 +7,7 @@ import { AllContext } from "./Context/Context";
 import AdminDashboard from "./Admin/AdminComp/AdminDashboard";
 import SearchComp from "./Admin/AdminComp/SearchComp";
 import UserPage from "./User/UserPage";
+import Navbar from "./User/UserComponents/NavBar";
 
 function App() {
   const { token, setToken } = useContext(AllContext);
@@ -33,6 +34,7 @@ function App() {
   return (
     <>
       <BrowserRouter>
+        <Navbar />
         <Routes>
           <Route path="/" element={<UserPage />} />
           <Route
