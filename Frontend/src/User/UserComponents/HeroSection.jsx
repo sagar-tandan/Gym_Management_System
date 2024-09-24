@@ -3,8 +3,11 @@ import { FaPlay } from "react-icons/fa";
 
 const HeroSection = () => {
   return (
-    <div className="w-full flex flex-col text-white font-nunito max-w-screen-2xl mx-auto">
-      <div className="w-full flex gap-3 p-40 mt-8">
+    <div
+      id="home"
+      className="w-full flex flex-col text-white font-nunito max-w-screen-2xl mx-auto"
+    >
+      <div className="w-full flex gap-3 px-40 pt-40 pb-20 mt-8">
         <div className="w-[70%] flex flex-col gap-5">
           <div className="w-full font-semibold text-5xl gap-3 flex flex-col ">
             <h1 className="font-extrabold uppercase font-inter">

@@ -18,3 +18,7 @@
     color: #7e22ce;
   }
 }
+
+html {
+  scroll-behavior: smooth;
+}

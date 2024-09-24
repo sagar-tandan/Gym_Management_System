@@ -2,6 +2,7 @@ import React from "react";
 import HeroSection from "./UserComponents/HeroSection";
 import MarqueeComp from "./UserComponents/MarqueeComp";
 import AboutUs from "./UserComponents/AboutUs";
+import TrainingPrograms from "./UserComponents/TrainingPrograms";
 
 const UserPage = () => {
   return (
@@ -12,6 +13,7 @@ const UserPage = () => {
       <div className="w-full flex flex-col max-w-screen-2xl mx-auto">
         <HeroSection />
         <AboutUs />
+        <TrainingPrograms />
       </div>
     </div>
   );
