@@ -76,7 +76,8 @@ const HeroSection = () => {
           </div>
         </div>
         {/* FOR PICTURE */}
-        <div className="w-[40%] bg-red-500"></div>
+        <div className="w-[40%]">
+        </div>
       </div>
     </div>
   );
