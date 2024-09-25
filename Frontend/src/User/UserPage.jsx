@@ -14,6 +14,7 @@ const UserPage = () => {
         <HeroSection />
         <AboutUs />
         <TrainingPrograms />
+        {/* <Slider /> */}
       </div>
     </div>
   );

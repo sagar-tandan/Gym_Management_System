@@ -27,6 +27,7 @@ const menuItems = [
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
+  const [activeTab, setActiveTab] = useState("Home");
 
   useEffect(() => {
     const handleScroll = () => {
@@ -64,9 +65,12 @@ const Navbar = () => {
             <div className="ml-10 flex items-baseline space-x-8">
               {menuItems.map((item, index) => (
                 <a
+                  onClick={() => setActiveTab(item.label)}
                   key={index}
                   href={item.href}
-                  className=" hover:text-purple-600 px-3 py-2 rounded-md font-semibold font-nunito"
+                  className={` hover:text-purple-600 px-3 py-2 rounded-md font-semibold font-nunito ${
+                    activeTab === item.label ? "text-purple-600" : ""
+                  }`}
                 >
                   {item.label}
                 </a>
