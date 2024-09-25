@@ -5,6 +5,8 @@ import { MdOutlineDirectionsRun } from "react-icons/md";
 import { GiFruitBowl } from "react-icons/gi";
 import { IoIosArrowRoundForward } from "react-icons/io";
 import { IoIosArrowRoundBack } from "react-icons/io";
+import { GiBoxingGloveSurprise } from "react-icons/gi";
+import { TbYoga } from "react-icons/tb";
 
 const programs = [
   {
@@ -23,6 +25,16 @@ const programs = [
     desc: "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Animi tempore, rem cum cupiditate amet, ipsam magni ratione nobis natussequi dolorum officia",
   },
   {
+    name: "Boxing",
+    icon: GiBoxingGloveSurprise,
+    desc: "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Animi tempore, rem cum cupiditate amet, ipsam magni ratione nobis natussequi dolorum officia",
+  },
+  {
+    name: "Yoga Classes",
+    icon: TbYoga,
+    desc: "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Animi tempore, rem cum cupiditate amet, ipsam magni ratione nobis natussequi dolorum officia",
+  },
+  {
     name: "Nutrition Support",
     icon: GiFruitBowl,
     desc: "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Animi tempore, rem cum cupiditate amet, ipsam magni ratione nobis natussequi dolorum officia",
@@ -38,7 +50,6 @@ const TrainingPrograms = () => {
   const prevCard = () => {
     setStartIndex((prevIndex) => Math.max(prevIndex - 1, 0));
   };
-  const slideRef = useRef(null);
 
   return (
     <div
@@ -81,7 +92,7 @@ const TrainingPrograms = () => {
             style={{ transform: `translateX(-${startIndex * 110}%)` }}
           >
             <program.icon className="w-10 h-10 " />
-            <h1 className="font-normal text-[18px]">{program.name}</h1>
+            <h1 className="font-normal">{program.name}</h1>
             <p className="font-thin">{program.desc}</p>
           </div>
         ))}
