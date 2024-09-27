@@ -1,5 +1,6 @@
 import React from "react";
 import { FaPlay } from "react-icons/fa";
+import Navbar from "./NavBar";
 
 const HeroSection = () => {
   return (
@@ -7,6 +8,8 @@ const HeroSection = () => {
       id="home"
       className="w-full flex flex-col text-white font-nunito max-w-screen-2xl mx-auto"
     >
+      <Navbar />
+
       <div className="w-full flex gap-3 px-40 pt-40 pb-20 mt-8">
         <div className="w-[70%] flex flex-col gap-5">
           <div className="w-full font-semibold text-5xl gap-3 flex flex-col ">
@@ -76,8 +79,7 @@ const HeroSection = () => {
           </div>
         </div>
         {/* FOR PICTURE */}
-        <div className="w-[40%]">
-        </div>
+        <div className="w-[40%]"></div>
       </div>
     </div>
   );
