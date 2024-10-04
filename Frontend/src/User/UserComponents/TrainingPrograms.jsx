@@ -84,11 +84,11 @@ const TrainingPrograms = () => {
         </div>
       </div>
 
-      <div className="w-full gap-12 px-2 flex mt-10 font-inter py-10 overflow-x-hidden items-center">
+      <div className="w-full gap-12 flex mt-10 font-inter py-10 overflow-x-hidden items-center">
         {programs.map((program) => (
           <div
             key={program.name}
-            className="w-[30%] flex flex-shrink-0 flex-col gap-2 bg-neutral-950 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(120,119,198,0.3),rgba(255,255,255,0))] p-6 rounded-md shadow-xl shadow-slate-900 transition-transform duration-300 ease-in-out "
+            className="w-[355px]  flex flex-shrink-0 flex-col gap-2 bg-neutral-950 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(120,119,198,0.3),rgba(255,255,255,0))] p-6 rounded-md transition-transform duration-300 ease-in-out "
             style={{ transform: `translateX(-${startIndex * 110}%)` }}
           >
             <program.icon className="w-10 h-10 " />
