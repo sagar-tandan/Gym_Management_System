@@ -35,19 +35,19 @@ function App() {
     <>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<UserPage />} />
+          {/* <Route path="/" element={<UserPage />} /> */}
           <Route
             path="/adminlogin"
             element={
               token && role != "User" ? (
-                <Navigate to="/adminDashboard" />
+                <Navigate to="/" />
               ) : (
                 <AdminiLoginPage />
               )
             }
           />
           <Route
-            path="/adminDashboard"
+            path="/"
             element={
               token && role != "User" ? (
                 <AdminPage />

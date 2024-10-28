@@ -2,7 +2,6 @@ import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
 import ResponsivePagination from "react-responsive-pagination";
 import "../../Pagination.css";
-import { LiaUserAstronautSolid } from "react-icons/lia";
 import { LiaEditSolid } from "react-icons/lia";
 import { MdDeleteOutline } from "react-icons/md";
 import { RxCross2 } from "react-icons/rx";
@@ -39,6 +38,7 @@ const MemberRegister = () => {
     cardNo: "",
     memberName: "",
     enrolledDate: todayDate,
+    startDate: "",
     expiryDate: "",
     email: "",
     contact: "",
@@ -144,7 +144,7 @@ const MemberRegister = () => {
       const response = await axios.get(
         `http://localhost:5002/api/member?pageNumber=${currentPage}&pageSize=8`
       );
-      // console.table(response.data);
+      console.table(response.data.members);
       setAllMemberData(response.data.members);
       setMemberInfo(response.data);
       setTotalPage(Math.ceil(response.data.totalRecords / 8));
@@ -177,7 +177,9 @@ const MemberRegister = () => {
     if (selectedPlan) {
       if (renew) {
         // Renewing the plan by adding duration to the current expiry date
-        const finalDate = new Date(registerMember.expiryDate);
+
+        const finalDate = new Date(registerMember.startDate);
+
         const expiry = new Date(
           finalDate.setMonth(
             finalDate.getMonth() + selectedPlan.durationInMonths
@@ -208,7 +210,7 @@ const MemberRegister = () => {
       // Reset when no plan is selected
       setregisterMember((prev) => ({ ...prev, price: 0, expiryDate: "" }));
     }
-  }, [registerMember.planId, renew, plan]);
+  }, [registerMember.planId, renew, plan, registerMember.startDate]);
 
   const MountModel = (e) => {
     e.preventDefault();
@@ -247,8 +249,21 @@ const MemberRegister = () => {
   };
 
   const handleRenewModel = (e, data) => {
+    console.log(data);
     setRenew(true);
-    setregisterMember(data);
+    setregisterMember({
+      cardNo: data.cardNo,
+      contact: data.contact,
+      email: data.email,
+      enrolledDate: data.enrolledDate,
+      startDate: data.expiryDate,
+      expiryDate: data.expiryDate,
+      id: data.id,
+      memberName: data.memberName,
+      planId: data.planId,
+      planName: data.planName,
+      price: data.price,
+    });
   };
 
   const RenewMember = async (e) => {
@@ -294,13 +309,11 @@ const MemberRegister = () => {
   const sendDataToBackend = async () => {
     try {
       if (editable) {
-        // console.log(registerMember);
         // Update existing item
         const response = await axios.put(
           `http://localhost:5002/api/member/${registerMember.id}`,
           registerMember
         );
-        // console.log(response);
       } else {
         // Add new member
         const response = await axios.post(
@@ -962,6 +975,44 @@ const MemberRegister = () => {
                   onChange={handleChange}
                   required
                 />
+              </div>
+
+              <div className="w-full flex gap-3">
+                <div className="w-full flex flex-col">
+                  <div className="w-full flex flex-col">
+                    <label
+                      class="block mb-2 font-medium mt-4 "
+                      for="enrolledDate"
+                    >
+                      Start Date
+                    </label>
+                    <input
+                      type="date"
+                      id="startDate"
+                      name="startDate"
+                      className="p-2 w-full rounded-sm bg-purple-100"
+                      placeholder="Date"
+                      value={registerMember.startDate}
+                      onChange={handleChange}
+                      required
+                    />
+                  </div>
+                </div>
+                <div className="w-full flex flex-col">
+                  <label class="block mb-2 font-medium mt-4 " for="expiryDate">
+                    Expiration Date
+                  </label>
+                  <input
+                    type="date"
+                    id="expiryDate"
+                    name="expiryDate"
+                    className="p-2 w-full rounded-sm bg-purple-100"
+                    placeholder="Date"
+                    value={registerMember.expiryDate}
+                    onChange={handleChange}
+                    required
+                  />
+                </div>
               </div>
 
               <div className="w-full flex gap-3">
